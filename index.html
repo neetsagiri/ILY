@@ -15,7 +15,7 @@
     body {
       width: 100vw;
       height: 100vh;
-      background: radial-gradient(ellipse at center, #1a0515 0%, #030106 100%);
+      background: radial-gradient(circle at 50% 45%, #220318 0%, #06010a 100%);
       overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       display: flex;
@@ -126,10 +126,10 @@
       display: block;
     }
 
-    /* Chữ chạy phía dưới */
+    /* Chữ chạy phía dưới - căn chỉnh cao hơn mép màn hình */
     .caption-container {
       position: absolute;
-      bottom: 8%;
+      bottom: 11%;
       width: 100%;
       text-align: center;
       pointer-events: none;
@@ -138,26 +138,27 @@
 
     #lang-text {
       font-size: 1.35rem;
-      font-weight: 600;
+      font-weight: 700;
       color: #ffffff;
-      text-shadow: 0 0 12px #ff4d6d, 0 0 25px #ff0055;
+      text-shadow: 0 0 12px #ff4d6d, 0 0 25px #ff0055, 0 0 35px #ff2a6d;
       letter-spacing: 0.8px;
-      transition: opacity 0.5s ease, transform 0.5s ease;
+      transition: opacity 0.4s ease, transform 0.4s ease;
       transform: scale(1);
     }
 
     #sub-text {
-      margin-top: 6px;
-      font-size: 0.85rem;
-      color: #ffb3c1;
+      margin-top: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #ffccd5;
+      text-shadow: 0 0 8px rgba(255, 77, 109, 0.8);
       letter-spacing: 1px;
-      opacity: 0.85;
     }
 
     .touch-heart {
       position: fixed;
       pointer-events: none;
-      font-size: 16px;
+      font-size: 18px;
       z-index: 999;
       transition: transform 0.7s ease-out, opacity 0.7s ease-out;
     }
@@ -184,12 +185,12 @@
   <div id="letter-card">
     <div class="letter-title">Gửi Bảo Bei của bé 💕</div>
     <div class="letter-content">
-      Bé iuu Bảo Bei Nhất 💕, Bảo Bei bấm nút dưới bấm nút dưới...
+      Bé iuu Bảo Bei Nhất 💕, Bảo Bei bấm ở dưới bấm ở dưới...
     </div>
     <button class="surprise-btn" onclick="startHeartShow()">Xem điều bất ngờ 💖</button>
   </div>
 
-  <!-- Bước 3: Trái tim tạo từ emoji 💗 ❤️ 💕 -->
+  <!-- Bước 3: Trái tim đa tầng emoji hoàn hảo -->
   <div id="heart-wrapper">
     <canvas id="heartCanvas"></canvas>
     <div class="caption-container">
@@ -214,7 +215,6 @@
       "Bé iuu Bảo Bei Nhất 💕"
     ];
 
-    // Chạm tạo hiệu ứng phụ
     window.addEventListener('pointermove', (e) => {
       if (Math.random() < 0.25) {
         const heart = document.createElement('div');
@@ -258,7 +258,7 @@
         const hw = document.getElementById('heart-wrapper');
         hw.style.display = 'block';
         setTimeout(() => hw.style.opacity = '1', 50);
-        initEmojiHeart();
+        initPerfectHeart();
         startTextRotation();
       }, 500);
     }
@@ -274,12 +274,12 @@
           textEl.innerText = phrases[idx];
           textEl.style.opacity = '1';
           textEl.style.transform = 'scale(1)';
-        }, 400);
+        }, 350);
       }, 2600);
     }
 
-    /* Hiệu ứng Emoji 💗❤️💕 bay từ từ hình thành trái tim */
-    function initEmojiHeart() {
+    /* Thuật toán tạo Trái Tim Emoji Chuẩn Form Cân Đối */
+    function initPerfectHeart() {
       const canvas = document.getElementById('heartCanvas');
       const ctx = canvas.getContext('2d');
       let width = canvas.width = window.innerWidth;
@@ -299,29 +299,51 @@
 
       const emojis = ['💗', '❤️', '💕', '💖'];
       const particles = [];
-      const totalCount = 360; // Số lượng emoji tạo hình trái tim
 
-      for (let i = 0; i < totalCount; i++) {
-        const t = Math.random() * Math.PI * 2;
-        const base = heartFormula(t);
-        const r = Math.pow(Math.random(), 0.5); // Phủ đều từ trong ra ngoài
-
-        // Vị trí xuất phát ngẫu nhiên bay từ 4 phía ngoài màn hình
+      // 1. TẠO VIỀN CHUẨN (Khắc phục hoàn toàn việc bị méo, khuyết cánh)
+      const borderCount = 140;
+      for (let i = 0; i < borderCount; i++) {
+        const t = (Math.PI * 2 * i) / borderCount;
+        const pos = heartFormula(t);
         const angle = Math.random() * Math.PI * 2;
-        const spawnDist = Math.max(width, height) * (0.8 + Math.random() * 0.4);
+        const dist = Math.max(width, height) * (0.6 + Math.random() * 0.5);
 
         particles.push({
-          targetRelX: base.x * r,
-          targetRelY: base.y * r,
-          currX: width / 2 + Math.cos(angle) * spawnDist,
-          currY: height / 2 + Math.sin(angle) * spawnDist,
+          targetRelX: pos.x,
+          targetRelY: pos.y,
+          currX: width / 2 + Math.cos(angle) * dist,
+          currY: height / 2 + Math.sin(angle) * dist,
           emoji: emojis[Math.floor(Math.random() * emojis.length)],
-          size: Math.random() * 6 + 13, // Kích thước emoji
+          size: Math.random() * 4 + 14,
           progress: 0,
-          speed: 0.008 + Math.random() * 0.012, // Tốc độ bay tụ lại
-          delay: Math.random() * 60 // Bay lệch pha để tạo độ tự nhiên
+          speed: 0.012 + Math.random() * 0.01,
+          delay: Math.random() * 45
         });
       }
+
+      // 2. TẠO RUỘT BÊN TRONG THEO TẦNG ĐỒNG TÂM (Đầy đặn, không bị lỗ hổng)
+      const layers = [0.2, 0.35, 0.5, 0.65, 0.8, 0.9];
+      layers.forEach(layer => {
+        const countInLayer = Math.floor(borderCount * layer * 0.8);
+        for (let i = 0; i < countInLayer; i++) {
+          const t = (Math.PI * 2 * i) / countInLayer + (Math.random() - 0.5) * 0.15;
+          const pos = heartFormula(t);
+          const angle = Math.random() * Math.PI * 2;
+          const dist = Math.max(width, height) * (0.6 + Math.random() * 0.5);
+
+          particles.push({
+            targetRelX: pos.x * layer,
+            targetRelY: pos.y * layer,
+            currX: width / 2 + Math.cos(angle) * dist,
+            currY: height / 2 + Math.sin(angle) * dist,
+            emoji: emojis[Math.floor(Math.random() * emojis.length)],
+            size: Math.random() * 3 + 12,
+            progress: 0,
+            speed: 0.01 + Math.random() * 0.012,
+            delay: Math.random() * 50
+          });
+        }
+      });
 
       let time = 0;
       let frame = 0;
@@ -329,38 +351,45 @@
       function render() {
         ctx.clearRect(0, 0, width, height);
 
-        time += 0.05;
+        time += 0.045;
         frame++;
 
-        // Nhịp tim đập sau khi đã dần tụ lại
-        const beat = 1 + 0.08 * Math.pow(Math.sin(time), 8);
+        // Nhịp đập Lup-Dup chân thực
+        const beat = 1 + 0.09 * Math.pow(Math.sin(time), 8) + 0.03 * Math.sin(time * 2);
         const scale = (Math.min(width, height) / 38) * beat;
         const centerX = width / 2;
-        const centerY = height / 2 - 45;
+        const centerY = height / 2 - 50;
 
+        // Vẽ vầng sáng phát quang trung tâm
+        const gradient = ctx.createRadialGradient(centerX, centerY, 10, centerX, centerY, 160 * beat);
+        gradient.addColorStop(0, 'rgba(255, 42, 109, 0.25)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 180 * beat, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Vẽ từng emoji bay vào form
         for (let i = 0; i < particles.length; i++) {
           const p = particles[i];
 
-          if (frame > p.delay) {
-            if (p.progress < 1) {
-              p.progress += p.speed;
-              if (p.progress > 1) p.progress = 1;
-            }
+          if (frame > p.delay && p.progress < 1) {
+            p.progress += p.speed;
+            if (p.progress > 1) p.progress = 1;
           }
 
-          // Tọa độ mục tiêu trong nhịp đập tim
           const targetX = centerX + p.targetRelX * scale;
           const targetY = centerY + p.targetRelY * scale;
 
-          // Hiệu ứng bay mượt (Ease Out)
+          // Hiệu ứng lướt mượt mà Cubic-Bezier
           const ease = 1 - Math.pow(1 - p.progress, 3);
           const drawX = p.currX + (targetX - p.currX) * ease;
           const drawY = p.currY + (targetY - p.currY) * ease;
 
-          ctx.font = `${p.size}px -apple-system, sans-serif`;
+          ctx.font = `${p.size * (0.6 + 0.4 * ease)}px -apple-system, sans-serif`;
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.globalAlpha = Math.min(1, ease + 0.15);
+          ctx.globalAlpha = Math.min(1, ease + 0.2);
           ctx.fillText(p.emoji, drawX, drawY);
         }
 
