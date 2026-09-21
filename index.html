@@ -24,7 +24,26 @@
       justify-content: center;
       align-items: center;
       position: relative;
-      touch-action: manipulation;
+    }
+
+    /* Thanh chỉ báo khi vuốt xuống để tải lại */
+    #refresh-indicator {
+      position: fixed;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 42, 109, 0.85);
+      backdrop-filter: blur(6px);
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(255, 42, 109, 0.4);
+      z-index: 9999;
+      pointer-events: none;
+      transition: top 0.2s ease, opacity 0.2s ease;
+      opacity: 0;
     }
 
     /* Đốm sáng đom đóm nền */
@@ -67,7 +86,7 @@
       border-radius: 0 0 16px 16px;
       box-shadow: 0 20px 45px rgba(255, 42, 109, 0.45), 0 0 35px rgba(255, 117, 140, 0.25);
       margin: 0 auto;
-      pointer-events: none; /* Để toàn bộ cú chạm rơi thẳng vào envelope-wrapper */
+      pointer-events: none;
     }
 
     /* Nắp gập phong bì */
@@ -140,7 +159,7 @@
       pointer-events: none;
     }
 
-    /* TỜ GIẤY THƯ NẰM LỌT TRONG PHONG BÌ */
+    /* TỜ GIẤY THƯ */
     #paper-letter {
       position: absolute;
       bottom: 12px;
@@ -174,7 +193,7 @@
       transform: translateX(-50%) translateY(-135px);
     }
 
-    /* Giai đoạn 2: Tách khỏi phong bì và bung mở ra giữa màn hình */
+    /* Giai đoạn 2: Bung to ra giữa màn hình */
     #paper-letter.opened {
       position: fixed;
       top: 50%;
@@ -265,6 +284,9 @@
 </head>
 <body>
 
+  <!-- Thanh hiển thị hiệu ứng vuốt tải lại -->
+  <div id="refresh-indicator">Đang làm mới trang... 🔄</div>
+
   <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
   <div id="fireflies"></div>
 
@@ -297,6 +319,45 @@
   </div>
 
   <script>
+    /* ================= TÍNH NĂNG VUỐT XUỐNG TẢI LẠI TRANG ================= */
+    let touchStartY = 0;
+    let touchEndY = 0;
+    const refreshIndicator = document.getElementById('refresh-indicator');
+
+    window.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      const currentY = e.touches[0].clientY;
+      const distance = currentY - touchStartY;
+
+      // Khi kéo xuống từ 40px trở lên, hiển thị thanh gợi ý
+      if (distance > 40) {
+        refreshIndicator.style.top = Math.min(distance * 0.4, 30) + 'px';
+        refreshIndicator.style.opacity = '1';
+        refreshIndicator.innerText = distance > 90 ? 'Thả ra để tải lại 🔄' : 'Kéo xuống để tải lại...';
+      }
+    }, { passive: true });
+
+    window.addEventListener('touchend', (e) => {
+      touchEndY = e.changedTouches[0].clientY;
+      const distance = touchEndY - touchStartY;
+
+      // Vuốt xuống vượt quá 90px -> Kích hoạt tải lại trang
+      if (distance > 90) {
+        refreshIndicator.innerText = 'Đang làm mới trang... 💕';
+        setTimeout(() => {
+          window.location.reload();
+        }, 300);
+      } else {
+        // Thu thanh chỉ báo về vị trí ẩn
+        refreshIndicator.style.top = '-50px';
+        refreshIndicator.style.opacity = '0';
+      }
+    }, { passive: true });
+    /* ===================================================================== */
+
     const ringTexts = [
       "Anh yêu Bảo Bei 💕",
       "I Love You, Bảo Bei ✨",
@@ -355,22 +416,18 @@
 
       const letter = document.getElementById('paper-letter');
 
-      // Tờ giấy trồi thẳng lên
       setTimeout(() => {
         letter.classList.add('peeking');
       }, 550);
 
-      // Tách ra giữa màn hình
       setTimeout(() => {
         letter.classList.remove('peeking');
         letter.classList.add('opened');
       }, 1450);
     }
 
-    // Đăng ký sự kiện mở thư an toàn trên cả điện thoại và máy tính
     const envWrapper = document.getElementById('envelope-wrapper');
     envWrapper.addEventListener('pointerdown', (e) => {
-      // Nếu bấm trúng nút trong thư thì bỏ qua
       if (e.target && e.target.id === 'surpriseBtn') return;
       openEnvelope();
     });
