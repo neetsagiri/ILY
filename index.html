@@ -15,7 +15,7 @@
     body {
       width: 100vw;
       height: 100vh;
-      background: radial-gradient(circle at 50% 40%, #1a0312 0%, #080108 60%, #020004 100%);
+      background: radial-gradient(circle at 50% 35%, #180108 0%, #060003 60%, #010002 100%);
       overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       display: flex;
@@ -27,17 +27,17 @@
     /* Đốm sáng đom đóm nền */
     .bg-firefly {
       position: absolute;
-      background: #ff758c;
+      background: #ff2a55;
       border-radius: 50%;
       pointer-events: none;
-      opacity: 0.4;
+      opacity: 0.35;
       animation: floatFirefly 6s infinite ease-in-out;
       z-index: 1;
     }
 
     @keyframes floatFirefly {
-      0%, 100% { transform: translateY(0); opacity: 0.2; }
-      50% { transform: translateY(-25px) scale(1.4); opacity: 0.75; }
+      0%, 100% { transform: translateY(0); opacity: 0.15; }
+      50% { transform: translateY(-25px) scale(1.3); opacity: 0.65; }
     }
 
     /* Khung Phong bì */
@@ -61,7 +61,7 @@
       height: 170px;
       background: #9b0e31;
       border-radius: 0 0 16px 16px;
-      box-shadow: 0 20px 45px rgba(255, 42, 109, 0.45), 0 0 35px rgba(255, 117, 140, 0.25);
+      box-shadow: 0 20px 45px rgba(255, 0, 51, 0.4), 0 0 35px rgba(255, 42, 85, 0.2);
       margin: 0 auto;
     }
 
@@ -100,9 +100,9 @@
       transform: translate(-50%, -50%);
       width: 48px;
       height: 48px;
-      background: radial-gradient(circle, #ffccd5 0%, #ff4d6d 70%, #900523 100%);
+      background: radial-gradient(circle, #ff6b81 0%, #ff0033 70%, #80001a 100%);
       border-radius: 50%;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.7);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.6);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -114,11 +114,11 @@
 
     .hint-text {
       margin-top: 26px;
-      color: #ffccd5;
+      color: #ff99aa;
       font-size: 1.12rem;
       font-weight: 600;
       letter-spacing: 0.5px;
-      text-shadow: 0 0 12px rgba(255, 77, 109, 0.8);
+      text-shadow: 0 0 12px rgba(255, 0, 51, 0.8);
       user-select: none;
     }
 
@@ -126,7 +126,7 @@
       display: block;
       margin-top: 6px;
       font-size: 0.82rem;
-      color: #ff85a1;
+      color: #ff6680;
       opacity: 0.85;
       letter-spacing: 1px;
       user-select: none;
@@ -168,7 +168,7 @@
       z-index: 100;
       opacity: 1;
       transform: translate(-50%, -50%) scale(1);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 77, 109, 0.4);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 0, 51, 0.4);
       background: #fffdf7;
       background-image: repeating-linear-gradient(#fffdf7, #fffdf7 27px, #faeade 28px);
     }
@@ -197,7 +197,7 @@
     }
 
     .surprise-btn {
-      background: linear-gradient(135deg, #ff4d6d, #c9184a);
+      background: linear-gradient(135deg, #ff0033, #c9184a);
       color: #fff;
       border: none;
       padding: 11px 26px;
@@ -253,7 +253,7 @@
   <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
   <div id="fireflies"></div>
 
-  <!-- Bước 1: Phong bì và Lá thư -->
+  <!-- Bước 1: Phong bì và Thư -->
   <div id="envelope-wrapper" onclick="openEnvelope()">
     <div class="envelope">
       <div class="envelope-flap" id="envFlap"></div>
@@ -275,7 +275,7 @@
     <span class="tap-hint" id="hintSub">(Chạm vào phong thư để mở ✨)</span>
   </div>
 
-  <!-- Bước 2: Canvas Trái tim 3D ngập tràn hạt phát sáng -->
+  <!-- Bước 2: Canvas Trái tim 3D Đỏ Nhỏ Gọn & Chữ Xoay Dưới -->
   <div id="heart-wrapper">
     <canvas id="heartCanvas"></canvas>
   </div>
@@ -290,12 +290,12 @@
       "Bé iuu Bảo Bei Nhất 💕"
     ];
 
-    // Đom đóm nền
+    // Tạo đom đóm nền
     const fireflyContainer = document.getElementById('fireflies');
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 35; i++) {
       const fly = document.createElement('div');
       fly.className = 'bg-firefly';
-      const size = Math.random() * 4 + 2;
+      const size = Math.random() * 3.5 + 1.5;
       fly.style.width = size + 'px';
       fly.style.height = size + 'px';
       fly.style.left = Math.random() * 100 + 'vw';
@@ -304,12 +304,12 @@
       fireflyContainer.appendChild(fly);
     }
 
-    // Hiệu ứng chạm / rê chuột bay tim lấp lánh
+    // Hiệu ứng rê chuột / chạm ngón tay
     window.addEventListener('pointermove', (e) => {
-      if (Math.random() < 0.25) {
+      if (Math.random() < 0.2) {
         const heart = document.createElement('div');
         heart.className = 'touch-heart';
-        heart.innerText = Math.random() > 0.5 ? '💗' : '✨';
+        heart.innerText = Math.random() > 0.5 ? '❤️' : '✨';
         heart.style.left = e.clientX + 'px';
         heart.style.top = e.clientY + 'px';
         document.body.appendChild(heart);
@@ -366,12 +366,11 @@
         const hw = document.getElementById('heart-wrapper');
         hw.style.display = 'block';
         setTimeout(() => hw.style.opacity = '1', 50);
-        initDense3DHeart();
+        initCompact3DHeart();
       }, 850);
     }
 
-    /* Thuật toán tạo trái tim 3D phủ kín đặc bằng hàng ngàn hạt phát sáng */
-    function initDense3DHeart() {
+    function initCompact3DHeart() {
       const canvas = document.getElementById('heartCanvas');
       const ctx = canvas.getContext('2d');
       let width = (canvas.width = window.innerWidth);
@@ -382,7 +381,7 @@
         height = canvas.height = window.innerHeight;
       });
 
-      // Góc xoay 3D (có thể vuốt/kéo xoay tự do)
+      // Tương tác kéo xoay 3D
       let rotX = 0.12;
       let rotY = 0;
       let isDragging = false;
@@ -400,8 +399,8 @@
         if (!isDragging) return;
         const dx = e.clientX - lastMouseX;
         const dy = e.clientY - lastMouseY;
-        rotY += dx * 0.008;
-        rotX += dy * 0.008;
+        rotY += dx * 0.007;
+        rotX += dy * 0.007;
         lastMouseX = e.clientX;
         lastMouseY = e.clientY;
       });
@@ -409,7 +408,7 @@
       window.addEventListener('pointerup', () => { isDragging = false; });
       window.addEventListener('pointercancel', () => { isDragging = false; });
 
-      // Đường cong trái tim chuẩn tham số
+      // Phương trình toán học trái tim chuẩn
       function heartCurve(t) {
         return {
           x: 16 * Math.pow(Math.sin(t), 3),
@@ -417,72 +416,54 @@
         };
       }
 
-      // Khởi tạo các hạt 3D phủ đầy toàn bộ thể tích trái tim
-      const particles = [];
-      const TOTAL_PARTICLES = 3600; // Mật độ dày đặc phủ kín trái tim
-
-      const colorPalette = [
-        '#ffffff', // Điểm sáng lấp lánh (sparkle)
-        '#ffe4e9', // Hồng sáng
-        '#ff7597', // Hồng cánh sen
-        '#ff2a6d', // Đỏ hồng rực
-        '#c9184a', // Đỏ nhung
-        '#9b0e31'  // Đỏ trầm chiều sâu
+      // Chỉ sử dụng duy nhất các sắc thái ĐỎ
+      const redColors = [
+        '#ff0033', // Đỏ tươi
+        '#ff1744', // Đỏ thắm
+        '#ff2a55', // Đỏ neon
+        '#e60026', // Đỏ đậm
+        '#d00028', // Đỏ ruby
+        '#ff3b69', // Đỏ viền sáng
+        '#b30021'  // Đỏ nhung sâu
       ];
+
+      const particles = [];
+      const TOTAL_PARTICLES = 6500; // Đảm bảo quả tim hiện rõ nét mà hạt vẫn nhỏ
 
       for (let i = 0; i < TOTAL_PARTICLES; i++) {
         const t = Math.random() * Math.PI * 2;
-        const curve = heartCurve(t);
+        const base = heartCurve(t);
 
-        // Phân bổ từ trong lõi ra ngoài vỏ
-        const isCore = Math.random() < 0.65;
-        const layer = isCore ? Math.pow(Math.random(), 0.5) : (0.85 + Math.random() * 0.15);
+        // 35% hạt bám viền ngoài làm rõ hình dáng trái tim, 65% trải đều thể tích
+        const isRim = i < TOTAL_PARTICLES * 0.35;
+        const layer = isRim 
+          ? (0.92 + Math.random() * 0.08) 
+          : (0.15 + Math.sqrt(Math.random()) * 0.82);
 
-        const x2D = curve.x * layer;
-        const y2D = curve.y * layer;
+        const x2D = base.x * layer;
+        const y2D = (base.y - (-2.5)) * layer + (-2.5);
 
-        // Chiều sâu Z: phần trên nở phồng tròn, thon nhỏ dần về đáy nhọn
-        const depthFactor = Math.max(0.08, (curve.y + 17) / 33);
-        const maxZ = 9.5 * depthFactor * Math.sqrt(Math.max(0, 1 - Math.pow(layer - 0.5, 2)));
-        const z3D = (Math.random() * 2 - 1) * maxZ * (isCore ? Math.random() : 1);
+        // Phân bổ độ dày 3D
+        const depthCurve = Math.max(0.08, (base.y + 17) / 33);
+        const maxZ = 8.5 * depthCurve * Math.sqrt(Math.max(0, 1 - Math.pow(layer - 0.5, 2)));
+        const z3D = (Math.random() * 2 - 1) * maxZ * (isRim ? 0.6 : 1);
 
-        // Vị trí xuất phát ngẫu nhiên ngoài không gian để bay tụ lại
         const scatterAngle = Math.random() * Math.PI * 2;
         const scatterDist = Math.max(width, height) * (0.6 + Math.random() * 0.5);
 
-        // Chọn màu theo độ sâu hoặc ngẫu nhiên điểm sáng
-        let color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
-        if (Math.random() < 0.12) color = '#ffffff';
-
         particles.push({
           origX: x2D,
-          origY: y2D + 2.0, // Căn tâm trục Y
+          origY: y2D,
           origZ: z3D,
           currX: width / 2 + Math.cos(scatterAngle) * scatterDist,
           currY: height / 2 + Math.sin(scatterAngle) * scatterDist,
-          currZ: (Math.random() - 0.5) * 400,
-          size: Math.random() * 1.5 + 1.0,
-          color: color,
+          // Kích thước hạt nhỏ li ti như ban đầu (0.75px - 1.45px)
+          size: isRim ? (Math.random() * 0.6 + 0.85) : (Math.random() * 0.6 + 0.75),
+          color: redColors[Math.floor(Math.random() * redColors.length)],
           progress: 0,
           speed: 0.0035 + Math.random() * 0.0035,
-          delay: Math.random() * 80,
+          delay: Math.random() * 75,
           twinkleOffset: Math.random() * Math.PI * 2
-        });
-      }
-
-      // Trái tim nhỏ bay phụ bên cạnh (giống hình mẫu)
-      const miniHeartParticles = [];
-      for (let i = 0; i < 280; i++) {
-        const t = Math.random() * Math.PI * 2;
-        const c = heartCurve(t);
-        const s = 0.35 + Math.random() * 0.1;
-        miniHeartParticles.push({
-          x: c.x * s + 18,
-          y: c.y * s - 8,
-          z: (Math.random() - 0.5) * 5,
-          color: Math.random() > 0.4 ? '#ff7597' : '#ffccd5',
-          size: Math.random() * 1.3 + 0.8,
-          phase: Math.random() * Math.PI * 2
         });
       }
 
@@ -495,36 +476,36 @@
         frame++;
 
         if (!isDragging) {
-          rotY += 0.007; // Tự động xoay quanh trục Y nhẹ nhàng
+          rotY += 0.007; // Tự xoay êm ái
         }
 
         const centerX = width / 2;
-        const centerY = height * 0.45;
+        // Đặt tâm tim ở khoảng 38% chiều cao
+        const centerY = height * 0.38;
 
-        // Nhịp đập phập phồng (Heartbeat)
-        const beat = 1 + 0.075 * Math.pow(Math.sin(time * 1.4), 8) + 0.02 * Math.sin(time * 2.8);
-        const scale = (Math.min(width, height) / 34) * beat;
+        // Trái tim đập nhẹ
+        const beat = 1 + 0.07 * Math.pow(Math.sin(time * 1.3), 8) + 0.015 * Math.sin(time * 2.6);
+        
+        // Thu nhỏ kích thước tổng thể (~32% so với bản lớn trước đó)
+        const scale = (Math.min(width, height) / 56) * beat;
 
-        // Tiêu cự camera 3D
         const fov = 420;
-
-        // Ma trận xoay góc
         const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
         const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
 
-        // Ánh hào quang rực rỡ phía sau tim
-        const glow = ctx.createRadialGradient(centerX, centerY, 10, centerX, centerY, 210 * beat);
-        glow.addColorStop(0, 'rgba(255, 42, 109, 0.42)');
-        glow.addColorStop(0.4, 'rgba(201, 24, 74, 0.18)');
+        // Hào quang đỏ dịu gọn gàng quanh tim
+        const glow = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, 130 * beat);
+        glow.addColorStop(0, 'rgba(255, 0, 51, 0.35)');
+        glow.addColorStop(0.5, 'rgba(201, 24, 74, 0.1)');
         glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = glow;
         ctx.beginPath();
-        ctx.arc(centerX, centerY, 220 * beat, 0, Math.PI * 2);
+        ctx.arc(centerX, centerY, 140 * beat, 0, Math.PI * 2);
         ctx.fill();
 
         const renderQueue = [];
 
-        // 1. Tính tọa độ 3D các hạt tim
+        // 1. Chiếu các hạt tim 3D
         for (let i = 0; i < particles.length; i++) {
           const p = particles[i];
 
@@ -535,16 +516,13 @@
 
           const ease = 1 - Math.pow(1 - p.progress, 3);
 
-          // Biến đổi xoay 3D
           let x0 = p.origX * scale;
           let y0 = p.origY * scale;
           let z0 = p.origZ * scale;
 
-          // Xoay Y
           let x1 = x0 * cosY + z0 * sinY;
           let z1 = -x0 * sinY + z0 * cosY;
 
-          // Xoay X
           let y2 = y0 * cosX - z1 * sinX;
           let z2 = y0 * sinX + z1 * cosX;
 
@@ -554,52 +532,26 @@
           const drawX = p.currX + (targetProjX - p.currX) * ease;
           const drawY = p.currY + (targetProjY - p.currY) * ease;
 
-          const depthRatio = (z2 + 180) / 360;
-          const twinkle = 0.8 + 0.2 * Math.sin(time * 3 + p.twinkleOffset);
+          const depthRatio = (z2 + 160) / 320;
+          const twinkle = 0.85 + 0.15 * Math.sin(time * 3 + p.twinkleOffset);
 
           renderQueue.push({
             type: 'particle',
             x: drawX,
             y: drawY,
             z: z2,
-            size: p.size * (0.6 + 0.5 * depthRatio) * (0.3 + 0.7 * ease),
+            size: p.size * (0.65 + 0.45 * depthRatio) * (0.3 + 0.7 * ease),
             color: p.color,
-            alpha: Math.max(0.2, Math.min(1, (0.4 + 0.6 * depthRatio) * ease * twinkle))
+            alpha: Math.max(0.15, Math.min(1, (0.4 + 0.6 * depthRatio) * ease * twinkle))
           });
         }
 
-        // 2. Trái tim nhỏ phụ bên cạnh
-        for (let i = 0; i < miniHeartParticles.length; i++) {
-          const mp = miniHeartParticles[i];
-          const floatY = Math.sin(time * 1.5 + mp.phase) * 3;
-          let x0 = mp.x * (scale * 0.7);
-          let y0 = (mp.y + floatY) * (scale * 0.7);
-          let z0 = mp.z * (scale * 0.7);
-
-          let x1 = x0 * cosY + z0 * sinY;
-          let z1 = -x0 * sinY + z0 * cosY;
-          let y2 = y0 * cosX - z1 * sinX;
-          let z2 = y0 * sinX + z1 * cosX;
-
-          const projX = centerX + (x1 * fov) / (fov + z2);
-          const projY = centerY + (y2 * fov) / (fov + z2);
-
-          renderQueue.push({
-            type: 'mini_particle',
-            x: projX,
-            y: projY,
-            z: z2,
-            size: mp.size,
-            color: mp.color,
-            alpha: 0.75 + 0.25 * Math.sin(time * 2 + mp.phase)
-          });
-        }
-
-        // 3. Vành đai chữ 3D xoay lồng qua tim
+        // 2. Vành đai chữ 3D - BỐ TRÍ NẰM HOÀN TOÀN DƯỚI ĐÁY TRÁI TIM
         const textCount = ringTexts.length;
-        const ringRadiusX = Math.min(width * 0.44, 210);
+        const ringRadiusX = Math.min(width * 0.42, 175);
         const ringRadiusZ = ringRadiusX * 0.95;
-        const ringYPos = centerY + 38 * (scale / 16);
+        // Đặt vị trí Y của vòng chữ ở khoảng 72% chiều cao màn hình (dưới tim)
+        const ringYPos = height * 0.72;
 
         for (let i = 0; i < textCount; i++) {
           const angle = time * 0.35 + (i * 2 * Math.PI) / textCount;
@@ -607,12 +559,12 @@
           const cosA = Math.cos(angle);
 
           let x0 = cosA * ringRadiusX;
-          let y0 = (sinA * 0.15) * ringRadiusX;
+          let y0 = sinA * 14; // Nghiêng nhẹ 3D
           let z0 = sinA * ringRadiusZ;
 
-          // Áp dụng góc xoay cùng với toàn cảnh
           let x1 = x0 * cosY + z0 * sinY;
           let z1 = -x0 * sinY + z0 * cosY;
+
           let y2 = y0 * cosX - z1 * sinX;
           let z2 = y0 * sinX + z1 * cosX;
 
@@ -631,31 +583,31 @@
           });
         }
 
-        // 4. Sắp xếp thứ tự Z (từ xa đến gần) để tạo chiều sâu chân thực
+        // Sắp xếp thứ tự xa gần (Z-sorting)
         renderQueue.sort((a, b) => a.z - b.z);
 
-        // 5. Vẽ toàn bộ theo đúng chiều sâu
+        // 3. Vẽ toàn bộ các thành phần
         for (let i = 0; i < renderQueue.length; i++) {
           const item = renderQueue[i];
 
-          if (item.type === 'particle' || item.type === 'mini_particle') {
+          if (item.type === 'particle') {
             ctx.beginPath();
             ctx.arc(item.x, item.y, item.size, 0, Math.PI * 2);
             ctx.fillStyle = item.color;
             ctx.globalAlpha = item.alpha;
-            ctx.shadowBlur = item.color === '#ffffff' ? 8 : 4;
-            ctx.shadowColor = '#ff2a6d';
+            ctx.shadowBlur = 4;
+            ctx.shadowColor = '#ff0033';
             ctx.fill();
           } else if (item.type === 'text') {
-            const fontSize = 11.5 + item.depthRatio * 7.5;
+            const fontSize = 11.5 + item.depthRatio * 6.5;
             ctx.font = `bold ${fontSize}px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
 
-            ctx.globalAlpha = 0.25 + 0.75 * item.depthRatio;
-            ctx.fillStyle = item.depthRatio > 0.65 ? '#ffffff' : '#ffccd5';
-            ctx.shadowBlur = item.depthRatio > 0.65 ? 14 : 5;
-            ctx.shadowColor = '#ff2a6d';
+            ctx.globalAlpha = 0.3 + 0.7 * item.depthRatio;
+            ctx.fillStyle = item.depthRatio > 0.6 ? '#ffffff' : '#ffccd5';
+            ctx.shadowBlur = item.depthRatio > 0.6 ? 12 : 5;
+            ctx.shadowColor = '#ff0033';
             ctx.fillText(item.text, item.x, item.y);
           }
         }
