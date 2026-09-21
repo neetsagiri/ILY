@@ -57,7 +57,7 @@
       align-items: center;
       cursor: pointer;
       z-index: 200;
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(6px);
       box-shadow: 0 4px 15px rgba(0,0,0,0.4);
       transition: all 0.3s ease;
     }
@@ -310,10 +310,10 @@
     ];
 
     const fireflyContainer = document.getElementById('fireflies');
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 25; i++) {
       const fly = document.createElement('div');
       fly.className = 'bg-firefly';
-      const size = Math.random() * 4 + 2;
+      const size = Math.random() * 3 + 2;
       fly.style.width = size + 'px';
       fly.style.height = size + 'px';
       fly.style.left = Math.random() * 100 + 'vw';
@@ -323,7 +323,7 @@
     }
 
     window.addEventListener('pointermove', (e) => {
-      if (Math.random() < 0.25) {
+      if (Math.random() < 0.2) {
         const heart = document.createElement('div');
         heart.className = 'touch-heart';
         heart.innerText = Math.random() > 0.5 ? '💗' : '✨';
@@ -332,11 +332,11 @@
         document.body.appendChild(heart);
 
         setTimeout(() => {
-          heart.style.transform = `translate(${(Math.random() - 0.5) * 50}px, -45px) scale(0.2)`;
+          heart.style.transform = `translate(${(Math.random() - 0.5) * 40}px, -35px) scale(0.2)`;
           heart.style.opacity = '0';
         }, 20);
 
-        setTimeout(() => heart.remove(), 700);
+        setTimeout(() => heart.remove(), 600);
       }
     });
 
@@ -415,59 +415,43 @@
       let width = canvas.width = window.innerWidth;
       let height = canvas.height = window.innerHeight;
 
-      // 1. Sao nền lấp lánh
+      // ================= TẠO TEXTURE ĐỆM (OFFSCREEN CACHE) =================
+      // Thay vì shadowBlur gây giật lag, ta vẽ sẵn 3 đốm sáng texture
+      function createGlowDot(colorInner, colorOuter) {
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = 24;
+        offCanvas.height = 24;
+        const offCtx = offCanvas.getContext('2d');
+        const g = offCtx.createRadialGradient(12, 12, 1, 12, 12, 11);
+        g.addColorStop(0, colorInner);
+        g.addColorStop(0.4, colorOuter);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        offCtx.fillStyle = g;
+        offCtx.fillRect(0, 0, 24, 24);
+        return offCanvas;
+      }
+
+      const texPink = createGlowDot('rgba(255, 255, 255, 1)', 'rgba(255, 42, 109, 0.85)');
+      const texRed = createGlowDot('rgba(255, 180, 200, 1)', 'rgba(220, 20, 60, 0.75)');
+      const texWhite = createGlowDot('rgba(255, 255, 255, 1)', 'rgba(255, 160, 190, 0.8)');
+
+      // Sao nền tĩnh (chỉ cần ~60 sao vẽ thẳng, không blur)
       const stars = [];
-      for (let i = 0; i < 180; i++) {
+      for (let i = 0; i < 60; i++) {
         stars.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          size: Math.random() * 1.5 + 0.4,
-          twinkleSpeed: 0.02 + Math.random() * 0.04,
-          phase: Math.random() * Math.PI * 2,
-          color: Math.random() > 0.4 ? '#ffffff' : '#ffd1dc'
+          size: Math.random() * 1.3 + 0.5,
+          twinkleSpeed: 0.02 + Math.random() * 0.03,
+          phase: Math.random() * Math.PI * 2
         });
       }
-
-      // 2. Bụi tiên bay lơ lửng
-      const stardust = [];
-      for (let i = 0; i < 60; i++) {
-        stardust.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: -(Math.random() * 0.5 + 0.2),
-          size: Math.random() * 2 + 0.8,
-          alpha: Math.random() * 0.5 + 0.2,
-          pulse: Math.random() * Math.PI * 2
-        });
-      }
-
-      // 3. Sao băng
-      const shootingStars = [];
-      function spawnShootingStar() {
-        shootingStars.push({
-          x: Math.random() * width * 0.8 + width * 0.1,
-          y: Math.random() * (height * 0.35),
-          len: Math.random() * 90 + 40,
-          speed: Math.random() * 6 + 7,
-          angle: (Math.PI / 4) + (Math.random() - 0.5) * 0.2,
-          opacity: 1
-        });
-      }
-
-      // 4. Sóng xung kích trái tim
-      const shockwaves = [];
 
       window.addEventListener('resize', () => {
         width = canvas.width = window.innerWidth;
         height = canvas.height = window.innerHeight;
-        for (let s of stars) {
-          s.x = Math.random() * width;
-          s.y = Math.random() * height;
-        }
       });
 
-      // Phương trình toán học trái tim 3D thể tích
       function heartFunction(t) {
         return {
           x: 16 * Math.pow(Math.sin(t), 3),
@@ -475,69 +459,61 @@
         };
       }
 
-      /* TẠO KHỐI HẠT TRÁI TIM TỰ NHIÊN (ORGANIC 3D HEART) */
+      // Giảm hạt xuống ~450 nhưng dùng texture nên hình ảnh rất đầy đặn và siêu mượt
       const heartParticles = [];
-      const totalHeartParticles = 1400; // Mật độ hạt dày dặn, mịn như dải ngân hà
+      const totalParticles = 460;
 
-      for (let i = 0; i < totalHeartParticles; i++) {
+      for (let i = 0; i < totalParticles; i++) {
         const t = Math.PI * 2 * Math.random();
         const base = heartFunction(t);
 
-        // Phân phối thể tích ngẫu nhiên theo bán kính để không bị chia thành từng vệt vòng tròn lộ liễu
-        const r = Math.pow(Math.random(), 0.55); // rải đều từ tâm ra viền
-        // Độ dày trục Z tạo hình phồng 3D quả tim
-        const zThickness = (1 - r) * (Math.random() - 0.5) * 16;
+        const r = Math.pow(Math.random(), 0.6);
+        const zThickness = (1 - r) * (Math.random() - 0.5) * 14;
 
-        // Jitter nhẹ vị trí để phá bỏ tính cơ học của công thức
-        const jitter = (Math.random() - 0.5) * 0.5;
-        const hx = base.x * r + jitter;
-        const hy = (base.y - (-2.5)) * r + (-2.5) + jitter;
-        const hz = zThickness;
+        const hx = base.x * r + (Math.random() - 0.5) * 0.4;
+        const hy = (base.y - (-2.5)) * r + (-2.5) + (Math.random() - 0.5) * 0.4;
 
         const angle = Math.random() * Math.PI * 2;
         const dist = Math.max(width, height) * (0.6 + Math.random() * 0.4);
 
-        // Màu sắc chuyển dần từ viền hồng neon vào lõi trắng hồng
-        const isCore = r < 0.35 && Math.random() > 0.4;
-        const color = isCore ? '#ffffff' : (r > 0.85 ? '#ff1e56' : (Math.random() > 0.5 ? '#ff4d6d' : '#ff758c'));
+        let tex = texPink;
+        if (r < 0.3) tex = texWhite;
+        else if (r > 0.8) tex = texRed;
 
         heartParticles.push({
           x3d: hx,
           y3d: hy,
-          z3d: hz,
+          z3d: zThickness,
           currX: width / 2 + Math.cos(angle) * dist,
           currY: height / 2 + Math.sin(angle) * dist,
-          size: isCore ? (Math.random() * 1.8 + 1.2) : (Math.random() * 1.4 + 0.8),
-          color: color,
-          alpha: Math.random() * 0.4 + 0.6,
+          size: (Math.random() * 6 + 10),
+          texture: tex,
+          alpha: Math.random() * 0.3 + 0.7,
           progress: 0,
-          speed: 0.0035 + Math.random() * 0.003,
-          delay: Math.random() * 80,
-          phase: Math.random() * Math.PI * 2
+          speed: 0.005 + Math.random() * 0.004,
+          delay: Math.random() * 50
         });
       }
 
-      // Đĩa hạt xoay chân đế
+      // Đĩa hạt chân đế tối ưu (~70 hạt)
       const ringParticles = [];
-      const ringCount = 180;
-      for (let i = 0; i < ringCount; i++) {
+      for (let i = 0; i < 70; i++) {
         ringParticles.push({
           theta: Math.random() * Math.PI * 2,
           radius: Math.random() * 110 + 60,
-          speed: 0.01 + Math.random() * 0.006,
-          size: Math.random() * 1.6 + 0.5,
-          alpha: Math.random() * 0.6 + 0.3
+          speed: 0.01 + Math.random() * 0.005,
+          size: Math.random() * 6 + 6,
+          alpha: Math.random() * 0.5 + 0.3
         });
       }
 
       let time = 0;
       let frame = 0;
-      let lastBeatPeak = false;
 
       function render() {
         ctx.clearRect(0, 0, width, height);
 
-        time += 0.032;
+        time += 0.035;
         frame++;
 
         const centerX = width / 2;
@@ -546,126 +522,34 @@
         const ringRadiusX = Math.min(width * 0.42, 175);
         const ringRadiusY = ringRadiusX * 0.34;
 
-        if (Math.random() < 0.008) spawnShootingStar();
-
-        // ================= BACKGROUND =================
-        const nebula = ctx.createRadialGradient(centerX, centerY, 20, centerX, centerY, Math.max(width, height) * 0.65);
-        nebula.addColorStop(0, 'rgba(120, 10, 50, 0.32)');
-        nebula.addColorStop(0.45, 'rgba(40, 5, 25, 0.18)');
-        nebula.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = nebula;
-        ctx.fillRect(0, 0, width, height);
-
-        // Bầu trời sao
-        for (let i = 0; i < stars.length; i++) {
-          const s = stars[i];
-          const twinkle = (Math.sin(time * 30 * s.twinkleSpeed + s.phase) + 1) / 2;
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.size * (0.8 + 0.4 * twinkle), 0, Math.PI * 2);
-          ctx.fillStyle = s.color;
-          ctx.globalAlpha = 0.2 + 0.75 * twinkle;
-          ctx.fill();
-        }
-
-        // Sao băng
-        for (let i = shootingStars.length - 1; i >= 0; i--) {
-          const ss = shootingStars[i];
-          ss.x += Math.cos(ss.angle) * ss.speed;
-          ss.y += Math.sin(ss.angle) * ss.speed;
-          ss.opacity -= 0.015;
-
-          if (ss.opacity <= 0) {
-            shootingStars.splice(i, 1);
-            continue;
-          }
-
-          const tailX = ss.x - Math.cos(ss.angle) * ss.len;
-          const tailY = ss.y - Math.sin(ss.angle) * ss.len;
-          const gradSS = ctx.createLinearGradient(tailX, tailY, ss.x, ss.y);
-          gradSS.addColorStop(0, 'rgba(255, 117, 140, 0)');
-          gradSS.addColorStop(1, `rgba(255, 255, 255, ${ss.opacity})`);
-
-          ctx.beginPath();
-          ctx.moveTo(tailX, tailY);
-          ctx.lineTo(ss.x, ss.y);
-          ctx.strokeStyle = gradSS;
-          ctx.lineWidth = 1.8;
-          ctx.stroke();
-        }
-
-        // Bụi tiên
-        for (let i = 0; i < stardust.length; i++) {
-          const dust = stardust[i];
-          dust.x += dust.vx;
-          dust.y += dust.vy;
-          dust.pulse += 0.03;
-
-          if (dust.y < -10) { dust.y = height + 10; dust.x = Math.random() * width; }
-          if (dust.x < -10) dust.x = width + 10;
-          if (dust.x > width + 10) dust.x = -10;
-
-          const dAlpha = ((Math.sin(dust.pulse) + 1) / 2) * dust.alpha;
-          ctx.beginPath();
-          ctx.arc(dust.x, dust.y, dust.size, 0, Math.PI * 2);
-          ctx.fillStyle = '#ff85a1';
-          ctx.shadowBlur = 5;
-          ctx.shadowColor = '#ff2a6d';
-          ctx.globalAlpha = dAlpha;
-          ctx.fill();
-        }
-
-        // ================= NHỊP TIM & SHOCKWAVE =================
+        // 1. Quầng sáng tâm (vẽ 1 lần)
         const beatPower = Math.pow(Math.sin(time * 1.3), 8);
-        const beat = 1 + 0.09 * beatPower + 0.02 * Math.sin(time * 2.6);
-        const scale = (Math.min(width, height) / 37) * beat;
+        const beat = 1 + 0.08 * beatPower;
+        const scale = (Math.min(width, height) / 38) * beat;
 
-        if (beatPower > 0.82 && !lastBeatPeak) {
-          shockwaves.push({ radius: 25, maxRadius: 210, opacity: 0.65 });
-          lastBeatPeak = true;
-        } else if (beatPower <= 0.82) {
-          lastBeatPeak = false;
-        }
-
-        // Vẽ shockwave
-        for (let i = shockwaves.length - 1; i >= 0; i--) {
-          const sw = shockwaves[i];
-          sw.radius += 3.2;
-          sw.opacity -= 0.012;
-
-          if (sw.opacity <= 0 || sw.radius >= sw.maxRadius) {
-            shockwaves.splice(i, 1);
-            continue;
-          }
-
-          ctx.save();
-          ctx.beginPath();
-          ctx.arc(centerX, centerY, sw.radius, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(255, 77, 109, ${sw.opacity})`;
-          ctx.lineWidth = 1.8;
-          ctx.shadowBlur = 10;
-          ctx.shadowColor = '#ff2a6d';
-          ctx.stroke();
-          ctx.restore();
-        }
-
-        // Hào quang tâm tim
         const grad = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, 150 * beat);
-        grad.addColorStop(0, 'rgba(255, 42, 109, 0.45)');
-        grad.addColorStop(0.5, 'rgba(255, 77, 109, 0.12)');
+        grad.addColorStop(0, 'rgba(255, 42, 109, 0.35)');
+        grad.addColorStop(0.5, 'rgba(255, 77, 109, 0.08)');
         grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(centerX, centerY, 160 * beat, 0, Math.PI * 2);
+        ctx.arc(centerX, centerY, 150 * beat, 0, Math.PI * 2);
         ctx.fill();
 
-        // ================= HIỆU ỨNG TRÁI TIM 3D BỤI SAO =================
-        // Bật chế độ trộn màu 'lighter' giúp các hạt đè lên nhau sẽ tự phát sáng rực rỡ
-        ctx.save();
+        // 2. Sao nền nhẹ nhàng
+        ctx.fillStyle = '#ffccd5';
+        for (let i = 0; i < stars.length; i++) {
+          const s = stars[i];
+          const tw = (Math.sin(time * 25 * s.twinkleSpeed + s.phase) + 1) / 2;
+          ctx.globalAlpha = 0.2 + 0.6 * tw;
+          ctx.fillRect(s.x, s.y, s.size, s.size);
+        }
+
+        // 3. Render hạt tim qua Texture (Siêu mượt)
         ctx.globalCompositeOperation = 'lighter';
 
-        // Góc xoay 3D nhẹ quanh trục Y & Z tạo cảm giác sống động
-        const rotY = Math.sin(time * 0.5) * 0.22;
-        const rotX = Math.cos(time * 0.4) * 0.08;
+        const rotY = Math.sin(time * 0.5) * 0.18;
+        const rotX = Math.cos(time * 0.4) * 0.06;
 
         for (let i = 0; i < heartParticles.length; i++) {
           const p = heartParticles[i];
@@ -675,37 +559,28 @@
             if (p.progress > 1) p.progress = 1;
           }
 
-          // Xoay tọa độ 3D quanh trục Y
           const x1 = p.x3d * Math.cos(rotY) + p.z3d * Math.sin(rotY);
           const z1 = -p.x3d * Math.sin(rotY) + p.z3d * Math.cos(rotY);
-
-          // Xoay nhẹ quanh trục X
           const y2 = p.y3d * Math.cos(rotX) - z1 * Math.sin(rotX);
           const z2 = p.y3d * Math.sin(rotX) + z1 * Math.cos(rotX);
 
-          // Phép chiếu phối cảnh Perspective
           const fov = 350;
           const persp = fov / (fov + z2 * scale * 0.3);
 
-          const floatOffset = (p.progress >= 1) ? Math.sin(time * 2.2 + p.phase) * 0.8 : 0;
-          const targetX = centerX + x1 * scale * persp + floatOffset;
-          const targetY = centerY + y2 * scale * persp + floatOffset;
+          const targetX = centerX + x1 * scale * persp;
+          const targetY = centerY + y2 * scale * persp;
 
           const ease = 1 - Math.pow(1 - p.progress, 3);
           const drawX = p.currX + (targetX - p.currX) * ease;
           const drawY = p.currY + (targetY - p.currY) * ease;
 
-          ctx.beginPath();
-          ctx.arc(drawX, drawY, p.size * persp * (0.5 + 0.5 * ease), 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.shadowBlur = 6;
-          ctx.shadowColor = '#ff2a6d';
-          ctx.globalAlpha = p.alpha * ease * Math.min(1, Math.max(0.4, persp));
-          ctx.fill();
+          const renderSize = p.size * persp * (0.5 + 0.5 * ease);
+          ctx.globalAlpha = p.alpha * ease;
+          // Vẽ texture trực tiếp: không tốn CPU tính đường tròn hay đổ bóng
+          ctx.drawImage(p.texture, drawX - renderSize / 2, drawY - renderSize / 2, renderSize, renderSize);
         }
-        ctx.restore();
 
-        // ================= VÒNG HẠT XOAY CHÂN ĐẾ =================
+        // 4. Render đĩa hạt xoay chân đế
         for (let i = 0; i < ringParticles.length; i++) {
           const rp = ringParticles[i];
           rp.theta += rp.speed;
@@ -714,16 +589,15 @@
           const ry = ringCenterY + Math.sin(rp.theta) * (rp.radius * (ringRadiusY / 140));
           const zDepth = (Math.sin(rp.theta) + 1) / 2;
 
-          ctx.beginPath();
-          ctx.arc(rx, ry, rp.size * (0.6 + 0.5 * zDepth), 0, Math.PI * 2);
-          ctx.fillStyle = '#ff758c';
-          ctx.shadowBlur = 5;
-          ctx.shadowColor = '#ff2a6d';
+          const rSize = rp.size * (0.6 + 0.5 * zDepth);
           ctx.globalAlpha = rp.alpha * (0.3 + 0.7 * zDepth);
-          ctx.fill();
+          ctx.drawImage(texPink, rx - rSize / 2, ry - rSize / 2, rSize, rSize);
         }
 
-        // ================= VÒNG CHỮ 3D CHÂN ĐẾ =================
+        // Trả lại chế độ vẽ thông thường để vẽ chữ sắc nét
+        ctx.globalCompositeOperation = 'source-over';
+
+        // 5. Render đĩa chữ 3D chân đế
         const textCount = ringTexts.length;
         const sortedTexts = [];
 
@@ -732,39 +606,30 @@
           const sinA = Math.sin(angle);
           const cosA = Math.cos(angle);
 
-          const tx = centerX + cosA * ringRadiusX;
-          const ty = ringCenterY + sinA * ringRadiusY;
-          const zDepth = (sinA + 1) / 2;
-
           sortedTexts.push({
             text: ringTexts[i],
-            x: tx,
-            y: ty,
-            z: zDepth,
-            depthRatio: zDepth
+            x: centerX + cosA * ringRadiusX,
+            y: ringCenterY + sinA * ringRadiusY,
+            z: (sinA + 1) / 2
           });
         }
 
         sortedTexts.sort((a, b) => a.z - b.z);
 
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
         for (let i = 0; i < sortedTexts.length; i++) {
           const item = sortedTexts[i];
-          const fontSize = 11.5 + item.depthRatio * 6.5;
+          const fontSize = 11.5 + item.z * 6;
 
           ctx.font = `bold ${fontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-
-          ctx.globalAlpha = 0.35 + 0.65 * item.depthRatio;
-          ctx.fillStyle = item.depthRatio > 0.65 ? '#ffffff' : '#ffccd5';
-          ctx.shadowBlur = item.depthRatio > 0.65 ? 14 : 6;
-          ctx.shadowColor = '#ff2a6d';
-
+          ctx.globalAlpha = 0.35 + 0.65 * item.z;
+          ctx.fillStyle = item.z > 0.65 ? '#ffffff' : '#ffccd5';
           ctx.fillText(item.text, item.x, item.y);
         }
 
         ctx.globalAlpha = 1;
-        ctx.shadowBlur = 0;
         requestAnimationFrame(render);
       }
 
