@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -223,7 +223,7 @@
       height: 100vh;
       display: none;
       opacity: 0;
-      transition: opacity 1.4s ease;
+      transition: opacity 1.8s ease;
       z-index: 10;
     }
 
@@ -268,6 +268,7 @@
 </head>
 <body>
   <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
+  <audio id="galaxy-music" src="audio1.mp3" preload="auto" loop></audio>
   <div id="fireflies"></div>
 
   <div id="envelope-wrapper" onclick="openEnvelope()">
@@ -323,6 +324,7 @@
 
     let isOpened = false;
     const music = document.getElementById('bg-music');
+    const galaxyMusic = document.getElementById('galaxy-music');
 
     function openEnvelope() {
       if (isOpened) return;
@@ -349,14 +351,16 @@
     function startHeartShow(e) {
       e.stopPropagation();
 
+      music.play().catch(() => {});
+
       const letter = document.getElementById('paper-letter');
       const envWrapper = document.getElementById('envelope-wrapper');
 
-      letter.style.transition = 'all 0.85s ease';
+      letter.style.transition = 'all 1.2s cubic-bezier(0.25, 1, 0.5, 1)';
       letter.style.opacity = '0';
-      letter.style.transform = 'translate(-50%, -50%) scale(0.65)';
+      letter.style.transform = 'translate(-50%, -50%) scale(0.6)';
       envWrapper.style.opacity = '0';
-      envWrapper.style.transform = 'scale(0.65)';
+      envWrapper.style.transform = 'scale(0.6)';
 
       fireflyContainer.style.display = 'none';
 
@@ -367,7 +371,7 @@
         hw.style.display = 'block';
         requestAnimationFrame(() => hw.style.opacity = '1');
         initCrispHeart();
-      }, 750);
+      }, 1000);
     }
 
     let toggleMorph = null;
@@ -530,20 +534,21 @@
         data[idx + 5] = size;
         data[idx + 6] = colorType;
         data[idx + 7] = 0;
-        data[idx + 8] = 0.0022 + Math.random() * 0.0014;
+        data[idx + 8] = 0.0004 + Math.random() * 0.0003; // Slower initial appearance for the heart
         data[idx + 9] = Math.random() * 95;
       }
 
       let rotY = 0, rotX = 0;
       let velY = 0, velX = 0;
-      let isDragging = false;
       let lastPointerX = 0, lastPointerY = 0;
 
       let isGalaxyMode = false;
       let morphProgress = 0;
       let smoothMorph = 0;
 
-      function triggerTouchDisperse(touchesMap) {
+      const activeTouches = new Map();
+
+      function triggerMultiTouchDisperse(touchesMap) {
         const curScale = Math.min(width, height) / (38 - smoothMorph * 12);
         const curCenterY = height * (0.35 * (1 - smoothMorph) + 0.46 * smoothMorph);
         const curCenterX = width / 2;
@@ -581,19 +586,11 @@
 
             if (d < radius) {
               const factor = 1 - d / radius;
-              const force = Math.sin(factor * Math.PI * 0.5) * 0.14;
+              const force = Math.sin(factor * Math.PI * 0.5) * 0.65;
               const ang = Math.atan2(dy, dx);
               velDispX[i] += Math.cos(ang) * force;
               velDispY[i] += Math.sin(ang) * force;
-              velDispZ[i] += (Math.random() - 0.5) * force * 0.2;
-
-              const curVel = Math.hypot(velDispX[i], velDispY[i], velDispZ[i]);
-              if (curVel > 0.28) {
-                const scaleV = 0.28 / curVel;
-                velDispX[i] *= scaleV;
-                velDispY[i] *= scaleV;
-                velDispZ[i] *= scaleV;
-              }
+              velDispZ[i] += (Math.random() - 0.5) * force * 0.35;
             }
           }
         }
@@ -601,17 +598,17 @@
 
       canvas.addEventListener('touchstart', (e) => {
         isDragging = true;
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const t = e.changedTouches[i];
+          activeTouches.set(t.identifier, { x: t.clientX, y: t.clientY });
+        }
         if (e.touches.length > 0) {
           lastPointerX = e.touches[0].clientX;
           lastPointerY = e.touches[0].clientY;
           velY = 0;
           velX = 0;
         }
-        const currentTouches = new Map();
-        for (let i = 0; i < e.touches.length; i++) {
-          currentTouches.set(e.touches[i].identifier, { x: e.touches[i].clientX, y: e.touches[i].clientY });
-        }
-        triggerTouchDisperse(currentTouches);
+        triggerMultiTouchDisperse(activeTouches);
       }, { passive: true });
 
       window.addEventListener('touchmove', (e) => {
@@ -626,22 +623,25 @@
           lastPointerX = e.touches[0].clientX;
           lastPointerY = e.touches[0].clientY;
         }
-        const currentTouches = new Map();
-        for (let i = 0; i < e.touches.length; i++) {
-          currentTouches.set(e.touches[i].identifier, { x: e.touches[i].clientX, y: e.touches[i].clientY });
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          const t = e.changedTouches[i];
+          if (activeTouches.has(t.identifier)) {
+            activeTouches.set(t.identifier, { x: t.clientX, y: t.clientY });
+          }
         }
-        triggerTouchDisperse(currentTouches);
+        triggerMultiTouchDisperse(activeTouches);
       }, { passive: true });
 
       window.addEventListener('touchend', (e) => {
+        for (let i = 0; i < e.changedTouches.length; i++) {
+          activeTouches.delete(e.changedTouches[i].identifier);
+        }
         if (e.touches.length === 0) {
           isDragging = false;
-        } else {
-          lastPointerX = e.touches[0].clientX;
-          lastPointerY = e.touches[0].clientY;
         }
       }, { passive: true });
 
+      let isDragging = false;
       canvas.addEventListener('mousedown', (e) => {
         isDragging = true;
         lastPointerX = e.clientX;
@@ -649,7 +649,7 @@
         velY = 0;
         velX = 0;
         const singleTouch = new Map([[1, { x: e.clientX, y: e.clientY }]]);
-        triggerTouchDisperse(singleTouch);
+        triggerMultiTouchDisperse(singleTouch);
       });
 
       window.addEventListener('mousemove', (e) => {
@@ -664,7 +664,7 @@
           lastPointerX = e.clientX;
           lastPointerY = e.clientY;
           const singleTouch = new Map([[1, { x: e.clientX, y: e.clientY }]]);
-          triggerTouchDisperse(singleTouch);
+          triggerMultiTouchDisperse(singleTouch);
         }
       });
 
@@ -678,6 +678,14 @@
 
         const btn = document.getElementById('morphBtn');
         btn.innerText = isGalaxyMode ? "Trở về trái tim 💕" : "Biến thành dải ngân hà 🌌";
+
+        if (isGalaxyMode) {
+          music.pause();
+          galaxyMusic.play().catch(() => {});
+        } else {
+          galaxyMusic.pause();
+          music.play().catch(() => {});
+        }
       };
 
       function render() {
@@ -709,7 +717,7 @@
         const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
 
         const targetMorph = isGalaxyMode ? 1 : 0;
-        morphProgress += (targetMorph - morphProgress) * 0.014;
+        morphProgress += (targetMorph - morphProgress) * 0.005; // Slower transition speed
         smoothMorph = morphProgress * morphProgress * (3 - 2 * morphProgress);
 
         const centerX = width / 2;
