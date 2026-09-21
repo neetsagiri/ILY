@@ -32,7 +32,7 @@
       top: -50px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255, 42, 109, 0.85);
+      background: rgba(255, 42, 109, 0.9);
       backdrop-filter: blur(6px);
       color: #fff;
       padding: 8px 18px;
@@ -70,7 +70,7 @@
       z-index: 50;
       transition: opacity 1s ease, transform 1s ease;
       animation: floatEnvelope 3.5s ease-in-out infinite;
-      padding: 20px;
+      padding: 25px;
     }
 
     @keyframes floatEnvelope {
@@ -86,7 +86,6 @@
       border-radius: 0 0 16px 16px;
       box-shadow: 0 20px 45px rgba(255, 42, 109, 0.45), 0 0 35px rgba(255, 117, 140, 0.25);
       margin: 0 auto;
-      pointer-events: none;
     }
 
     /* Nắp gập phong bì */
@@ -146,7 +145,6 @@
       font-weight: 600;
       letter-spacing: 0.5px;
       text-shadow: 0 0 12px rgba(255, 77, 109, 0.8);
-      pointer-events: none;
     }
 
     .tap-hint {
@@ -156,7 +154,6 @@
       color: #ff85a1;
       opacity: 0.85;
       letter-spacing: 1px;
-      pointer-events: none;
     }
 
     /* TỜ GIẤY THƯ */
@@ -184,16 +181,13 @@
       flex-direction: column;
       justify-content: space-between;
       border: 1px solid #ead6c3;
-      pointer-events: auto;
     }
 
-    /* Giai đoạn 1: Trồi thẳng lên khỏi miệng túi */
     #paper-letter.peeking {
       opacity: 1;
       transform: translateX(-50%) translateY(-135px);
     }
 
-    /* Giai đoạn 2: Bung to ra giữa màn hình */
     #paper-letter.opened {
       position: fixed;
       top: 50%;
@@ -246,7 +240,6 @@
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(201, 24, 74, 0.45);
       align-self: center;
-      pointer-events: auto;
     }
 
     /* Khung Canvas Trái Tim 3D */
@@ -290,8 +283,8 @@
   <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
   <div id="fireflies"></div>
 
-  <!-- Bước 1: Phong bì và Lá thư mượt mà -->
-  <div id="envelope-wrapper">
+  <!-- Bước 1: Bấm trực tiếp mở phong bì -->
+  <div id="envelope-wrapper" onclick="openEnvelope()">
     <div class="envelope">
       <div class="envelope-flap" id="envFlap"></div>
       
@@ -302,7 +295,7 @@
         <div class="paper-body">
           Bé iuu Bảo Bei Nhất 💕, Bảo Bei bấm ở dưới bấm ở dưới...
         </div>
-        <button class="surprise-btn" id="surpriseBtn">Xem điều bất ngờ 💖</button>
+        <button class="surprise-btn" onclick="startHeartShow(event)">Xem điều bất ngờ 💖</button>
       </div>
 
       <div class="envelope-pocket"></div>
@@ -319,42 +312,44 @@
   </div>
 
   <script>
-    /* ================= TÍNH NĂNG VUỐT XUỐNG TẢI LẠI TRANG ================= */
+    /* ================= VUỐT XUỐNG TẢI LẠI TRANG (KHÔNG CHẶN CLICK) ================= */
     let touchStartY = 0;
-    let touchEndY = 0;
+    let isPulling = false;
     const refreshIndicator = document.getElementById('refresh-indicator');
 
     window.addEventListener('touchstart', (e) => {
       touchStartY = e.touches[0].clientY;
+      isPulling = false;
     }, { passive: true });
 
     window.addEventListener('touchmove', (e) => {
       const currentY = e.touches[0].clientY;
       const distance = currentY - touchStartY;
 
-      // Khi kéo xuống từ 40px trở lên, hiển thị thanh gợi ý
-      if (distance > 40) {
+      // Chỉ khi người dùng thực sự kéo vuốt xuống quá 35px mới tính là vuốt
+      if (distance > 35) {
+        isPulling = true;
         refreshIndicator.style.top = Math.min(distance * 0.4, 30) + 'px';
         refreshIndicator.style.opacity = '1';
-        refreshIndicator.innerText = distance > 90 ? 'Thả ra để tải lại 🔄' : 'Kéo xuống để tải lại...';
+        refreshIndicator.innerText = distance > 95 ? 'Thả ra để tải lại 🔄' : 'Kéo xuống để tải lại...';
       }
     }, { passive: true });
 
     window.addEventListener('touchend', (e) => {
-      touchEndY = e.changedTouches[0].clientY;
-      const distance = touchEndY - touchStartY;
+      if (!isPulling) return;
+      const currentY = e.changedTouches[0].clientY;
+      const distance = currentY - touchStartY;
 
-      // Vuốt xuống vượt quá 90px -> Kích hoạt tải lại trang
-      if (distance > 90) {
+      if (distance > 95) {
         refreshIndicator.innerText = 'Đang làm mới trang... 💕';
         setTimeout(() => {
           window.location.reload();
         }, 300);
       } else {
-        // Thu thanh chỉ báo về vị trí ẩn
         refreshIndicator.style.top = '-50px';
         refreshIndicator.style.opacity = '0';
       }
+      isPulling = false;
     }, { passive: true });
     /* ===================================================================== */
 
@@ -402,12 +397,13 @@
 
     let isOpened = false;
 
+    // Hàm mở thư mượt mà không bị lỗi
     function openEnvelope() {
       if (isOpened) return;
       isOpened = true;
 
       const music = document.getElementById('bg-music');
-      music.play().catch(() => {});
+      if (music) music.play().catch(() => {});
 
       document.getElementById('heartSeal').style.opacity = '0';
       document.getElementById('envFlap').style.transform = 'rotateX(180deg)';
@@ -416,29 +412,23 @@
 
       const letter = document.getElementById('paper-letter');
 
+      // Tờ giấy trồi lên
       setTimeout(() => {
         letter.classList.add('peeking');
-      }, 550);
+      }, 450);
 
+      // Mở to ra giữa màn hình
       setTimeout(() => {
         letter.classList.remove('peeking');
         letter.classList.add('opened');
-      }, 1450);
+      }, 1350);
     }
 
-    const envWrapper = document.getElementById('envelope-wrapper');
-    envWrapper.addEventListener('pointerdown', (e) => {
-      if (e.target && e.target.id === 'surpriseBtn') return;
-      openEnvelope();
-    });
+    function startHeartShow(e) {
+      if (e) e.stopPropagation();
 
-    document.getElementById('surpriseBtn').addEventListener('pointerdown', (e) => {
-      e.stopPropagation();
-      startHeartShow();
-    });
-
-    function startHeartShow() {
       const letter = document.getElementById('paper-letter');
+      const envWrapper = document.getElementById('envelope-wrapper');
 
       letter.style.transition = 'all 0.9s ease';
       letter.style.opacity = '0';
@@ -455,7 +445,7 @@
       }, 850);
     }
 
-    /* Thuật toán tạo khối quả cầu Trái tim 3D (3D Volumetric Heart) */
+    /* Thuật toán Trái tim 3D */
     function init3DVolumetricHeart() {
       const canvas = document.getElementById('heartCanvas');
       const ctx = canvas.getContext('2d');
