@@ -26,26 +26,6 @@
       position: relative;
     }
 
-    /* Thanh chỉ báo khi vuốt xuống để tải lại */
-    #refresh-indicator {
-      position: fixed;
-      top: -50px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255, 42, 109, 0.9);
-      backdrop-filter: blur(6px);
-      color: #fff;
-      padding: 8px 18px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      box-shadow: 0 4px 15px rgba(255, 42, 109, 0.4);
-      z-index: 9999;
-      pointer-events: none;
-      transition: top 0.2s ease, opacity 0.2s ease;
-      opacity: 0;
-    }
-
     /* Đốm sáng đom đóm nền */
     .bg-firefly {
       position: absolute;
@@ -68,9 +48,9 @@
       text-align: center;
       cursor: pointer;
       z-index: 50;
-      transition: opacity 1s ease, transform 1s ease;
+      transition: opacity 0.8s ease, transform 0.8s ease;
       animation: floatEnvelope 3.5s ease-in-out infinite;
-      padding: 25px;
+      padding: 20px;
     }
 
     @keyframes floatEnvelope {
@@ -100,7 +80,7 @@
       border-top: 105px solid #cb1a40;
       filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
       transform-origin: top;
-      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 5;
     }
 
@@ -116,6 +96,7 @@
       border-bottom: 100px solid #d41c46;
       border-radius: 0 0 16px 16px;
       z-index: 4;
+      pointer-events: none;
     }
 
     /* Con dấu sáp trái tim nổi */
@@ -136,6 +117,7 @@
       z-index: 6;
       animation: pulse 1.6s infinite;
       transition: opacity 0.4s ease;
+      pointer-events: none;
     }
 
     .hint-text {
@@ -145,6 +127,7 @@
       font-weight: 600;
       letter-spacing: 0.5px;
       text-shadow: 0 0 12px rgba(255, 77, 109, 0.8);
+      pointer-events: none;
     }
 
     .tap-hint {
@@ -154,56 +137,36 @@
       color: #ff85a1;
       opacity: 0.85;
       letter-spacing: 1px;
+      pointer-events: none;
     }
 
     /* TỜ GIẤY THƯ */
     #paper-letter {
-      position: absolute;
-      bottom: 12px;
-      left: 50%;
-      transform: translateX(-50%) translateY(0);
-      width: 236px;
-      height: 145px;
-      background: #fffdf7;
-      background-image: repeating-linear-gradient(#fffdf7, #fffdf7 26px, #f1e4d8 27px);
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.25);
-      padding: 16px 14px;
-      z-index: 2;
-      opacity: 0;
-      transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1), 
-                  width 0.8s ease, 
-                  height 0.8s ease, 
-                  box-shadow 0.8s ease,
-                  opacity 0.4s ease;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border: 1px solid #ead6c3;
-    }
-
-    #paper-letter.peeking {
-      opacity: 1;
-      transform: translateX(-50%) translateY(-135px);
-    }
-
-    #paper-letter.opened {
       position: fixed;
       top: 50%;
       left: 50%;
-      bottom: auto;
-      transform: translate(-50%, -50%) scale(1);
+      transform: translate(-50%, -50%) scale(0.6);
       width: 88%;
       max-width: 360px;
-      height: auto;
-      min-height: 250px;
-      padding: 26px 22px;
-      border-radius: 18px;
-      z-index: 100;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 77, 109, 0.4);
+      min-height: 240px;
       background: #fffdf7;
       background-image: repeating-linear-gradient(#fffdf7, #fffdf7 27px, #faeade 28px);
+      border-radius: 18px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 77, 109, 0.4);
+      padding: 26px 22px;
+      z-index: 100;
+      opacity: 0;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid #ead6c3;
+      transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.25, 1), transform 0.7s cubic-bezier(0.2, 0.8, 0.25, 1);
+    }
+
+    #paper-letter.opened {
+      display: flex;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
     }
 
     .paper-header {
@@ -277,27 +240,13 @@
 </head>
 <body>
 
-  <!-- Thanh hiển thị hiệu ứng vuốt tải lại -->
-  <div id="refresh-indicator">Đang làm mới trang... 🔄</div>
-
   <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
   <div id="fireflies"></div>
 
-  <!-- Bước 1: Bấm trực tiếp mở phong bì -->
-  <div id="envelope-wrapper" onclick="openEnvelope()">
+  <!-- Bước 1: Phong bì -->
+  <div id="envelope-wrapper" onclick="handleOpenEnvelope()">
     <div class="envelope">
       <div class="envelope-flap" id="envFlap"></div>
-      
-      <!-- Tờ thư kẹp bên trong phong bì -->
-      <div id="paper-letter">
-        <div class="paper-stamp">💌</div>
-        <div class="paper-header">Gửi Bảo Bei của bé 💕</div>
-        <div class="paper-body">
-          Bé iuu Bảo Bei Nhất 💕, Bảo Bei bấm ở dưới bấm ở dưới...
-        </div>
-        <button class="surprise-btn" onclick="startHeartShow(event)">Xem điều bất ngờ 💖</button>
-      </div>
-
       <div class="envelope-pocket"></div>
       <div class="heart-seal" id="heartSeal">❤️</div>
     </div>
@@ -306,53 +255,22 @@
     <span class="tap-hint" id="hintSub">(Chạm vào phong thư để mở ✨)</span>
   </div>
 
+  <!-- Tờ thư đặt độc lập nổi lên màn hình -->
+  <div id="paper-letter">
+    <div class="paper-stamp">💌</div>
+    <div class="paper-header">Gửi Bảo Bei của bé 💕</div>
+    <div class="paper-body">
+      Bé iuu Bảo Bei Nhất 💕, Bảo Bei bấm ở dưới bấm ở dưới...
+    </div>
+    <button class="surprise-btn" onclick="startHeartShow(event)">Xem điều bất ngờ 💖</button>
+  </div>
+
   <!-- Bước 2: Canvas Trái tim 3D -->
   <div id="heart-wrapper">
     <canvas id="heartCanvas"></canvas>
   </div>
 
   <script>
-    /* ================= VUỐT XUỐNG TẢI LẠI TRANG (KHÔNG CHẶN CLICK) ================= */
-    let touchStartY = 0;
-    let isPulling = false;
-    const refreshIndicator = document.getElementById('refresh-indicator');
-
-    window.addEventListener('touchstart', (e) => {
-      touchStartY = e.touches[0].clientY;
-      isPulling = false;
-    }, { passive: true });
-
-    window.addEventListener('touchmove', (e) => {
-      const currentY = e.touches[0].clientY;
-      const distance = currentY - touchStartY;
-
-      // Chỉ khi người dùng thực sự kéo vuốt xuống quá 35px mới tính là vuốt
-      if (distance > 35) {
-        isPulling = true;
-        refreshIndicator.style.top = Math.min(distance * 0.4, 30) + 'px';
-        refreshIndicator.style.opacity = '1';
-        refreshIndicator.innerText = distance > 95 ? 'Thả ra để tải lại 🔄' : 'Kéo xuống để tải lại...';
-      }
-    }, { passive: true });
-
-    window.addEventListener('touchend', (e) => {
-      if (!isPulling) return;
-      const currentY = e.changedTouches[0].clientY;
-      const distance = currentY - touchStartY;
-
-      if (distance > 95) {
-        refreshIndicator.innerText = 'Đang làm mới trang... 💕';
-        setTimeout(() => {
-          window.location.reload();
-        }, 300);
-      } else {
-        refreshIndicator.style.top = '-50px';
-        refreshIndicator.style.opacity = '0';
-      }
-      isPulling = false;
-    }, { passive: true });
-    /* ===================================================================== */
-
     const ringTexts = [
       "Anh yêu Bảo Bei 💕",
       "I Love You, Bảo Bei ✨",
@@ -397,55 +315,74 @@
 
     let isOpened = false;
 
-    // Hàm mở thư mượt mà không bị lỗi
-    function openEnvelope() {
+    // Hàm mở thư trực tiếp, an toàn tuyệt đối
+    function handleOpenEnvelope() {
       if (isOpened) return;
       isOpened = true;
 
-      const music = document.getElementById('bg-music');
-      if (music) music.play().catch(() => {});
+      // Phát nhạc an toàn trong try/catch để không làm đơ web
+      try {
+        const music = document.getElementById('bg-music');
+        if (music) {
+          const playPromise = music.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(err => console.log("Trình duyệt chặn phát âm thanh:", err));
+          }
+        }
+      } catch (e) {}
 
-      document.getElementById('heartSeal').style.opacity = '0';
-      document.getElementById('envFlap').style.transform = 'rotateX(180deg)';
-      document.getElementById('hintTitle').style.opacity = '0';
-      document.getElementById('hintSub').style.opacity = '0';
+      // Mở nắp phong bì
+      const flap = document.getElementById('envFlap');
+      if (flap) flap.style.transform = 'rotateX(180deg)';
+      
+      const seal = document.getElementById('heartSeal');
+      if (seal) seal.style.opacity = '0';
 
-      const letter = document.getElementById('paper-letter');
+      const title = document.getElementById('hintTitle');
+      if (title) title.style.opacity = '0';
 
-      // Tờ giấy trồi lên
+      const sub = document.getElementById('hintSub');
+      if (sub) sub.style.opacity = '0';
+
+      // Ẩn phong bì và đưa tờ thư ra giữa màn hình
       setTimeout(() => {
-        letter.classList.add('peeking');
-      }, 450);
+        const env = document.getElementById('envelope-wrapper');
+        if (env) {
+          env.style.opacity = '0';
+          env.style.transform = 'scale(0.8)';
+          setTimeout(() => env.style.display = 'none', 400);
+        }
 
-      // Mở to ra giữa màn hình
-      setTimeout(() => {
-        letter.classList.remove('peeking');
-        letter.classList.add('opened');
-      }, 1350);
+        const letter = document.getElementById('paper-letter');
+        if (letter) {
+          letter.style.display = 'flex';
+          setTimeout(() => letter.classList.add('opened'), 50);
+        }
+      }, 600);
     }
 
     function startHeartShow(e) {
       if (e) e.stopPropagation();
 
       const letter = document.getElementById('paper-letter');
-      const envWrapper = document.getElementById('envelope-wrapper');
-
-      letter.style.transition = 'all 0.9s ease';
-      letter.style.opacity = '0';
-      letter.style.transform = 'translate(-50%, -50%) scale(0.7)';
-      envWrapper.style.opacity = '0';
-      envWrapper.style.transform = 'scale(0.7)';
+      if (letter) {
+        letter.style.transition = 'all 0.8s ease';
+        letter.style.opacity = '0';
+        letter.style.transform = 'translate(-50%, -50%) scale(0.7)';
+        setTimeout(() => letter.style.display = 'none', 800);
+      }
 
       setTimeout(() => {
-        envWrapper.style.display = 'none';
         const hw = document.getElementById('heart-wrapper');
-        hw.style.display = 'block';
-        setTimeout(() => hw.style.opacity = '1', 50);
+        if (hw) {
+          hw.style.display = 'block';
+          setTimeout(() => hw.style.opacity = '1', 50);
+        }
         init3DVolumetricHeart();
-      }, 850);
+      }, 700);
     }
 
-    /* Thuật toán Trái tim 3D */
+    /* Thuật toán tạo khối quả cầu Trái tim 3D (3D Volumetric Heart) */
     function init3DVolumetricHeart() {
       const canvas = document.getElementById('heartCanvas');
       const ctx = canvas.getContext('2d');
