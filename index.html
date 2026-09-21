@@ -15,7 +15,7 @@
     body {
       width: 100vw;
       height: 100vh;
-      background: #06020a;
+      background: radial-gradient(circle at 50% 45%, #220318 0%, #05010a 100%);
       overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       display: flex;
@@ -24,19 +24,20 @@
       position: relative;
     }
 
-    /* Đốm sáng nhẹ nền mở đầu */
+    /* Đốm sáng đom đóm & sao bay ngập tràn nền */
     .bg-firefly {
       position: absolute;
-      background: #ff4d6d;
+      background: #ff758c;
       border-radius: 50%;
       pointer-events: none;
-      opacity: 0.3;
-      animation: floatFirefly 4s infinite ease-in-out;
+      opacity: 0.5;
+      animation: floatFirefly 5s infinite ease-in-out;
+      z-index: 1;
     }
 
     @keyframes floatFirefly {
-      0%, 100% { transform: translateY(0); opacity: 0.2; }
-      50% { transform: translateY(-20px); opacity: 0.6; }
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.2; }
+      50% { transform: translateY(-25px) scale(1.4); opacity: 0.75; }
     }
 
     /* Bì thư 3D */
@@ -44,22 +45,22 @@
       text-align: center;
       cursor: pointer;
       z-index: 50;
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition: opacity 0.8s ease, transform 0.8s ease;
       animation: floatEnvelope 3s ease-in-out infinite;
     }
 
     @keyframes floatEnvelope {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
+      50% { transform: translateY(-10px); }
     }
 
     .envelope {
       position: relative;
-      width: 230px;
-      height: 155px;
+      width: 250px;
+      height: 165px;
       background: #b01037;
-      border-radius: 0 0 14px 14px;
-      box-shadow: 0 15px 35px rgba(255, 42, 109, 0.4);
+      border-radius: 0 0 16px 16px;
+      box-shadow: 0 20px 45px rgba(255, 42, 109, 0.45), 0 0 35px rgba(255, 117, 140, 0.25);
       margin: 0 auto;
     }
 
@@ -69,10 +70,10 @@
       left: 0;
       width: 0;
       height: 0;
-      border-left: 115px solid transparent;
-      border-right: 115px solid transparent;
-      border-top: 92px solid #d62246;
-      filter: drop-shadow(0 3px 5px rgba(0,0,0,0.3));
+      border-left: 125px solid transparent;
+      border-right: 125px solid transparent;
+      border-top: 100px solid #d62246;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.35));
       transform-origin: top;
       transition: transform 0.4s ease;
       z-index: 3;
@@ -84,63 +85,64 @@
       left: 0;
       width: 0;
       height: 0;
-      border-left: 115px solid #c1123a;
-      border-right: 115px solid #c1123a;
-      border-bottom: 90px solid #e01e4a;
-      border-radius: 0 0 14px 14px;
+      border-left: 125px solid #c1123a;
+      border-right: 125px solid #c1123a;
+      border-bottom: 95px solid #e01e4a;
+      border-radius: 0 0 16px 16px;
       z-index: 2;
     }
 
     .heart-seal {
       position: absolute;
-      top: 70px;
+      top: 75px;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 46px;
-      height: 46px;
+      width: 50px;
+      height: 50px;
       background: radial-gradient(circle, #ffccd5 0%, #ff4d6d 70%, #a0082a 100%);
       border-radius: 50%;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4), inset 0 2px 3px rgba(255,255,255,0.6);
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 24px;
+      font-size: 26px;
       z-index: 4;
       animation: pulse 1.4s infinite;
     }
 
     .hint-text {
-      margin-top: 24px;
+      margin-top: 26px;
       color: #ffccd5;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       font-weight: 600;
       letter-spacing: 0.5px;
-      text-shadow: 0 0 10px rgba(255, 77, 109, 0.8);
+      text-shadow: 0 0 12px rgba(255, 77, 109, 0.8);
     }
 
     .tap-hint {
       display: block;
       margin-top: 6px;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: #ff85a1;
       opacity: 0.85;
+      letter-spacing: 1px;
     }
 
     /* Thiệp */
     #letter-card {
       position: absolute;
       width: 86%;
-      max-width: 360px;
-      background: rgba(255, 255, 255, 0.97);
-      border-radius: 18px;
-      padding: 26px 22px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 77, 109, 0.35);
+      max-width: 380px;
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 77, 109, 0.35);
       text-align: center;
       z-index: 60;
       display: none;
       opacity: 0;
       transform: translateY(20px) scale(0.9);
-      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     #letter-card.show {
@@ -150,7 +152,7 @@
     }
 
     .letter-title {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       color: #c9184a;
       font-weight: 700;
       margin-bottom: 12px;
@@ -158,9 +160,9 @@
 
     .letter-content {
       color: #333;
-      font-size: 1rem;
+      font-size: 1.05rem;
       line-height: 1.6;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
       font-weight: 500;
     }
 
@@ -168,15 +170,15 @@
       background: linear-gradient(135deg, #ff4d6d, #c9184a);
       color: #fff;
       border: none;
-      padding: 11px 26px;
-      border-radius: 25px;
-      font-size: 0.95rem;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 5px 15px rgba(201, 24, 74, 0.45);
+      box-shadow: 0 6px 18px rgba(201, 24, 74, 0.45);
     }
 
-    /* Khung Canvas Trái Tim */
+    /* Khung Trái Tim & Nền trong suốt */
     #heart-wrapper {
       position: fixed;
       top: 0;
@@ -187,6 +189,7 @@
       opacity: 0;
       transition: opacity 0.8s ease;
       z-index: 10;
+      pointer-events: none;
     }
 
     canvas {
@@ -195,7 +198,7 @@
       display: block;
     }
 
-    /* Chữ hiển thị rõ nét, không bị tối */
+    /* Chữ chạy phía dưới - Đèn Neon sắc nét */
     .caption-container {
       position: absolute;
       bottom: 10%;
@@ -209,18 +212,19 @@
       font-size: 1.45rem;
       font-weight: 700;
       color: #ffffff;
-      text-shadow: 0 0 10px #ff2a6d, 0 0 20px #ff0055;
-      letter-spacing: 0.5px;
-      transition: opacity 0.35s ease, transform 0.35s ease;
+      text-shadow: 0 0 12px #ff4d6d, 0 0 25px #ff0055, 0 0 35px #ff2a6d;
+      letter-spacing: 0.8px;
+      transition: opacity 0.4s ease, transform 0.4s ease;
       transform: scale(1);
     }
 
     #sub-text {
-      margin-top: 6px;
+      margin-top: 8px;
       font-size: 0.9rem;
       font-weight: 500;
-      color: #ffb3c1;
+      color: #ffccd5;
       text-shadow: 0 0 8px rgba(255, 77, 109, 0.8);
+      letter-spacing: 1px;
     }
 
     .touch-heart {
@@ -240,6 +244,8 @@
 <body>
 
   <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
+  
+  <!-- Hạt đom đóm nền luôn hiển thị xuyên suốt -->
   <div id="fireflies"></div>
 
   <!-- Bước 1: Phong bì -->
@@ -262,7 +268,7 @@
     <button class="surprise-btn" onclick="startHeartShow()">Xem điều bất ngờ 💖</button>
   </div>
 
-  <!-- Bước 3: Trái tim siêu mượt 60fps -->
+  <!-- Bước 3: Trái tim đa tầng & hạt bay từ từ -->
   <div id="heart-wrapper">
     <canvas id="heartCanvas"></canvas>
 
@@ -288,21 +294,22 @@
       "Bé iuu Bảo Bei Nhất 💕"
     ];
 
+    // Tạo 45 hạt đom đóm nền bay lơ lửng khắp màn hình
     const fireflyContainer = document.getElementById('fireflies');
-    for (let i = 0; i < 25; i++) {
+    for (let i = 0; i < 45; i++) {
       const fly = document.createElement('div');
       fly.className = 'bg-firefly';
-      const size = Math.random() * 3 + 2;
+      const size = Math.random() * 4 + 2;
       fly.style.width = size + 'px';
       fly.style.height = size + 'px';
       fly.style.left = Math.random() * 100 + 'vw';
       fly.style.top = Math.random() * 100 + 'vh';
-      fly.style.animationDelay = Math.random() * 4 + 's';
+      fly.style.animationDelay = Math.random() * 5 + 's';
       fireflyContainer.appendChild(fly);
     }
 
     window.addEventListener('pointermove', (e) => {
-      if (Math.random() < 0.2) {
+      if (Math.random() < 0.25) {
         const heart = document.createElement('div');
         heart.className = 'touch-heart';
         heart.innerText = Math.random() > 0.5 ? '💗' : '💕';
@@ -311,7 +318,7 @@
         document.body.appendChild(heart);
 
         setTimeout(() => {
-          heart.style.transform = `translate(${(Math.random() - 0.5) * 40}px, -35px) scale(0.3)`;
+          heart.style.transform = `translate(${(Math.random() - 0.5) * 50}px, -40px) scale(0.3)`;
           heart.style.opacity = '0';
         }, 20);
 
@@ -336,8 +343,8 @@
           const card = document.getElementById('letter-card');
           card.style.display = 'block';
           setTimeout(() => card.classList.add('show'), 20);
-        }, 500);
-      }, 300);
+        }, 600);
+      }, 350);
     }
 
     function startHeartShow() {
@@ -348,10 +355,10 @@
         card.style.display = 'none';
         const hw = document.getElementById('heart-wrapper');
         hw.style.display = 'block';
-        setTimeout(() => hw.style.opacity = '1', 40);
-        initFastSmoothHeart();
+        setTimeout(() => hw.style.opacity = '1', 50);
+        initSlowGracefulHeart();
         startTextRotation();
-      }, 400);
+      }, 500);
     }
 
     function startTextRotation() {
@@ -359,18 +366,18 @@
       const textEl = document.getElementById('lang-text');
       setInterval(() => {
         textEl.style.opacity = '0';
-        textEl.style.transform = 'scale(0.9)';
+        textEl.style.transform = 'scale(0.85)';
         setTimeout(() => {
           idx = (idx + 1) % phrases.length;
           textEl.innerText = phrases[idx];
           textEl.style.opacity = '1';
           textEl.style.transform = 'scale(1)';
         }, 350);
-      }, 2500);
+      }, 2600);
     }
 
-    /* Thuật toán Sprite Cache siêu mượt không lag trên di động */
-    function initFastSmoothHeart() {
+    /* Thuật toán Trái tim hình thành từ từ & Giữ nguyên vẹn nền lung linh */
+    function initSlowGracefulHeart() {
       const canvas = document.getElementById('heartCanvas');
       const ctx = canvas.getContext('2d');
       let width = canvas.width = window.innerWidth;
@@ -381,18 +388,18 @@
         height = canvas.height = window.innerHeight;
       });
 
-      // Tạo trước các mẫu hạt phát sáng (Offscreen Sprite Cache) để điện thoại không bị lag
+      // Tạo trước ảnh sprite nhẹ không lag
       function createHeartSprite(emoji) {
         const sCanvas = document.createElement('canvas');
-        sCanvas.width = 40;
-        sCanvas.height = 40;
+        sCanvas.width = 44;
+        sCanvas.height = 44;
         const sCtx = sCanvas.getContext('2d');
-        sCtx.font = '22px -apple-system, sans-serif';
+        sCtx.font = '24px -apple-system, sans-serif';
         sCtx.textAlign = 'center';
         sCtx.textBaseline = 'middle';
-        sCtx.shadowBlur = 8;
+        sCtx.shadowBlur = 10;
         sCtx.shadowColor = '#ff2a6d';
-        sCtx.fillText(emoji, 20, 20);
+        sCtx.fillText(emoji, 22, 22);
         return sCanvas;
       }
 
@@ -414,13 +421,13 @@
 
       const particles = [];
 
-      // Viền nét tinh xảo (110 hạt)
+      // 1. Viền ngoài trái tim (110 hạt)
       const borderCount = 110;
       for (let i = 0; i < borderCount; i++) {
         const t = (Math.PI * 2 * i) / borderCount;
         const pos = heartCurve(t);
         const angle = Math.random() * Math.PI * 2;
-        const dist = Math.max(width, height) * (0.6 + Math.random() * 0.4);
+        const dist = Math.max(width, height) * (0.6 + Math.random() * 0.45);
 
         particles.push({
           targetRelX: pos.x,
@@ -430,21 +437,22 @@
           sprite: sprites[i % sprites.length],
           scaleMod: Math.random() * 0.2 + 0.9,
           progress: 0,
-          speed: 0.015 + Math.random() * 0.01,
-          delay: Math.random() * 35,
+          // Tốc độ chậm rãi & thời gian trễ kéo dài giúp hình thành từ từ
+          speed: 0.005 + Math.random() * 0.005,
+          delay: Math.random() * 90,
           phase: Math.random() * Math.PI * 2
         });
       }
 
-      // Ruột lấp kín vừa vặn, không bị đè quá tải GPU (140 hạt)
-      const insideCount = 140;
+      // 2. Ruột trong trái tim (150 hạt)
+      const insideCount = 150;
       let added = 0;
       while (added < insideCount) {
-        const rx = (Math.random() * 2 - 1) * 15;
-        const ry = Math.random() * 26 - 15;
+        const rx = (Math.random() * 2 - 1) * 15.2;
+        const ry = Math.random() * 27 - 15.5;
         if (isInsideHeart(rx, ry)) {
           const angle = Math.random() * Math.PI * 2;
-          const dist = Math.max(width, height) * (0.6 + Math.random() * 0.4);
+          const dist = Math.max(width, height) * (0.6 + Math.random() * 0.45);
 
           particles.push({
             targetRelX: rx,
@@ -454,8 +462,8 @@
             sprite: sprites[added % sprites.length],
             scaleMod: Math.random() * 0.25 + 0.75,
             progress: 0,
-            speed: 0.014 + Math.random() * 0.01,
-            delay: Math.random() * 40,
+            speed: 0.004 + Math.random() * 0.005,
+            delay: Math.random() * 110,
             phase: Math.random() * Math.PI * 2
           });
           added++;
@@ -466,8 +474,8 @@
       let frame = 0;
 
       function render() {
-        ctx.fillStyle = 'rgba(6, 2, 10, 0.3)';
-        ctx.fillRect(0, 0, width, height);
+        // Xóa trong suốt mỗi khung hình để lộ nền đom đóm & tinh vân
+        ctx.clearRect(0, 0, width, height);
 
         time += 0.045;
         frame++;
@@ -475,7 +483,17 @@
         const beat = 1 + 0.08 * Math.pow(Math.sin(time), 8) + 0.03 * Math.sin(time * 2);
         const scale = (Math.min(width, height) / 38) * beat;
         const centerX = width / 2;
-        const centerY = height / 2 - 40;
+        const centerY = height / 2 - 45;
+
+        // Vẽ vầng sáng hào quang mềm mại ở giữa tâm
+        const gradient = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, 170 * beat);
+        gradient.addColorStop(0, 'rgba(255, 42, 109, 0.35)');
+        gradient.addColorStop(0.6, 'rgba(255, 77, 109, 0.12)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 180 * beat, 0, Math.PI * 2);
+        ctx.fill();
 
         for (let i = 0; i < particles.length; i++) {
           const p = particles[i];
@@ -489,13 +507,14 @@
           const targetX = centerX + p.targetRelX * scale + floatOffset;
           const targetY = centerY + p.targetRelY * scale + floatOffset;
 
+          // Hiệu ứng lướt mượt mà chậm rãi Cubic-Bezier
           const ease = 1 - Math.pow(1 - p.progress, 3);
           const drawX = p.currX + (targetX - p.currX) * ease;
           const drawY = p.currY + (targetY - p.currY) * ease;
 
-          const size = 30 * p.scaleMod * (0.6 + 0.4 * ease);
-          
-          ctx.globalAlpha = Math.min(1, ease + 0.15);
+          const size = 32 * p.scaleMod * (0.4 + 0.6 * ease);
+
+          ctx.globalAlpha = Math.min(1, ease + 0.1);
           ctx.drawImage(p.sprite, drawX - size / 2, drawY - size / 2, size, size);
         }
 
