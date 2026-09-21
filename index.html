@@ -15,9 +15,9 @@
     body {
       width: 100vw;
       height: 100vh;
-      background: #050208;
+      background: radial-gradient(ellipse at center, #1a0515 0%, #030106 100%);
       overflow: hidden;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -36,8 +36,8 @@
       width: 200px;
       height: 140px;
       background: linear-gradient(135deg, #ff4d6d, #c9184a);
-      border-radius: 12px;
-      box-shadow: 0 15px 35px rgba(255, 77, 109, 0.4);
+      border-radius: 14px;
+      box-shadow: 0 15px 35px rgba(255, 77, 109, 0.45);
       margin: 0 auto;
       display: flex;
       justify-content: center;
@@ -57,15 +57,15 @@
       text-shadow: 0 0 10px rgba(255, 77, 109, 0.6);
     }
 
-    /* Thiệp tâm sự */
+    /* Thiệp tâm tình */
     #letter-card {
       position: absolute;
       width: 86%;
       max-width: 380px;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 16px;
-      padding: 26px 22px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 77, 109, 0.3);
+      background: rgba(255, 255, 255, 0.96);
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 77, 109, 0.35);
       text-align: center;
       z-index: 60;
       display: none;
@@ -81,33 +81,33 @@
     }
 
     .letter-title {
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       color: #c9184a;
       font-weight: 700;
       margin-bottom: 12px;
     }
 
     .letter-content {
-      color: #444;
-      font-size: 0.95rem;
+      color: #333;
+      font-size: 1.05rem;
       line-height: 1.6;
-      margin-bottom: 20px;
-      text-align: justify;
+      margin-bottom: 22px;
+      font-weight: 500;
     }
 
     .surprise-btn {
       background: linear-gradient(135deg, #ff4d6d, #c9184a);
       color: #fff;
       border: none;
-      padding: 10px 24px;
-      border-radius: 25px;
-      font-size: 0.95rem;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 6px 15px rgba(201, 24, 74, 0.4);
+      box-shadow: 0 6px 18px rgba(201, 24, 74, 0.45);
     }
 
-    /* Khung hiển thị Trái Tim Canvas */
+    /* Khu vực hiển thị Trái Tim Emoji */
     #heart-wrapper {
       position: fixed;
       top: 0;
@@ -116,7 +116,7 @@
       height: 100vh;
       display: none;
       opacity: 0;
-      transition: opacity 1s ease;
+      transition: opacity 0.8s ease;
       z-index: 10;
     }
 
@@ -126,37 +126,37 @@
       display: block;
     }
 
-    /* Các dòng chữ đa ngôn ngữ chạy phía dưới trái tim */
-    #lang-text {
+    /* Chữ chạy phía dưới */
+    .caption-container {
       position: absolute;
-      bottom: 12%;
+      bottom: 8%;
       width: 100%;
       text-align: center;
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #fff;
-      text-shadow: 0 0 10px #ff4d6d, 0 0 20px #ff0055;
-      letter-spacing: 1px;
       pointer-events: none;
-      transition: opacity 0.4s ease;
+      z-index: 20;
+    }
+
+    #lang-text {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: #ffffff;
+      text-shadow: 0 0 12px #ff4d6d, 0 0 25px #ff0055;
+      letter-spacing: 0.8px;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      transform: scale(1);
     }
 
     #sub-text {
-      position: absolute;
-      bottom: 7.5%;
-      width: 100%;
-      text-align: center;
-      font-size: 0.9rem;
+      margin-top: 6px;
+      font-size: 0.85rem;
       color: #ffb3c1;
-      letter-spacing: 0.5px;
-      pointer-events: none;
+      letter-spacing: 1px;
+      opacity: 0.85;
     }
 
-    /* Tia tim mini khi chạm ngón tay */
     .touch-heart {
       position: fixed;
       pointer-events: none;
-      user-select: none;
       font-size: 16px;
       z-index: 999;
       transition: transform 0.7s ease-out, opacity 0.7s ease-out;
@@ -172,7 +172,7 @@
 
   <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
 
-  <!-- Bước 1: Bì thư -->
+  <!-- Bước 1: Phong bì -->
   <div id="envelope-wrapper" onclick="openEnvelope()">
     <div class="envelope">
       <div class="heart-seal">💌</div>
@@ -180,44 +180,46 @@
     <div class="hint-text">Gửi Bảo Bei, tình cảm của bé💕</div>
   </div>
 
-  <!-- Bước 2: Thiệp tâm tình -->
+  <!-- Bước 2: Thiệp -->
   <div id="letter-card">
     <div class="letter-title">Gửi Bảo Bei của bé 💕</div>
     <div class="letter-content">
-      Bé iuu Bảo Bei Nhất 💕
+      Bé iuu Bảo Bei Nhất 💕, Bảo Bei bấm nút dưới bấm nút dưới...
     </div>
     <button class="surprise-btn" onclick="startHeartShow()">Xem điều bất ngờ 💖</button>
   </div>
 
-  <!-- Bước 3: Trái tim phát sáng & chữ chạy -->
+  <!-- Bước 3: Trái tim tạo từ emoji 💗 ❤️ 💕 -->
   <div id="heart-wrapper">
     <canvas id="heartCanvas"></canvas>
-    <div id="lang-text">Anh yêu Bảo Bei 💕</div>
-    <div id="sub-text">Forever with Bảo Bei ✨</div>
+    <div class="caption-container">
+      <div id="lang-text">Anh yêu Bảo Bei 💕</div>
+      <div id="sub-text">Forever with Bảo Bei ✨</div>
+    </div>
   </div>
 
   <script>
     const phrases = [
       "Anh yêu Bảo Bei 💕",
       "I Love You, Bảo Bei",
-      "我爱你, Bảo Bei",
+      "我爱你, Bảo Bei 💕",
       "사랑해, Bảo Bei",
       "愛してる, Bảo Bei",
       "Je t'aime, Bảo Bei",
-      "Te amo, Bảo Bei",
+      "Te amo, Bảo Bei 💕",
       "Ich liebe dich, Bảo Bei",
       "Ti amo, Bảo Bei",
       "Я люблю тебя, Bảo Bei",
       "ฉันรักเธอ, Bảo Bei",
-      "Em yêu Bảo Bei 💕"
+      "Bé iuu Bảo Bei Nhất 💕"
     ];
 
-    // Tạo tia tim khi chạm/lướt màn hình
+    // Chạm tạo hiệu ứng phụ
     window.addEventListener('pointermove', (e) => {
-      if (Math.random() < 0.2) {
+      if (Math.random() < 0.25) {
         const heart = document.createElement('div');
         heart.className = 'touch-heart';
-        heart.innerText = Math.random() > 0.5 ? '💖' : '✨';
+        heart.innerText = Math.random() > 0.5 ? '💗' : '💕';
         heart.style.left = e.clientX + 'px';
         heart.style.top = e.clientY + 'px';
         document.body.appendChild(heart);
@@ -256,7 +258,7 @@
         const hw = document.getElementById('heart-wrapper');
         hw.style.display = 'block';
         setTimeout(() => hw.style.opacity = '1', 50);
-        initHeartCanvas();
+        initEmojiHeart();
         startTextRotation();
       }, 500);
     }
@@ -266,16 +268,18 @@
       const textEl = document.getElementById('lang-text');
       setInterval(() => {
         textEl.style.opacity = '0';
+        textEl.style.transform = 'scale(0.85)';
         setTimeout(() => {
           idx = (idx + 1) % phrases.length;
           textEl.innerText = phrases[idx];
           textEl.style.opacity = '1';
+          textEl.style.transform = 'scale(1)';
         }, 400);
-      }, 2400);
+      }, 2600);
     }
 
-    /* Hiệu ứng Trái tim Canvas đập nhịp */
-    function initHeartCanvas() {
+    /* Hiệu ứng Emoji 💗❤️💕 bay từ từ hình thành trái tim */
+    function initEmojiHeart() {
       const canvas = document.getElementById('heartCanvas');
       const ctx = canvas.getContext('2d');
       let width = canvas.width = window.innerWidth;
@@ -286,55 +290,81 @@
         height = canvas.height = window.innerHeight;
       });
 
-      // Công thức tạo hình trái tim chuẩn xác
-      function heartPosition(t) {
+      function heartFormula(t) {
         return {
           x: 16 * Math.pow(Math.sin(t), 3),
           y: -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))
         };
       }
 
-      const points = [];
-      const totalPoints = 380;
-      for (let i = 0; i < totalPoints; i++) {
-        const t = (Math.PI * 2 * i) / totalPoints;
-        const pos = heartPosition(t);
-        points.push({
-          x: pos.x,
-          y: pos.y,
-          r: Math.random() * 2 + 1,
-          alpha: Math.random() * 0.7 + 0.3
+      const emojis = ['💗', '❤️', '💕', '💖'];
+      const particles = [];
+      const totalCount = 360; // Số lượng emoji tạo hình trái tim
+
+      for (let i = 0; i < totalCount; i++) {
+        const t = Math.random() * Math.PI * 2;
+        const base = heartFormula(t);
+        const r = Math.pow(Math.random(), 0.5); // Phủ đều từ trong ra ngoài
+
+        // Vị trí xuất phát ngẫu nhiên bay từ 4 phía ngoài màn hình
+        const angle = Math.random() * Math.PI * 2;
+        const spawnDist = Math.max(width, height) * (0.8 + Math.random() * 0.4);
+
+        particles.push({
+          targetRelX: base.x * r,
+          targetRelY: base.y * r,
+          currX: width / 2 + Math.cos(angle) * spawnDist,
+          currY: height / 2 + Math.sin(angle) * spawnDist,
+          emoji: emojis[Math.floor(Math.random() * emojis.length)],
+          size: Math.random() * 6 + 13, // Kích thước emoji
+          progress: 0,
+          speed: 0.008 + Math.random() * 0.012, // Tốc độ bay tụ lại
+          delay: Math.random() * 60 // Bay lệch pha để tạo độ tự nhiên
         });
       }
 
-      let beatProgress = 0;
+      let time = 0;
+      let frame = 0;
 
       function render() {
-        ctx.fillStyle = 'rgba(5, 2, 8, 0.25)';
-        ctx.fillRect(0, 0, width, height);
+        ctx.clearRect(0, 0, width, height);
 
-        beatProgress += 0.04;
-        // Nhịp đập tim
-        const beatScale = 1 + 0.15 * Math.pow(Math.sin(beatProgress), 6);
-        const scale = Math.min(width, height) / 38 * beatScale;
+        time += 0.05;
+        frame++;
 
+        // Nhịp tim đập sau khi đã dần tụ lại
+        const beat = 1 + 0.08 * Math.pow(Math.sin(time), 8);
+        const scale = (Math.min(width, height) / 38) * beat;
         const centerX = width / 2;
-        const centerY = height / 2 - 40; // Nâng nhẹ lên trên nhường chỗ cho dòng chữ
+        const centerY = height / 2 - 45;
 
-        // Vẽ từng điểm hạt phát sáng
-        for (let i = 0; i < points.length; i++) {
-          const p = points[i];
-          const px = centerX + p.x * scale + (Math.random() - 0.5) * 4;
-          const py = centerY + p.y * scale + (Math.random() - 0.5) * 4;
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
 
-          ctx.beginPath();
-          ctx.arc(px, py, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 77, 109, ${p.alpha})`;
-          ctx.shadowBlur = 12;
-          ctx.shadowColor = '#ff2a55';
-          ctx.fill();
+          if (frame > p.delay) {
+            if (p.progress < 1) {
+              p.progress += p.speed;
+              if (p.progress > 1) p.progress = 1;
+            }
+          }
+
+          // Tọa độ mục tiêu trong nhịp đập tim
+          const targetX = centerX + p.targetRelX * scale;
+          const targetY = centerY + p.targetRelY * scale;
+
+          // Hiệu ứng bay mượt (Ease Out)
+          const ease = 1 - Math.pow(1 - p.progress, 3);
+          const drawX = p.currX + (targetX - p.currX) * ease;
+          const drawY = p.currY + (targetY - p.currY) * ease;
+
+          ctx.font = `${p.size}px -apple-system, sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.globalAlpha = Math.min(1, ease + 0.15);
+          ctx.fillText(p.emoji, drawX, drawY);
         }
 
+        ctx.globalAlpha = 1;
         requestAnimationFrame(render);
       }
 
