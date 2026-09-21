@@ -1,556 +1,556 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Gửi Bảo Bei, tình cảm của bé💕</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Gửi Bảo Bei, tình cảm của bé💕</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-    body {
-      width: 100vw;
-      height: 100vh;
-      background: radial-gradient(circle at 50% 35%, #220316 0%, #030105 100%);
-      overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-    }
+    body {
+      width: 100vw;
+      height: 100vh;
+      background: radial-gradient(circle at 50% 35%, #220316 0%, #030105 100%);
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
 
-    /* Đốm sáng đom đóm nền */
-    .bg-firefly {
-      position: absolute;
-      background: #ff758c;
-      border-radius: 50%;
-      pointer-events: none;
-      opacity: 0.4;
-      animation: floatFirefly 6s infinite ease-in-out;
-      z-index: 1;
-    }
+    /* Đốm sáng đom đóm nền */
+    .bg-firefly {
+      position: absolute;
+      background: #ff758c;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.4;
+      animation: floatFirefly 6s infinite ease-in-out;
+      z-index: 1;
+    }
 
-    @keyframes floatFirefly {
-      0%, 100% { transform: translateY(0); opacity: 0.2; }
-      50% { transform: translateY(-25px) scale(1.4); opacity: 0.75; }
-    }
+    @keyframes floatFirefly {
+      0%, 100% { transform: translateY(0); opacity: 0.2; }
+      50% { transform: translateY(-25px) scale(1.4); opacity: 0.75; }
+    }
 
-    /* Khung Phong bì */
-    #envelope-wrapper {
-      position: relative;
-      text-align: center;
-      cursor: pointer;
-      z-index: 50;
-      transition: opacity 1.2s ease, transform 1.2s ease;
-      animation: floatEnvelope 3.5s ease-in-out infinite;
-    }
+    /* Khung Phong bì */
+    #envelope-wrapper {
+      position: relative;
+      text-align: center;
+      cursor: pointer;
+      z-index: 50;
+      transition: opacity 1.2s ease, transform 1.2s ease;
+      animation: floatEnvelope 3.5s ease-in-out infinite;
+    }
 
-    @keyframes floatEnvelope {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
+    @keyframes floatEnvelope {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
 
-    .envelope {
-      position: relative;
-      width: 260px;
-      height: 170px;
-      background: #9b0e31;
-      border-radius: 0 0 16px 16px;
-      box-shadow: 0 20px 45px rgba(255, 42, 109, 0.45), 0 0 35px rgba(255, 117, 140, 0.25);
-      margin: 0 auto;
-    }
+    .envelope {
+      position: relative;
+      width: 260px;
+      height: 170px;
+      background: #9b0e31;
+      border-radius: 0 0 16px 16px;
+      box-shadow: 0 20px 45px rgba(255, 42, 109, 0.45), 0 0 35px rgba(255, 117, 140, 0.25);
+      margin: 0 auto;
+    }
 
-    .envelope-flap {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 0;
-      border-left: 130px solid transparent;
-      border-right: 130px solid transparent;
-      border-top: 105px solid #cb1a40;
-      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
-      transform-origin: top;
-      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 5;
-    }
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 130px solid transparent;
+      border-right: 130px solid transparent;
+      border-top: 105px solid #cb1a40;
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
+      transform-origin: top;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 5;
+    }
 
-    .envelope-pocket {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 0;
-      border-left: 130px solid #b31439;
-      border-right: 130px solid #b31439;
-      border-bottom: 98px solid #d91c47;
-      border-radius: 0 0 16px 16px;
-      z-index: 4;
-    }
+    .envelope-pocket {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 130px solid #b31439;
+      border-right: 130px solid #b31439;
+      border-bottom: 98px solid #d91c47;
+      border-radius: 0 0 16px 16px;
+      z-index: 4;
+    }
 
-    .heart-seal {
-      position: absolute;
-      top: 80px;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 48px;
-      height: 48px;
-      background: radial-gradient(circle, #ffccd5 0%, #ff4d6d 70%, #900523 100%);
-      border-radius: 50%;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.7);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 24px;
-      z-index: 6;
-      animation: pulse 1.6s infinite;
-      transition: opacity 0.5s ease;
-    }
+    .heart-seal {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 48px;
+      background: radial-gradient(circle, #ffccd5 0%, #ff4d6d 70%, #900523 100%);
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      z-index: 6;
+      animation: pulse 1.6s infinite;
+      transition: opacity 0.5s ease;
+    }
 
-    .hint-text {
-      margin-top: 26px;
-      color: #ffccd5;
-      font-size: 1.12rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      text-shadow: 0 0 12px rgba(255, 77, 109, 0.8);
-      user-select: none;
-    }
+    .hint-text {
+      margin-top: 26px;
+      color: #ffccd5;
+      font-size: 1.12rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 12px rgba(255, 77, 109, 0.8);
+      user-select: none;
+    }
 
-    .tap-hint {
-      display: block;
-      margin-top: 6px;
-      font-size: 0.82rem;
-      color: #ff85a1;
-      opacity: 0.85;
-      letter-spacing: 1px;
-      user-select: none;
-    }
+    .tap-hint {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.82rem;
+      color: #ff85a1;
+      opacity: 0.85;
+      letter-spacing: 1px;
+      user-select: none;
+    }
 
-    /* Tờ thư từ từ trồi lên */
-    #paper-letter {
-      position: absolute;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%) scale(0.85);
-      width: 230px;
-      height: 145px;
-      background: #fffdf7;
-      background-image: repeating-linear-gradient(#fffdf7, #fffdf7 26px, #f1e4d8 27px);
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      padding: 16px 14px;
-      z-index: 3;
-      opacity: 0;
-      transition: all 1.2s cubic-bezier(0.2, 0.8, 0.25, 1);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      border: 1px solid #ebd9c8;
-    }
+    /* Tờ thư từ từ trồi lên */
+    #paper-letter {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.85);
+      width: 230px;
+      height: 145px;
+      background: #fffdf7;
+      background-image: repeating-linear-gradient(#fffdf7, #fffdf7 26px, #f1e4d8 27px);
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      padding: 16px 14px;
+      z-index: 3;
+      opacity: 0;
+      transition: all 1.2s cubic-bezier(0.2, 0.8, 0.25, 1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid #ebd9c8;
+    }
 
-    #paper-letter.opened {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 88%;
-      max-width: 360px;
-      height: auto;
-      min-height: 250px;
-      padding: 26px 22px;
-      border-radius: 18px;
-      z-index: 100;
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 77, 109, 0.4);
-      background: #fffdf7;
-      background-image: repeating-linear-gradient(#fffdf7, #fffdf7 27px, #faeade 28px);
-    }
+    #paper-letter.opened {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 88%;
+      max-width: 360px;
+      height: auto;
+      min-height: 250px;
+      padding: 26px 22px;
+      border-radius: 18px;
+      z-index: 100;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 77, 109, 0.4);
+      background: #fffdf7;
+      background-image: repeating-linear-gradient(#fffdf7, #fffdf7 27px, #faeade 28px);
+    }
 
-    .paper-header {
-      font-size: 1.22rem;
-      color: #c9184a;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 14px;
-    }
+    .paper-header {
+      font-size: 1.22rem;
+      color: #c9184a;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 14px;
+    }
 
-    .paper-body {
-      color: #3b2826;
-      font-size: 1.02rem;
-      line-height: 1.68;
-      font-weight: 500;
-      text-align: center;
-      margin-bottom: 22px;
-    }
+    .paper-body {
+      color: #3b2826;
+      font-size: 1.02rem;
+      line-height: 1.68;
+      font-weight: 500;
+      text-align: center;
+      margin-bottom: 22px;
+    }
 
-    .paper-stamp {
-      font-size: 28px;
-      text-align: center;
-      margin-bottom: 8px;
-    }
+    .paper-stamp {
+      font-size: 28px;
+      text-align: center;
+      margin-bottom: 8px;
+    }
 
-    .surprise-btn {
-      background: linear-gradient(135deg, #ff4d6d, #c9184a);
-      color: #fff;
-      border: none;
-      padding: 11px 26px;
-      border-radius: 25px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 5px 15px rgba(201, 24, 74, 0.45);
-      align-self: center;
-    }
+    .surprise-btn {
+      background: linear-gradient(135deg, #ff4d6d, #c9184a);
+      color: #fff;
+      border: none;
+      padding: 11px 26px;
+      border-radius: 25px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(201, 24, 74, 0.45);
+      align-self: center;
+    }
 
-    /* Khung Canvas */
-    #heart-wrapper {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      display: none;
-      opacity: 0;
-      transition: opacity 1.4s ease;
-      z-index: 10;
-    }
+    /* Khung Canvas */
+    #heart-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      opacity: 0;
+      transition: opacity 1.4s ease;
+      z-index: 10;
+    }
 
-    canvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
 
-    .touch-heart {
-      position: fixed;
-      pointer-events: none;
-      font-size: 18px;
-      z-index: 999;
-      transition: transform 0.7s ease-out, opacity 0.7s ease-out;
-    }
+    .touch-heart {
+      position: fixed;
+      pointer-events: none;
+      font-size: 18px;
+      z-index: 999;
+      transition: transform 0.7s ease-out, opacity 0.7s ease-out;
+    }
 
-    @keyframes pulse {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); }
-      50% { transform: translate(-50%, -50%) scale(1.12); }
-    }
-  </style>
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.12); }
+    }
+  </style>
 </head>
 <body>
 
-  <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
-  <div id="fireflies"></div>
+  <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
+  <div id="fireflies"></div>
 
-  <!-- Bước 1: Phong bì và Lá thư -->
-  <div id="envelope-wrapper" onclick="openEnvelope()">
-    <div class="envelope">
-      <div class="envelope-flap" id="envFlap"></div>
-      
-      <div id="paper-letter">
-        <div class="paper-stamp">💌</div>
-        <div class="paper-header">Gửi Bảo Bei của bé 💕</div>
-        <div class="paper-body">
-          Bé iuu Bảo Bei Nhất 💕, Bảo Bei bấm ở dưới bấm ở dưới...
-        </div>
-        <button class="surprise-btn" onclick="startHeartShow(event)">Xem điều bất ngờ 💖</button>
-      </div>
+  <!-- Bước 1: Phong bì và Lá thư -->
+  <div id="envelope-wrapper" onclick="openEnvelope()">
+    <div class="envelope">
+      <div class="envelope-flap" id="envFlap"></div>
+      
+      <div id="paper-letter">
+        <div class="paper-stamp">💌</div>
+        <div class="paper-header">Gửi Bảo Bei của bé 💕</div>
+        <div class="paper-body">
+          Bé iuu Bảo Bei Nhất 💕, Bảo Bei bấm ở dưới bấm ở dưới...
+        </div>
+        <button class="surprise-btn" onclick="startHeartShow(event)">Xem điều bất ngờ 💖</button>
+      </div>
 
-      <div class="envelope-pocket"></div>
-      <div class="heart-seal" id="heartSeal">❤️</div>
-    </div>
-    
-    <div class="hint-text" id="hintTitle">Gửi Bảo Bei, tình cảm của bé 💕</div>
-    <span class="tap-hint" id="hintSub">(Chạm vào phong thư để mở ✨)</span>
-  </div>
+      <div class="envelope-pocket"></div>
+      <div class="heart-seal" id="heartSeal">❤️</div>
+    </div>
+    
+    <div class="hint-text" id="hintTitle">Gửi Bảo Bei, tình cảm của bé 💕</div>
+    <span class="tap-hint" id="hintSub">(Chạm vào phong thư để mở ✨)</span>
+  </div>
 
-  <!-- Bước 2: Canvas Trái tim 3D -->
-  <div id="heart-wrapper">
-    <canvas id="heartCanvas"></canvas>
-  </div>
+  <!-- Bước 2: Canvas Trái tim 3D -->
+  <div id="heart-wrapper">
+    <canvas id="heartCanvas"></canvas>
+  </div>
 
-  <script>
-    const ringTexts = [
-      "Anh yêu Bảo Bei 💕",
-      "I Love You, Bảo Bei ✨",
-      "我爱你, Bảo Bei 💕",
-      "사랑해, Bảo Bei ✨",
-      "愛してる, Bảo Bei 💕",
-      "Je t'aime, Bảo Bei ✨",
-      "Te amo, Bảo Bei 💕",
-      "Bé iuu Bảo Bei Nhất 💕"
-    ];
+  <script>
+    const ringTexts = [
+      "Anh yêu Bảo Bei 💕",
+      "I Love You, Bảo Bei ✨",
+      "我爱你, Bảo Bei 💕",
+      "사랑해, Bảo Bei ✨",
+      "愛してる, Bảo Bei 💕",
+      "Je t'aime, Bảo Bei ✨",
+      "Te amo, Bảo Bei 💕",
+      "Bé iuu Bảo Bei Nhất 💕"
+    ];
 
-    const fireflyContainer = document.getElementById('fireflies');
-    for (let i = 0; i < 40; i++) {
-      const fly = document.createElement('div');
-      fly.className = 'bg-firefly';
-      const size = Math.random() * 4 + 2;
-      fly.style.width = size + 'px';
-      fly.style.height = size + 'px';
-      fly.style.left = Math.random() * 100 + 'vw';
-      fly.style.top = Math.random() * 100 + 'vh';
-      fly.style.animationDelay = Math.random() * 6 + 's';
-      fireflyContainer.appendChild(fly);
-    }
+    const fireflyContainer = document.getElementById('fireflies');
+    for (let i = 0; i < 40; i++) {
+      const fly = document.createElement('div');
+      fly.className = 'bg-firefly';
+      const size = Math.random() * 4 + 2;
+      fly.style.width = size + 'px';
+      fly.style.height = size + 'px';
+      fly.style.left = Math.random() * 100 + 'vw';
+      fly.style.top = Math.random() * 100 + 'vh';
+      fly.style.animationDelay = Math.random() * 6 + 's';
+      fireflyContainer.appendChild(fly);
+    }
 
-    window.addEventListener('pointermove', (e) => {
-      if (Math.random() < 0.25) {
-        const heart = document.createElement('div');
-        heart.className = 'touch-heart';
-        heart.innerText = Math.random() > 0.5 ? '💗' : '✨';
-        heart.style.left = e.clientX + 'px';
-        heart.style.top = e.clientY + 'px';
-        document.body.appendChild(heart);
+    window.addEventListener('pointermove', (e) => {
+      if (Math.random() < 0.25) {
+        const heart = document.createElement('div');
+        heart.className = 'touch-heart';
+        heart.innerText = Math.random() > 0.5 ? '💗' : '✨';
+        heart.style.left = e.clientX + 'px';
+        heart.style.top = e.clientY + 'px';
+        document.body.appendChild(heart);
 
-        setTimeout(() => {
-          heart.style.transform = `translate(${(Math.random() - 0.5) * 40}px, -40px) scale(0.3)`;
-          heart.style.opacity = '0';
-        }, 20);
+        setTimeout(() => {
+          heart.style.transform = `translate(${(Math.random() - 0.5) * 40}px, -40px) scale(0.3)`;
+          heart.style.opacity = '0';
+        }, 20);
 
-        setTimeout(() => heart.remove(), 700);
-      }
-    });
+        setTimeout(() => heart.remove(), 700);
+      }
+    });
 
-    let isOpened = false;
+    let isOpened = false;
 
-    function openEnvelope() {
-      if (isOpened) return;
-      isOpened = true;
+    function openEnvelope() {
+      if (isOpened) return;
+      isOpened = true;
 
-      const music = document.getElementById('bg-music');
-      music.play().catch(() => {});
+      const music = document.getElementById('bg-music');
+      music.play().catch(() => {});
 
-      document.getElementById('heartSeal').style.opacity = '0';
-      document.getElementById('envFlap').style.transform = 'rotateX(180deg)';
-      document.getElementById('hintTitle').style.opacity = '0';
-      document.getElementById('hintSub').style.opacity = '0';
+      document.getElementById('heartSeal').style.opacity = '0';
+      document.getElementById('envFlap').style.transform = 'rotateX(180deg)';
+      document.getElementById('hintTitle').style.opacity = '0';
+      document.getElementById('hintSub').style.opacity = '0';
 
-      const letter = document.getElementById('paper-letter');
+      const letter = document.getElementById('paper-letter');
 
-      setTimeout(() => {
-        letter.style.opacity = '1';
-        letter.style.transform = 'translateX(-50%) translateY(-65px) scale(0.9)';
-      }, 500);
+      setTimeout(() => {
+        letter.style.opacity = '1';
+        letter.style.transform = 'translateX(-50%) translateY(-65px) scale(0.9)';
+      }, 500);
 
-      setTimeout(() => {
-        letter.classList.add('opened');
-      }, 1100);
-    }
+      setTimeout(() => {
+        letter.classList.add('opened');
+      }, 1100);
+    }
 
-    function startHeartShow(e) {
-      e.stopPropagation();
+    function startHeartShow(e) {
+      e.stopPropagation();
 
-      const letter = document.getElementById('paper-letter');
-      const envWrapper = document.getElementById('envelope-wrapper');
+      const letter = document.getElementById('paper-letter');
+      const envWrapper = document.getElementById('envelope-wrapper');
 
-      letter.style.transition = 'all 0.9s ease';
-      letter.style.opacity = '0';
-      letter.style.transform = 'translate(-50%, -50%) scale(0.7)';
-      envWrapper.style.opacity = '0';
-      envWrapper.style.transform = 'scale(0.7)';
+      letter.style.transition = 'all 0.9s ease';
+      letter.style.opacity = '0';
+      letter.style.transform = 'translate(-50%, -50%) scale(0.7)';
+      envWrapper.style.opacity = '0';
+      envWrapper.style.transform = 'scale(0.7)';
 
-      setTimeout(() => {
-        envWrapper.style.display = 'none';
-        const hw = document.getElementById('heart-wrapper');
-        hw.style.display = 'block';
-        setTimeout(() => hw.style.opacity = '1', 50);
-        initCrispHeart();
-      }, 850);
-    }
+      setTimeout(() => {
+        envWrapper.style.display = 'none';
+        const hw = document.getElementById('heart-wrapper');
+        hw.style.display = 'block';
+        setTimeout(() => hw.style.opacity = '1', 50);
+        initCrispHeart();
+      }, 850);
+    }
 
-    /* Thuật toán dựng hình trái tim chuẩn xác theo từng lớp biên dạng */
-    function initCrispHeart() {
-      const canvas = document.getElementById('heartCanvas');
-      const ctx = canvas.getContext('2d');
-      let width = canvas.width = window.innerWidth;
-      let height = canvas.height = window.innerHeight;
+    /* Thuật toán dựng hình trái tim chuẩn xác theo từng lớp biên dạng */
+    function initCrispHeart() {
+      const canvas = document.getElementById('heartCanvas');
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
 
-      window.addEventListener('resize', () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      });
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
 
-      // Phương trình toán học trái tim chuẩn
-      function heartCurve(t) {
-        return {
-          x: 16 * Math.pow(Math.sin(t), 3),
-          y: -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))
-        };
-      }
+      // Phương trình toán học trái tim chuẩn
+      function heartCurve(t) {
+        return {
+          x: 16 * Math.pow(Math.sin(t), 3),
+          y: -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))
+        };
+      }
 
-      const heartParticles = [];
+      const heartParticles = [];
 
-      // Dựng 14 lớp đường biên từ ngoài vào trong, co về đúng tâm đối xứng (-2.5) để không mất hõm chữ V
-      const layers = [1.0, 0.94, 0.88, 0.82, 0.76, 0.70, 0.64, 0.58, 0.52, 0.45, 0.38, 0.30, 0.22, 0.12];
-      const centerYOffset = -2.5;
+      // Dựng 14 lớp đường biên từ ngoài vào trong, co về đúng tâm đối xứng (-2.5) để không mất hõm chữ V
+      const layers = [1.0, 0.94, 0.88, 0.82, 0.76, 0.70, 0.64, 0.58, 0.52, 0.45, 0.38, 0.30, 0.22, 0.12];
+      const centerYOffset = -2.5;
 
-      layers.forEach((layerScale) => {
-        const count = Math.floor(110 * Math.pow(layerScale, 0.7));
-        for (let i = 0; i < count; i++) {
-          const t = (Math.PI * 2 * i) / count;
-          const base = heartCurve(t);
+      layers.forEach((layerScale) => {
+        const count = Math.floor(110 * Math.pow(layerScale, 0.7));
+        for (let i = 0; i < count; i++) {
+          const t = (Math.PI * 2 * i) / count;
+          const base = heartCurve(t);
 
-          const finalX = base.x * layerScale;
-          const finalY = (base.y - centerYOffset) * layerScale + centerYOffset;
+          const finalX = base.x * layerScale;
+          const finalY = (base.y - centerYOffset) * layerScale + centerYOffset;
 
-          const angle = Math.random() * Math.PI * 2;
-          const dist = Math.max(width, height) * (0.6 + Math.random() * 0.4);
+          const angle = Math.random() * Math.PI * 2;
+          const dist = Math.max(width, height) * (0.6 + Math.random() * 0.4);
 
-          heartParticles.push({
-            origX: finalX,
-            origY: finalY,
-            currX: width / 2 + Math.cos(angle) * dist,
-            currY: height / 2 + Math.sin(angle) * dist,
-            size: layerScale > 0.85 ? (Math.random() * 1.5 + 1.2) : (Math.random() * 1.2 + 0.8),
-            color: layerScale > 0.8 ? '#ff2a6d' : (Math.random() > 0.4 ? '#e61e58' : '#ff7597'),
-            alpha: layerScale > 0.85 ? 0.95 : (Math.random() * 0.4 + 0.4),
-            progress: 0,
-            speed: 0.0035 + Math.random() * 0.003,
-            delay: Math.random() * 100,
-            phase: Math.random() * Math.PI * 2
-          });
-        }
-      });
+          heartParticles.push({
+            origX: finalX,
+            origY: finalY,
+            currX: width / 2 + Math.cos(angle) * dist,
+            currY: height / 2 + Math.sin(angle) * dist,
+            size: layerScale > 0.85 ? (Math.random() * 1.5 + 1.2) : (Math.random() * 1.2 + 0.8),
+            color: layerScale > 0.8 ? '#ff2a6d' : (Math.random() > 0.4 ? '#e61e58' : '#ff7597'),
+            alpha: layerScale > 0.85 ? 0.95 : (Math.random() * 0.4 + 0.4),
+            progress: 0,
+            speed: 0.0035 + Math.random() * 0.003,
+            delay: Math.random() * 100,
+            phase: Math.random() * Math.PI * 2
+          });
+        }
+      });
 
-      // Đĩa hạt xoay chân đế
-      const ringParticles = [];
-      const ringCount = 200;
-      for (let i = 0; i < ringCount; i++) {
-        ringParticles.push({
-          theta: Math.random() * Math.PI * 2,
-          radius: Math.random() * 110 + 60,
-          speed: 0.01 + Math.random() * 0.006,
-          size: Math.random() * 1.6 + 0.5,
-          alpha: Math.random() * 0.6 + 0.3
-        });
-      }
+      // Đĩa hạt xoay chân đế
+      const ringParticles = [];
+      const ringCount = 200;
+      for (let i = 0; i < ringCount; i++) {
+        ringParticles.push({
+          theta: Math.random() * Math.PI * 2,
+          radius: Math.random() * 110 + 60,
+          speed: 0.01 + Math.random() * 0.006,
+          size: Math.random() * 1.6 + 0.5,
+          alpha: Math.random() * 0.6 + 0.3
+        });
+      }
 
-      let time = 0;
-      let frame = 0;
+      let time = 0;
+      let frame = 0;
 
-      function render() {
-        ctx.clearRect(0, 0, width, height);
+      function render() {
+        ctx.clearRect(0, 0, width, height);
 
-        time += 0.035;
-        frame++;
+        time += 0.035;
+        frame++;
 
-        const centerX = width / 2;
-        const centerY = height * 0.36;
-        const ringCenterY = height * 0.75;
-        const ringRadiusX = Math.min(width * 0.42, 175);
-        const ringRadiusY = ringRadiusX * 0.34;
+        const centerX = width / 2;
+        const centerY = height * 0.36;
+        const ringCenterY = height * 0.75;
+        const ringRadiusX = Math.min(width * 0.42, 175);
+        const ringRadiusY = ringRadiusX * 0.34;
 
-        // Nhịp tim đập
-        const beat = 1 + 0.08 * Math.pow(Math.sin(time * 1.2), 8) + 0.02 * Math.sin(time * 2.4);
-        const scale = (Math.min(width, height) / 38) * beat;
+        // Nhịp tim đập
+        const beat = 1 + 0.08 * Math.pow(Math.sin(time * 1.2), 8) + 0.02 * Math.sin(time * 2.4);
+        const scale = (Math.min(width, height) / 38) * beat;
 
-        // Hào quang
-        const grad = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, 150 * beat);
-        grad.addColorStop(0, 'rgba(255, 42, 109, 0.35)');
-        grad.addColorStop(0.5, 'rgba(255, 77, 109, 0.1)');
-        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, 160 * beat, 0, Math.PI * 2);
-        ctx.fill();
+        // Hào quang
+        const grad = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, 150 * beat);
+        grad.addColorStop(0, 'rgba(255, 42, 109, 0.35)');
+        grad.addColorStop(0.5, 'rgba(255, 77, 109, 0.1)');
+        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 160 * beat, 0, Math.PI * 2);
+        ctx.fill();
 
-        // 1. Vẽ các hạt tim chuẩn xác
-        for (let i = 0; i < heartParticles.length; i++) {
-          const p = heartParticles[i];
+        // 1. Vẽ các hạt tim chuẩn xác
+        for (let i = 0; i < heartParticles.length; i++) {
+          const p = heartParticles[i];
 
-          if (frame > p.delay && p.progress < 1) {
-            p.progress += p.speed;
-            if (p.progress > 1) p.progress = 1;
-          }
+          if (frame > p.delay && p.progress < 1) {
+            p.progress += p.speed;
+            if (p.progress > 1) p.progress = 1;
+          }
 
-          const floatOffset = (p.progress >= 1) ? Math.sin(time * 2 + p.phase) * 0.9 : 0;
-          const targetX = centerX + p.origX * scale + floatOffset;
-          const targetY = centerY + p.origY * scale + floatOffset;
+          const floatOffset = (p.progress >= 1) ? Math.sin(time * 2 + p.phase) * 0.9 : 0;
+          const targetX = centerX + p.origX * scale + floatOffset;
+          const targetY = centerY + p.origY * scale + floatOffset;
 
-          const ease = 1 - Math.pow(1 - p.progress, 3);
-          const drawX = p.currX + (targetX - p.currX) * ease;
-          const drawY = p.currY + (targetY - p.currY) * ease;
+          const ease = 1 - Math.pow(1 - p.progress, 3);
+          const drawX = p.currX + (targetX - p.currX) * ease;
+          const drawY = p.currY + (targetY - p.currY) * ease;
 
-          ctx.beginPath();
-          ctx.arc(drawX, drawY, p.size * (0.5 + 0.5 * ease), 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.shadowBlur = 4;
-          ctx.shadowColor = '#ff2a6d';
-          ctx.globalAlpha = p.alpha * ease;
-          ctx.fill();
-        }
+          ctx.beginPath();
+          ctx.arc(drawX, drawY, p.size * (0.5 + 0.5 * ease), 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.shadowBlur = 4;
+          ctx.shadowColor = '#ff2a6d';
+          ctx.globalAlpha = p.alpha * ease;
+          ctx.fill();
+        }
 
-        // 2. Vẽ đĩa hạt xoay chân đế
-        for (let i = 0; i < ringParticles.length; i++) {
-          const rp = ringParticles[i];
-          rp.theta += rp.speed;
+        // 2. Vẽ đĩa hạt xoay chân đế
+        for (let i = 0; i < ringParticles.length; i++) {
+          const rp = ringParticles[i];
+          rp.theta += rp.speed;
 
-          const rx = centerX + Math.cos(rp.theta) * (rp.radius * (ringRadiusX / 140));
-          const ry = ringCenterY + Math.sin(rp.theta) * (rp.radius * (ringRadiusY / 140));
-          const zDepth = (Math.sin(rp.theta) + 1) / 2;
+          const rx = centerX + Math.cos(rp.theta) * (rp.radius * (ringRadiusX / 140));
+          const ry = ringCenterY + Math.sin(rp.theta) * (rp.radius * (ringRadiusY / 140));
+          const zDepth = (Math.sin(rp.theta) + 1) / 2;
 
-          ctx.beginPath();
-          ctx.arc(rx, ry, rp.size * (0.6 + 0.5 * zDepth), 0, Math.PI * 2);
-          ctx.fillStyle = '#ff758c';
-          ctx.shadowBlur = 5;
-          ctx.shadowColor = '#ff2a6d';
-          ctx.globalAlpha = rp.alpha * (0.3 + 0.7 * zDepth);
-          ctx.fill();
-        }
+          ctx.beginPath();
+          ctx.arc(rx, ry, rp.size * (0.6 + 0.5 * zDepth), 0, Math.PI * 2);
+          ctx.fillStyle = '#ff758c';
+          ctx.shadowBlur = 5;
+          ctx.shadowColor = '#ff2a6d';
+          ctx.globalAlpha = rp.alpha * (0.3 + 0.7 * zDepth);
+          ctx.fill();
+        }
 
-        // 3. Vẽ đĩa chữ 3D xoay tròn
-        const textCount = ringTexts.length;
-        const sortedTexts = [];
+        // 3. Vẽ đĩa chữ 3D xoay tròn
+        const textCount = ringTexts.length;
+        const sortedTexts = [];
 
-        for (let i = 0; i < textCount; i++) {
-          const angle = time * 0.4 + (i * 2 * Math.PI) / textCount;
-          const sinA = Math.sin(angle);
-          const cosA = Math.cos(angle);
+        for (let i = 0; i < textCount; i++) {
+          const angle = time * 0.4 + (i * 2 * Math.PI) / textCount;
+          const sinA = Math.sin(angle);
+          const cosA = Math.cos(angle);
 
-          const tx = centerX + cosA * ringRadiusX;
-          const ty = ringCenterY + sinA * ringRadiusY;
-          const zDepth = (sinA + 1) / 2;
+          const tx = centerX + cosA * ringRadiusX;
+          const ty = ringCenterY + sinA * ringRadiusY;
+          const zDepth = (sinA + 1) / 2;
 
-          sortedTexts.push({
-            text: ringTexts[i],
-            x: tx,
-            y: ty,
-            z: zDepth,
-            depthRatio: zDepth
-          });
-        }
+          sortedTexts.push({
+            text: ringTexts[i],
+            x: tx,
+            y: ty,
+            z: zDepth,
+            depthRatio: zDepth
+          });
+        }
 
-        sortedTexts.sort((a, b) => a.z - b.z);
+        sortedTexts.sort((a, b) => a.z - b.z);
 
-        for (let i = 0; i < sortedTexts.length; i++) {
-          const item = sortedTexts[i];
-          const fontSize = 11.5 + item.depthRatio * 6.5;
+        for (let i = 0; i < sortedTexts.length; i++) {
+          const item = sortedTexts[i];
+          const fontSize = 11.5 + item.depthRatio * 6.5;
 
-          ctx.font = `bold ${fontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
+          ctx.font = `bold ${fontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
 
-          ctx.globalAlpha = 0.35 + 0.65 * item.depthRatio;
-          ctx.fillStyle = item.depthRatio > 0.65 ? '#ffffff' : '#ffccd5';
-          ctx.shadowBlur = item.depthRatio > 0.65 ? 14 : 6;
-          ctx.shadowColor = '#ff2a6d';
+          ctx.globalAlpha = 0.35 + 0.65 * item.depthRatio;
+          ctx.fillStyle = item.depthRatio > 0.65 ? '#ffffff' : '#ffccd5';
+          ctx.shadowBlur = item.depthRatio > 0.65 ? 14 : 6;
+          ctx.shadowColor = '#ff2a6d';
 
-          ctx.fillText(item.text, item.x, item.y);
-        }
+          ctx.fillText(item.text, item.x, item.y);
+        }
 
-        ctx.globalAlpha = 1;
-        ctx.shadowBlur = 0;
-        requestAnimationFrame(render);
-      }
+        ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
+        requestAnimationFrame(render);
+      }
 
-      render();
-    }
-  </script>
+      render();
+    }
+  </script>
 </body>
 </html>
