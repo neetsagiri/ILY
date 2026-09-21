@@ -40,6 +40,32 @@
       50% { transform: translateY(-25px) scale(1.4); opacity: 0.75; }
     }
 
+    /* Nút Bật/Tắt Nhạc */
+    #music-control {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 77, 109, 0.2);
+      border: 1px solid rgba(255, 117, 140, 0.4);
+      color: #ffccd5;
+      font-size: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 200;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      transition: all 0.3s ease;
+    }
+
+    #music-control:active {
+      transform: scale(0.9);
+    }
+
     /* Khung Phong bì */
     #envelope-wrapper {
       position: relative;
@@ -245,6 +271,7 @@
 <body>
 
   <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
+  <button id="music-control" onclick="toggleMusic(event)" title="Bật/Tắt nhạc">🎵</button>
   <div id="fireflies"></div>
 
   <!-- Bước 1: Phong bì và Lá thư -->
@@ -286,6 +313,7 @@
       "Bé iuu Bảo Bei Nhất 💕"
     ];
 
+    // Tạo đom đóm giai đoạn 1
     const fireflyContainer = document.getElementById('fireflies');
     for (let i = 0; i < 40; i++) {
       const fly = document.createElement('div');
@@ -299,8 +327,9 @@
       fireflyContainer.appendChild(fly);
     }
 
+    // Hiệu ứng chạm / rê chuột
     window.addEventListener('pointermove', (e) => {
-      if (Math.random() < 0.25) {
+      if (Math.random() < 0.28) {
         const heart = document.createElement('div');
         heart.className = 'touch-heart';
         heart.innerText = Math.random() > 0.5 ? '💗' : '✨';
@@ -309,7 +338,7 @@
         document.body.appendChild(heart);
 
         setTimeout(() => {
-          heart.style.transform = `translate(${(Math.random() - 0.5) * 40}px, -40px) scale(0.3)`;
+          heart.style.transform = `translate(${(Math.random() - 0.5) * 50}px, -45px) scale(0.2)`;
           heart.style.opacity = '0';
         }, 20);
 
@@ -317,14 +346,39 @@
       }
     });
 
+    const music = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-control');
+    let isMusicPlaying = false;
+
+    function toggleMusic(e) {
+      if (e) e.stopPropagation();
+      if (music.paused) {
+        music.play().then(() => {
+          isMusicPlaying = true;
+          musicBtn.innerText = '🎵';
+          musicBtn.style.opacity = '1';
+        }).catch(() => {});
+      } else {
+        music.pause();
+        isMusicPlaying = false;
+        musicBtn.innerText = '🔇';
+        musicBtn.style.opacity = '0.6';
+      }
+    }
+
     let isOpened = false;
 
     function openEnvelope() {
       if (isOpened) return;
       isOpened = true;
 
-      const music = document.getElementById('bg-music');
-      music.play().catch(() => {});
+      music.play().then(() => {
+        isMusicPlaying = true;
+        musicBtn.innerText = '🎵';
+      }).catch(() => {
+        isMusicPlaying = false;
+        musicBtn.innerText = '🔇';
+      });
 
       document.getElementById('heartSeal').style.opacity = '0';
       document.getElementById('envFlap').style.transform = 'rotateX(180deg)';
@@ -355,7 +409,6 @@
       envWrapper.style.opacity = '0';
       envWrapper.style.transform = 'scale(0.7)';
 
-      // Ẩn đàn đom đóm giai đoạn 1 khi vào giai đoạn 2
       fireflyContainer.style.display = 'none';
 
       setTimeout(() => {
@@ -373,34 +426,66 @@
       let width = canvas.width = window.innerWidth;
       let height = canvas.height = window.innerHeight;
 
-      // 1. Sao nền lấp lánh (160 ngôi sao)
+      // 1. Sao nền lấp lánh (180 ngôi sao)
       const stars = [];
-      const starCount = 160;
+      const starCount = 180;
       for (let i = 0; i < starCount; i++) {
         stars.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          size: Math.random() * 1.5 + 0.5,
-          twinkleSpeed: 0.02 + Math.random() * 0.04,
+          size: Math.random() * 1.6 + 0.4,
+          twinkleSpeed: 0.02 + Math.random() * 0.05,
           phase: Math.random() * Math.PI * 2,
-          color: Math.random() > 0.4 ? '#ffffff' : '#ffd1dc'
+          color: Math.random() > 0.45 ? '#ffffff' : '#ffd1dc'
         });
       }
 
-      // 2. Bụi tiên bay lơ lửng từ dưới lên (70 hạt)
+      // 2. Bụi tiên bay lơ lửng từ dưới lên
       const stardust = [];
-      const stardustCount = 70;
+      const stardustCount = 65;
       for (let i = 0; i < stardustCount; i++) {
         stardust.push({
           x: Math.random() * width,
           y: Math.random() * height,
-          vx: (Math.random() - 0.5) * 0.35,
+          vx: (Math.random() - 0.5) * 0.3,
           vy: -(Math.random() * 0.5 + 0.25),
-          size: Math.random() * 2 + 1,
-          alpha: Math.random() * 0.5 + 0.2,
+          size: Math.random() * 2 + 0.8,
+          alpha: Math.random() * 0.5 + 0.25,
           pulse: Math.random() * Math.PI * 2
         });
       }
+
+      // 3. Cánh hoa rơi lãng mạn
+      const petals = [];
+      const petalCount = 30;
+      for (let i = 0; i < petalCount; i++) {
+        petals.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          size: Math.random() * 5 + 4,
+          speedY: Math.random() * 0.7 + 0.4,
+          speedX: Math.random() * 0.4 - 0.2,
+          angle: Math.random() * Math.PI * 2,
+          angleSpeed: (Math.random() - 0.5) * 0.03,
+          opacity: Math.random() * 0.4 + 0.2
+        });
+      }
+
+      // 4. Quản lý sao băng rơi ngẫu nhiên
+      const shootingStars = [];
+      function spawnShootingStar() {
+        shootingStars.push({
+          x: Math.random() * width * 0.8 + width * 0.1,
+          y: Math.random() * (height * 0.35),
+          len: Math.random() * 85 + 45,
+          speed: Math.random() * 6 + 7,
+          angle: (Math.PI / 4) + (Math.random() - 0.5) * 0.2,
+          opacity: 1
+        });
+      }
+
+      // 5. Quản lý sóng nhịp tim lan tỏa (Heart Shockwave Ripples)
+      const shockwaves = [];
 
       window.addEventListener('resize', () => {
         width = canvas.width = window.innerWidth;
@@ -464,6 +549,7 @@
 
       let time = 0;
       let frame = 0;
+      let lastBeatPeak = false;
 
       function render() {
         ctx.clearRect(0, 0, width, height);
@@ -477,44 +563,75 @@
         const ringRadiusX = Math.min(width * 0.42, 175);
         const ringRadiusY = ringRadiusX * 0.34;
 
-        // ================= KHÔNG GIAN NỀN CHI TIẾT (BACKGROUND LAYER) =================
-        // A. Tinh vân mờ (Nebula glow)
-        const nebula = ctx.createRadialGradient(centerX, centerY, 30, centerX, centerY, Math.max(width, height) * 0.6);
-        nebula.addColorStop(0, 'rgba(105, 12, 49, 0.28)');
-        nebula.addColorStop(0.5, 'rgba(40, 5, 25, 0.16)');
+        // Sinh sao băng ngẫu nhiên mỗi ~200 frame
+        if (Math.random() < 0.008) {
+          spawnShootingStar();
+        }
+
+        // ================= BACKGROUND: TINH VÂN & QUẦNG KHÔNG GIAN =================
+        const nebula = ctx.createRadialGradient(centerX, centerY, 30, centerX, centerY, Math.max(width, height) * 0.62);
+        nebula.addColorStop(0, 'rgba(115, 12, 54, 0.3)');
+        nebula.addColorStop(0.45, 'rgba(45, 6, 28, 0.18)');
         nebula.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = nebula;
         ctx.fillRect(0, 0, width, height);
 
-        // B. Chùm tia sáng xoay nhẹ phía sau trái tim
+        // Chùm tia sáng xoay nhẹ
         ctx.save();
         ctx.translate(centerX, centerY);
-        ctx.rotate(time * 0.06);
-        const rayCount = 12;
+        ctx.rotate(time * 0.05);
+        const rayCount = 14;
         for (let r = 0; r < rayCount; r++) {
           ctx.beginPath();
           ctx.moveTo(0, 0);
           const startAngle = (r * Math.PI * 2) / rayCount;
           const endAngle = startAngle + (Math.PI / rayCount) * 0.45;
-          ctx.arc(0, 0, Math.max(width, height) * 0.7, startAngle, endAngle);
+          ctx.arc(0, 0, Math.max(width, height) * 0.75, startAngle, endAngle);
           ctx.closePath();
-          ctx.fillStyle = 'rgba(255, 77, 109, 0.025)';
+          ctx.fillStyle = 'rgba(255, 77, 109, 0.024)';
           ctx.fill();
         }
         ctx.restore();
 
-        // C. Bầu trời sao lấp lánh
+        // Bầu trời sao lấp lánh
         for (let i = 0; i < stars.length; i++) {
           const s = stars[i];
-          const twinkle = (Math.sin(time * 35 * s.twinkleSpeed + s.phase) + 1) / 2;
+          const twinkle = (Math.sin(time * 30 * s.twinkleSpeed + s.phase) + 1) / 2;
           ctx.beginPath();
           ctx.arc(s.x, s.y, s.size * (0.8 + 0.4 * twinkle), 0, Math.PI * 2);
           ctx.fillStyle = s.color;
-          ctx.globalAlpha = 0.2 + 0.7 * twinkle;
+          ctx.globalAlpha = 0.2 + 0.75 * twinkle;
           ctx.fill();
         }
 
-        // D. Bụi tiên bay bồng bềnh
+        // Sao băng lướt qua
+        for (let i = shootingStars.length - 1; i >= 0; i--) {
+          const ss = shootingStars[i];
+          ss.x += Math.cos(ss.angle) * ss.speed;
+          ss.y += Math.sin(ss.angle) * ss.speed;
+          ss.opacity -= 0.015;
+
+          if (ss.opacity <= 0) {
+            shootingStars.splice(i, 1);
+            continue;
+          }
+
+          const tailX = ss.x - Math.cos(ss.angle) * ss.len;
+          const tailY = ss.y - Math.sin(ss.angle) * ss.len;
+
+          const gradSS = ctx.createLinearGradient(tailX, tailY, ss.x, ss.y);
+          gradSS.addColorStop(0, 'rgba(255, 117, 140, 0)');
+          gradSS.addColorStop(1, `rgba(255, 255, 255, ${ss.opacity})`);
+
+          ctx.beginPath();
+          ctx.moveTo(tailX, tailY);
+          ctx.lineTo(ss.x, ss.y);
+          ctx.strokeStyle = gradSS;
+          ctx.lineWidth = 1.8;
+          ctx.stroke();
+        }
+
+        // Bụi tiên bay lơ lửng
         for (let i = 0; i < stardust.length; i++) {
           const dust = stardust[i];
           dust.x += dust.vx;
@@ -525,7 +642,7 @@
           if (dust.x < -10) dust.x = width + 10;
           if (dust.x > width + 10) dust.x = -10;
 
-          const dAlpha = (Math.sin(dust.pulse) + 1) / 2 * dust.alpha;
+          const dAlpha = ((Math.sin(dust.pulse) + 1) / 2) * dust.alpha;
           ctx.beginPath();
           ctx.arc(dust.x, dust.y, dust.size, 0, Math.PI * 2);
           ctx.fillStyle = '#ff85a1';
@@ -535,14 +652,67 @@
           ctx.fill();
         }
 
-        // ================= ĐỐI TƯỢNG CHÍNH (HEART & TEXT) =================
-        // Nhịp tim đập
-        const beat = 1 + 0.08 * Math.pow(Math.sin(time * 1.2), 8) + 0.02 * Math.sin(time * 2.4);
+        // Cánh hoa rơi xoay lơ lửng
+        for (let i = 0; i < petals.length; i++) {
+          const pt = petals[i];
+          pt.y += pt.speedY;
+          pt.x += Math.sin(time + i) * 0.6 + pt.speedX;
+          pt.angle += pt.angleSpeed;
+
+          if (pt.y > height + 20) {
+            pt.y = -20;
+            pt.x = Math.random() * width;
+          }
+
+          ctx.save();
+          ctx.translate(pt.x, pt.y);
+          ctx.rotate(pt.angle);
+          ctx.beginPath();
+          ctx.ellipse(0, 0, pt.size, pt.size * 0.45, 0, 0, Math.PI * 2);
+          ctx.fillStyle = '#ff758c';
+          ctx.globalAlpha = pt.opacity;
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // ================= NHỊP TIM & SÓNG XUNG KÍCH =================
+        const beatPower = Math.pow(Math.sin(time * 1.2), 8);
+        const beat = 1 + 0.08 * beatPower + 0.02 * Math.sin(time * 2.4);
         const scale = (Math.min(width, height) / 38) * beat;
 
+        // Bắt đỉnh nhịp tim để kích hoạt gợn sóng shockwave
+        if (beatPower > 0.85 && !lastBeatPeak) {
+          shockwaves.push({ radius: 20, maxRadius: 180, opacity: 0.6 });
+          lastBeatPeak = true;
+        } else if (beatPower <= 0.85) {
+          lastBeatPeak = false;
+        }
+
+        // Vẽ các vòng sóng lan tỏa
+        for (let i = shockwaves.length - 1; i >= 0; i--) {
+          const sw = shockwaves[i];
+          sw.radius += 2.8;
+          sw.opacity -= 0.012;
+
+          if (sw.opacity <= 0 || sw.radius >= sw.maxRadius) {
+            shockwaves.splice(i, 1);
+            continue;
+          }
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(centerX, centerY, sw.radius, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(255, 77, 109, ${sw.opacity})`;
+          ctx.lineWidth = 2;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = '#ff2a6d';
+          ctx.stroke();
+          ctx.restore();
+        }
+
         // Quầng sáng hào quang quanh tim
-        const grad = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, 150 * beat);
-        grad.addColorStop(0, 'rgba(255, 42, 109, 0.4)');
+        const grad = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, 155 * beat);
+        grad.addColorStop(0, 'rgba(255, 42, 109, 0.42)');
         grad.addColorStop(0.5, 'rgba(255, 77, 109, 0.12)');
         grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = grad;
@@ -550,7 +720,7 @@
         ctx.arc(centerX, centerY, 160 * beat, 0, Math.PI * 2);
         ctx.fill();
 
-        // 1. Vẽ các hạt tim
+        // 1. Vẽ các hạt tim 3D
         for (let i = 0; i < heartParticles.length; i++) {
           const p = heartParticles[i];
 
