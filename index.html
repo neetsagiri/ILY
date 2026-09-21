@@ -24,7 +24,7 @@
       position: relative;
     }
 
-    /* Đốm sáng đom đóm nền mở đầu */
+    /* Đốm sáng đom đóm nền */
     .bg-firefly {
       position: absolute;
       background: #ff758c;
@@ -209,7 +209,7 @@
       align-self: center;
     }
 
-    /* Khung Canvas Trái Tim 3D */
+    /* Khung Canvas */
     #heart-wrapper {
       position: fixed;
       top: 0;
@@ -247,7 +247,7 @@
   <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
   <div id="fireflies"></div>
 
-  <!-- Bước 1: Phong bì và Lá thư mở ra -->
+  <!-- Bước 1: Phong bì và Lá thư -->
   <div id="envelope-wrapper" onclick="openEnvelope()">
     <div class="envelope">
       <div class="envelope-flap" id="envFlap"></div>
@@ -269,7 +269,7 @@
     <span class="tap-hint" id="hintSub">(Chạm vào phong thư để mở ✨)</span>
   </div>
 
-  <!-- Bước 2: Trái tim 3D chuẩn xác từng đường nét -->
+  <!-- Bước 2: Canvas Trái tim 3D -->
   <div id="heart-wrapper">
     <canvas id="heartCanvas"></canvas>
   </div>
@@ -360,12 +360,12 @@
         const hw = document.getElementById('heart-wrapper');
         hw.style.display = 'block';
         setTimeout(() => hw.style.opacity = '1', 50);
-        initReal3DHeart();
+        initCrispHeart();
       }, 850);
     }
 
-    /* Thuật toán Dựng Hình Trái Tim Chuẩn Tuyệt Đối (Không Bị Phình Tròn) */
-    function initReal3DHeart() {
+    /* Thuật toán dựng hình trái tim chuẩn xác theo từng lớp biên dạng */
+    function initCrispHeart() {
       const canvas = document.getElementById('heartCanvas');
       const ctx = canvas.getContext('2d');
       let width = canvas.width = window.innerWidth;
@@ -376,8 +376,8 @@
         height = canvas.height = window.innerHeight;
       });
 
-      // Tọa độ toán học đường cong trái tim gốc
-      function getHeartBasePoint(t) {
+      // Phương trình toán học trái tim chuẩn
+      function heartCurve(t) {
         return {
           x: 16 * Math.pow(Math.sin(t), 3),
           y: -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))
@@ -385,48 +385,38 @@
       }
 
       const heartParticles = [];
-      const totalPoints = 1100;
 
-      // Dùng phương pháp co dãn tầng (Layer Shrinking) bảo toàn 100% hình dáng trái tim
-      for (let i = 0; i < totalPoints; i++) {
-        const t = Math.random() * Math.PI * 2;
-        const pt = getHeartBasePoint(t);
+      // Dựng 14 lớp đường biên từ ngoài vào trong, co về đúng tâm đối xứng (-2.5) để không mất hõm chữ V
+      const layers = [1.0, 0.94, 0.88, 0.82, 0.76, 0.70, 0.64, 0.58, 0.52, 0.45, 0.38, 0.30, 0.22, 0.12];
+      const centerYOffset = -2.5;
 
-        // Hệ số phân bố hạt: 45% hạt nằm ở sát viền ngoài, 55% hạt rải vào lòng trong
-        let r;
-        if (Math.random() < 0.45) {
-          // Viền ngoài sắc nét
-          r = 0.92 + Math.random() * 0.1;
-        } else {
-          // Ruột trong (dày dần vào tâm nhưng luôn giữ dáng tim)
-          r = Math.pow(Math.random(), 0.55) * 0.92;
+      layers.forEach((layerScale) => {
+        const count = Math.floor(110 * Math.pow(layerScale, 0.7));
+        for (let i = 0; i < count; i++) {
+          const t = (Math.PI * 2 * i) / count;
+          const base = heartCurve(t);
+
+          const finalX = base.x * layerScale;
+          const finalY = (base.y - centerYOffset) * layerScale + centerYOffset;
+
+          const angle = Math.random() * Math.PI * 2;
+          const dist = Math.max(width, height) * (0.6 + Math.random() * 0.4);
+
+          heartParticles.push({
+            origX: finalX,
+            origY: finalY,
+            currX: width / 2 + Math.cos(angle) * dist,
+            currY: height / 2 + Math.sin(angle) * dist,
+            size: layerScale > 0.85 ? (Math.random() * 1.5 + 1.2) : (Math.random() * 1.2 + 0.8),
+            color: layerScale > 0.8 ? '#ff2a6d' : (Math.random() > 0.4 ? '#e61e58' : '#ff7597'),
+            alpha: layerScale > 0.85 ? 0.95 : (Math.random() * 0.4 + 0.4),
+            progress: 0,
+            speed: 0.0035 + Math.random() * 0.003,
+            delay: Math.random() * 100,
+            phase: Math.random() * Math.PI * 2
+          });
         }
-
-        // Tọa độ mục tiêu
-        const targetX = pt.x * r;
-        const targetY = pt.y * r;
-        // Trục Z tạo độ dày khối 3D phồng ở giữa, mỏng dần ở rìa
-        const targetZ = (Math.random() - 0.5) * 8 * Math.sqrt(Math.max(0, 1 - (pt.x*pt.x + pt.y*pt.y) / 300));
-
-        // Điểm xuất phát: bay từ rìa ngoài màn hình vào
-        const startAngle = Math.random() * Math.PI * 2;
-        const startDist = Math.max(width, height) * (0.6 + Math.random() * 0.4);
-
-        heartParticles.push({
-          x: targetX,
-          y: targetY,
-          z: targetZ,
-          currX: width / 2 + Math.cos(startAngle) * startDist,
-          currY: height / 2 + Math.sin(startAngle) * startDist,
-          size: Math.random() * 2.0 + 1.1,
-          color: r > 0.85 ? '#ff2a6d' : (Math.random() > 0.4 ? '#e61e58' : '#ff7597'),
-          alpha: r > 0.85 ? 0.9 : (Math.random() * 0.4 + 0.4),
-          progress: 0,
-          speed: 0.0035 + Math.random() * 0.003, // Tốc độ tụ lại chậm rãi
-          delay: Math.random() * 120,
-          phase: Math.random() * Math.PI * 2
-        });
-      }
+      });
 
       // Đĩa hạt xoay chân đế
       const ringParticles = [];
@@ -436,7 +426,7 @@
           theta: Math.random() * Math.PI * 2,
           radius: Math.random() * 110 + 60,
           speed: 0.01 + Math.random() * 0.006,
-          size: Math.random() * 1.8 + 0.6,
+          size: Math.random() * 1.6 + 0.5,
           alpha: Math.random() * 0.6 + 0.3
         });
       }
@@ -450,28 +440,27 @@
         time += 0.035;
         frame++;
 
-        // Vị trí chuẩn cân đối màn hình
         const centerX = width / 2;
         const centerY = height * 0.36;
         const ringCenterY = height * 0.75;
         const ringRadiusX = Math.min(width * 0.42, 175);
         const ringRadiusY = ringRadiusX * 0.34;
 
-        // Nhịp tim đập kép tự nhiên
+        // Nhịp tim đập
         const beat = 1 + 0.08 * Math.pow(Math.sin(time * 1.2), 8) + 0.02 * Math.sin(time * 2.4);
         const scale = (Math.min(width, height) / 38) * beat;
 
-        // Hào quang hồng phía sau
-        const grad = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, 160 * beat);
-        grad.addColorStop(0, 'rgba(255, 42, 109, 0.45)');
-        grad.addColorStop(0.5, 'rgba(255, 77, 109, 0.15)');
+        // Hào quang
+        const grad = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, 150 * beat);
+        grad.addColorStop(0, 'rgba(255, 42, 109, 0.35)');
+        grad.addColorStop(0.5, 'rgba(255, 77, 109, 0.1)');
         grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(centerX, centerY, 170 * beat, 0, Math.PI * 2);
+        ctx.arc(centerX, centerY, 160 * beat, 0, Math.PI * 2);
         ctx.fill();
 
-        // 1. Vẽ các hạt tim 3D
+        // 1. Vẽ các hạt tim chuẩn xác
         for (let i = 0; i < heartParticles.length; i++) {
           const p = heartParticles[i];
 
@@ -480,19 +469,18 @@
             if (p.progress > 1) p.progress = 1;
           }
 
-          // Hiệu ứng thở nhẹ
-          const floatOffset = (p.progress >= 1) ? Math.sin(time * 2 + p.phase) * 1.1 : 0;
-          const targetX = centerX + p.x * scale + floatOffset;
-          const targetY = centerY + p.y * scale + floatOffset;
+          const floatOffset = (p.progress >= 1) ? Math.sin(time * 2 + p.phase) * 0.9 : 0;
+          const targetX = centerX + p.origX * scale + floatOffset;
+          const targetY = centerY + p.origY * scale + floatOffset;
 
           const ease = 1 - Math.pow(1 - p.progress, 3);
           const drawX = p.currX + (targetX - p.currX) * ease;
           const drawY = p.currY + (targetY - p.currY) * ease;
 
           ctx.beginPath();
-          ctx.arc(drawX, drawY, p.size * (0.4 + 0.6 * ease), 0, Math.PI * 2);
+          ctx.arc(drawX, drawY, p.size * (0.5 + 0.5 * ease), 0, Math.PI * 2);
           ctx.fillStyle = p.color;
-          ctx.shadowBlur = 8;
+          ctx.shadowBlur = 4;
           ctx.shadowColor = '#ff2a6d';
           ctx.globalAlpha = p.alpha * ease;
           ctx.fill();
@@ -510,7 +498,7 @@
           ctx.beginPath();
           ctx.arc(rx, ry, rp.size * (0.6 + 0.5 * zDepth), 0, Math.PI * 2);
           ctx.fillStyle = '#ff758c';
-          ctx.shadowBlur = 6;
+          ctx.shadowBlur = 5;
           ctx.shadowColor = '#ff2a6d';
           ctx.globalAlpha = rp.alpha * (0.3 + 0.7 * zDepth);
           ctx.fill();
