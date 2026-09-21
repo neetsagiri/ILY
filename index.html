@@ -10,6 +10,8 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     body {
@@ -22,6 +24,7 @@
       justify-content: center;
       align-items: center;
       position: relative;
+      touch-action: manipulation;
     }
 
     /* Đốm sáng đom đóm nền */
@@ -48,6 +51,7 @@
       z-index: 50;
       transition: opacity 1s ease, transform 1s ease;
       animation: floatEnvelope 3.5s ease-in-out infinite;
+      padding: 20px;
     }
 
     @keyframes floatEnvelope {
@@ -59,10 +63,11 @@
       position: relative;
       width: 260px;
       height: 170px;
-      background: #870b29; /* Lưng phong bì */
+      background: #870b29;
       border-radius: 0 0 16px 16px;
       box-shadow: 0 20px 45px rgba(255, 42, 109, 0.45), 0 0 35px rgba(255, 117, 140, 0.25);
       margin: 0 auto;
+      pointer-events: none; /* Để toàn bộ cú chạm rơi thẳng vào envelope-wrapper */
     }
 
     /* Nắp gập phong bì */
@@ -92,8 +97,7 @@
       border-right: 130px solid #a81236;
       border-bottom: 100px solid #d41c46;
       border-radius: 0 0 16px 16px;
-      z-index: 4; /* Luôn che chân tờ giấy khi giấy trồi lên */
-      pointer-events: none;
+      z-index: 4;
     }
 
     /* Con dấu sáp trái tim nổi */
@@ -123,8 +127,7 @@
       font-weight: 600;
       letter-spacing: 0.5px;
       text-shadow: 0 0 12px rgba(255, 77, 109, 0.8);
-      user-select: none;
-      transition: opacity 0.4s ease;
+      pointer-events: none;
     }
 
     .tap-hint {
@@ -134,8 +137,7 @@
       color: #ff85a1;
       opacity: 0.85;
       letter-spacing: 1px;
-      user-select: none;
-      transition: opacity 0.4s ease;
+      pointer-events: none;
     }
 
     /* TỜ GIẤY THƯ NẰM LỌT TRONG PHONG BÌ */
@@ -151,7 +153,7 @@
       border-radius: 10px;
       box-shadow: 0 5px 15px rgba(0,0,0,0.25);
       padding: 16px 14px;
-      z-index: 2; /* Nằm sau túi trước và nắp gập */
+      z-index: 2;
       opacity: 0;
       transition: transform 0.9s cubic-bezier(0.25, 1, 0.5, 1), 
                   width 0.8s ease, 
@@ -163,9 +165,10 @@
       flex-direction: column;
       justify-content: space-between;
       border: 1px solid #ead6c3;
+      pointer-events: auto;
     }
 
-    /* Giai đoạn 1: Trồi thẳng lên khỏi lòng phong bì */
+    /* Giai đoạn 1: Trồi thẳng lên khỏi miệng túi */
     #paper-letter.peeking {
       opacity: 1;
       transform: translateX(-50%) translateY(-135px);
@@ -184,7 +187,7 @@
       min-height: 250px;
       padding: 26px 22px;
       border-radius: 18px;
-      z-index: 100; /* Nổi hẳn lên trên cùng */
+      z-index: 100;
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 77, 109, 0.4);
       background: #fffdf7;
       background-image: repeating-linear-gradient(#fffdf7, #fffdf7 27px, #faeade 28px);
@@ -224,6 +227,7 @@
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(201, 24, 74, 0.45);
       align-self: center;
+      pointer-events: auto;
     }
 
     /* Khung Canvas Trái Tim 3D */
@@ -265,7 +269,7 @@
   <div id="fireflies"></div>
 
   <!-- Bước 1: Phong bì và Lá thư mượt mà -->
-  <div id="envelope-wrapper" onclick="openEnvelope()">
+  <div id="envelope-wrapper">
     <div class="envelope">
       <div class="envelope-flap" id="envFlap"></div>
       
@@ -276,7 +280,7 @@
         <div class="paper-body">
           Bé iuu Bảo Bei Nhất 💕, Bảo Bei bấm ở dưới bấm ở dưới...
         </div>
-        <button class="surprise-btn" onclick="startHeartShow(event)">Xem điều bất ngờ 💖</button>
+        <button class="surprise-btn" id="surpriseBtn">Xem điều bất ngờ 💖</button>
       </div>
 
       <div class="envelope-pocket"></div>
@@ -337,7 +341,6 @@
 
     let isOpened = false;
 
-    // Hiệu ứng mở thư từng bước tự nhiên
     function openEnvelope() {
       if (isOpened) return;
       isOpened = true;
@@ -345,7 +348,6 @@
       const music = document.getElementById('bg-music');
       music.play().catch(() => {});
 
-      // 1. Mở nắp và ẩn con dấu
       document.getElementById('heartSeal').style.opacity = '0';
       document.getElementById('envFlap').style.transform = 'rotateX(180deg)';
       document.getElementById('hintTitle').style.opacity = '0';
@@ -353,23 +355,33 @@
 
       const letter = document.getElementById('paper-letter');
 
-      // 2. Tờ giấy trồi thẳng lên khỏi miệng túi (chân giấy vẫn nằm trong túi)
+      // Tờ giấy trồi thẳng lên
       setTimeout(() => {
         letter.classList.add('peeking');
       }, 550);
 
-      // 3. Tờ giấy nhẹ nhàng bay ra giữa màn hình và nở to hoàn chỉnh
+      // Tách ra giữa màn hình
       setTimeout(() => {
         letter.classList.remove('peeking');
         letter.classList.add('opened');
       }, 1450);
     }
 
-    function startHeartShow(e) {
-      e.stopPropagation();
+    // Đăng ký sự kiện mở thư an toàn trên cả điện thoại và máy tính
+    const envWrapper = document.getElementById('envelope-wrapper');
+    envWrapper.addEventListener('pointerdown', (e) => {
+      // Nếu bấm trúng nút trong thư thì bỏ qua
+      if (e.target && e.target.id === 'surpriseBtn') return;
+      openEnvelope();
+    });
 
+    document.getElementById('surpriseBtn').addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      startHeartShow();
+    });
+
+    function startHeartShow() {
       const letter = document.getElementById('paper-letter');
-      const envWrapper = document.getElementById('envelope-wrapper');
 
       letter.style.transition = 'all 0.9s ease';
       letter.style.opacity = '0';
@@ -547,7 +559,7 @@
           ctx.fill();
         }
 
-        // 2. Vẽ đĩa hạt xoay chân đế
+        // 2. Vẽ đĩa hạt chân đế
         for (let i = 0; i < ringParticles.length; i++) {
           const rp = ringParticles[i];
           rp.theta += rp.speed;
