@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Gửi Bảo Bei, tình cảm của bé💕</title>
   <style>
     * {
@@ -14,87 +13,65 @@
     }
 
     body {
-      min-height: 100vh;
-      background: radial-gradient(ellipse at bottom, #1e1329 0%, #0a0612 100%);
+      width: 100vw;
+      height: 100vh;
+      background: #050208;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      position: relative;
     }
 
-    /* Các đốm sao lấp lánh nền */
-    .sparkle {
-      position: absolute;
-      background: #ff758c;
-      border-radius: 50%;
-      pointer-events: none;
-      opacity: 0.6;
-      animation: float 4s infinite ease-in-out;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
-      50% { transform: translateY(-30px) scale(1.4); opacity: 0.8; }
-    }
-
-    /* Giai đoạn 1: Phong bì thư */
+    /* Phong bì mở đầu */
     #envelope-wrapper {
       text-align: center;
       cursor: pointer;
-      z-index: 20;
+      z-index: 50;
       transition: opacity 0.8s ease, transform 0.8s ease;
     }
 
     .envelope {
       position: relative;
-      width: 220px;
-      height: 150px;
-      background: linear-gradient(135deg, #ff4b72, #d62828);
+      width: 200px;
+      height: 140px;
+      background: linear-gradient(135deg, #ff4d6d, #c9184a);
       border-radius: 12px;
-      box-shadow: 0 15px 35px rgba(255, 75, 114, 0.3);
+      box-shadow: 0 15px 35px rgba(255, 77, 109, 0.4);
       margin: 0 auto;
       display: flex;
       justify-content: center;
       align-items: center;
-      transition: transform 0.3s ease;
-    }
-
-    .envelope:hover {
-      transform: scale(1.06);
+      animation: pulse 1.6s infinite ease-in-out;
     }
 
     .heart-seal {
-      font-size: 45px;
-      animation: pulse 1.2s infinite;
-      user-select: none;
+      font-size: 42px;
     }
 
     .hint-text {
       margin-top: 22px;
-      color: #ffccd5;
-      font-size: 1.15rem;
+      color: #ffb3c1;
+      font-size: 1.1rem;
       letter-spacing: 0.5px;
-      text-shadow: 0 0 12px rgba(255, 117, 140, 0.7);
-      user-select: none;
+      text-shadow: 0 0 10px rgba(255, 77, 109, 0.6);
     }
 
-    /* Giai đoạn 2: Tấm thiệp tâm sự */
+    /* Thiệp tâm sự */
     #letter-card {
       position: absolute;
-      width: 88%;
-      max-width: 420px;
+      width: 86%;
+      max-width: 380px;
       background: rgba(255, 255, 255, 0.95);
       border-radius: 16px;
-      padding: 28px 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 117, 140, 0.4);
+      padding: 26px 22px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 25px rgba(255, 77, 109, 0.3);
       text-align: center;
-      z-index: 25;
+      z-index: 60;
       display: none;
       opacity: 0;
-      transform: translateY(30px) scale(0.9);
-      transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform: translateY(20px) scale(0.9);
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     #letter-card.show {
@@ -104,106 +81,98 @@
     }
 
     .letter-title {
-      font-size: 1.25rem;
-      color: #d62828;
+      font-size: 1.2rem;
+      color: #c9184a;
       font-weight: 700;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .letter-content {
       color: #444;
-      font-size: 0.98rem;
-      line-height: 1.65;
-      margin-bottom: 22px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
       text-align: justify;
     }
 
     .surprise-btn {
-      background: linear-gradient(135deg, #ff4b72, #e63946);
+      background: linear-gradient(135deg, #ff4d6d, #c9184a);
       color: #fff;
       border: none;
       padding: 10px 24px;
       border-radius: 25px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 6px 16px rgba(230, 57, 70, 0.4);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 6px 15px rgba(201, 24, 74, 0.4);
     }
 
-    .surprise-btn:active {
-      transform: scale(0.95);
-    }
-
-    /* Giai đoạn 3: Trái tim chữ đa ngôn ngữ */
-    #heart-container {
-      position: absolute;
+    /* Khung hiển thị Trái Tim Canvas */
+    #heart-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100vw;
       height: 100vh;
       display: none;
-      justify-content: center;
-      align-items: center;
+      opacity: 0;
+      transition: opacity 1s ease;
       z-index: 10;
     }
 
-    .heart-center-text {
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* Các dòng chữ đa ngôn ngữ chạy phía dưới trái tim */
+    #lang-text {
       position: absolute;
-      font-size: 24px;
-      font-weight: bold;
-      color: #ff3366;
-      text-shadow: 0 0 15px #ff6b8b, 0 0 30px #ff3366;
-      animation: beat 1.5s infinite ease-in-out;
+      bottom: 12%;
+      width: 100%;
       text-align: center;
-      z-index: 15;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .heart-word {
-      position: absolute;
-      font-size: 12.5px;
+      font-size: 1.3rem;
       font-weight: 600;
-      white-space: nowrap;
-      text-shadow: 0 0 8px rgba(255, 105, 180, 0.7);
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0);
-      transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      user-select: none;
+      color: #fff;
+      text-shadow: 0 0 10px #ff4d6d, 0 0 20px #ff0055;
+      letter-spacing: 1px;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    #sub-text {
+      position: absolute;
+      bottom: 7.5%;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #ffb3c1;
+      letter-spacing: 0.5px;
       pointer-events: none;
     }
 
-    /* Chạm ngón tay/chuột tạo tim bay */
+    /* Tia tim mini khi chạm ngón tay */
     .touch-heart {
       position: fixed;
       pointer-events: none;
-      font-size: 16px;
       user-select: none;
+      font-size: 16px;
       z-index: 999;
-      transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+      transition: transform 0.7s ease-out, opacity 0.7s ease-out;
     }
 
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.18); }
-    }
-
-    @keyframes beat {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); }
-      30% { transform: translate(-50%, -50%) scale(1.14); }
-      50% { transform: translate(-50%, -50%) scale(1.05); }
-      70% { transform: translate(-50%, -50%) scale(1.2); }
+      50% { transform: scale(1.06); }
     }
   </style>
 </head>
 <body>
 
-  <!-- File nhạc nền mp3 -->
   <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
 
-  <!-- Nền đốm sáng lấp lánh -->
-  <div id="stars"></div>
-
-  <!-- Phong bì mở đầu -->
+  <!-- Bước 1: Bì thư -->
   <div id="envelope-wrapper" onclick="openEnvelope()">
     <div class="envelope">
       <div class="heart-seal">💌</div>
@@ -211,171 +180,166 @@
     <div class="hint-text">Gửi Bảo Bei, tình cảm của bé💕</div>
   </div>
 
-  <!-- Thiệp tâm sự ngắn -->
+  <!-- Bước 2: Thiệp tâm tình -->
   <div id="letter-card">
     <div class="letter-title">Gửi Bảo Bei của bé 💕</div>
     <div class="letter-content">
-      Cảm ơn anh/em vì đã luôn ở bên cạnh, mang đến cho em thật nhiều niềm vui và những điều ngọt ngào mỗi ngày. Từng khoảnh khắc bên Bảo Bei đều vô cùng ý nghĩa với em...
+      Bé iuu Bảo Bei Nhất 💕
     </div>
-    <button class="surprise-btn" onclick="showHeartUniverse()">Xem điều bất ngờ 💖</button>
+    <button class="surprise-btn" onclick="startHeartShow()">Xem điều bất ngờ 💖</button>
   </div>
 
-  <!-- Vùng chứa trái tim tạo từ các câu I love you -->
-  <div id="heart-container">
-    <div class="heart-center-text" id="centerText">
-      Bảo Bei 💕<br>
-      <span style="font-size: 15px; color: #fff; font-weight: normal;">My Universe</span>
-    </div>
+  <!-- Bước 3: Trái tim phát sáng & chữ chạy -->
+  <div id="heart-wrapper">
+    <canvas id="heartCanvas"></canvas>
+    <div id="lang-text">Anh yêu Bảo Bei 💕</div>
+    <div id="sub-text">Forever with Bảo Bei ✨</div>
   </div>
 
   <script>
-    // Danh sách "I love you Bảo Bei" ở các thứ tiếng
     const phrases = [
-      "I love you, Bảo Bei",          // Tiếng Anh
-      "我爱你, Bảo Bei",              // Tiếng Trung
-      "Anh yêu Bảo Bei",              // Tiếng Việt
-      "Em yêu Bảo Bei",               // Tiếng Việt
-      "사랑해, Bảo Bei",              // Tiếng Hàn
-      "愛してる, Bảo Bei",            // Tiếng Nhật
-      "Je t'aime, Bảo Bei",           // Tiếng Pháp
-      "Te amo, Bảo Bei",              // Tây Ban Nha
-      "Ich liebe dich, Bảo Bei",      // Tiếng Đức
-      "Ti amo, Bảo Bei",              // Tiếng Ý
-      "Я люблю тебя, Bảo Bei",        // Tiếng Nga
-      "Eu te amo, Bảo Bei",           // Bồ Đào Nha
-      "Mahal kita, Bảo Bei",          // Philippines
-      "ฉันรักเธอ, Bảo Bei",           // Thái Lan
-      "Aku cinta kamu, Bảo Bei",      // Indonesia
-      "Mãi yêu Bảo Bei 💕",          // Tiếng Việt
-      "Forever with Bảo Bei",         // Tiếng Anh
-      "Only you, Bảo Bei"             // Tiếng Anh
+      "Anh yêu Bảo Bei 💕",
+      "I Love You, Bảo Bei",
+      "我爱你, Bảo Bei",
+      "사랑해, Bảo Bei",
+      "愛してる, Bảo Bei",
+      "Je t'aime, Bảo Bei",
+      "Te amo, Bảo Bei",
+      "Ich liebe dich, Bảo Bei",
+      "Ti amo, Bảo Bei",
+      "Я люблю тебя, Bảo Bei",
+      "ฉันรักเธอ, Bảo Bei",
+      "Em yêu Bảo Bei 💕"
     ];
 
-    // Tạo các hạt nền lấp lánh
-    const starsContainer = document.getElementById('stars');
-    for (let i = 0; i < 40; i++) {
-      const star = document.createElement('div');
-      star.className = 'sparkle';
-      const size = Math.random() * 4 + 2;
-      star.style.width = size + 'px';
-      star.style.height = size + 'px';
-      star.style.left = Math.random() * 100 + 'vw';
-      star.style.top = Math.random() * 100 + 'vh';
-      star.style.animationDelay = Math.random() * 3 + 's';
-      starsContainer.appendChild(star);
-    }
-
-    // Hiệu ứng tương tác: chạm ngón tay / di chuột ra tia tim nhỏ
-    const spawnTouchHeart = (x, y) => {
-      const heart = document.createElement('div');
-      heart.className = 'touch-heart';
-      heart.innerText = Math.random() > 0.5 ? '💖' : '✨';
-      heart.style.left = x + 'px';
-      heart.style.top = y + 'px';
-      document.body.appendChild(heart);
-
-      setTimeout(() => {
-        const moveX = (Math.random() - 0.5) * 60;
-        const moveY = -40 - Math.random() * 40;
-        heart.style.transform = `translate(${moveX}px, ${moveY}px) scale(0.3)`;
-        heart.style.opacity = '0';
-      }, 20);
-
-      setTimeout(() => heart.remove(), 800);
-    };
-
+    // Tạo tia tim khi chạm/lướt màn hình
     window.addEventListener('pointermove', (e) => {
-      if (Math.random() < 0.25) spawnTouchHeart(e.clientX, e.clientY);
+      if (Math.random() < 0.2) {
+        const heart = document.createElement('div');
+        heart.className = 'touch-heart';
+        heart.innerText = Math.random() > 0.5 ? '💖' : '✨';
+        heart.style.left = e.clientX + 'px';
+        heart.style.top = e.clientY + 'px';
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+          heart.style.transform = `translate(${(Math.random() - 0.5) * 50}px, -40px) scale(0.3)`;
+          heart.style.opacity = '0';
+        }, 20);
+
+        setTimeout(() => heart.remove(), 700);
+      }
     });
 
-    // Bước 1: Mở phong bì và kích hoạt nhạc
     function openEnvelope() {
       const music = document.getElementById('bg-music');
-      music.play().catch(() => console.log('Chờ người dùng tương tác thêm'));
+      music.play().catch(() => {});
 
-      const envelope = document.getElementById('envelope-wrapper');
-      envelope.style.opacity = '0';
-      envelope.style.transform = 'scale(0.6)';
+      const env = document.getElementById('envelope-wrapper');
+      env.style.opacity = '0';
+      env.style.transform = 'scale(0.7)';
 
       setTimeout(() => {
-        envelope.style.display = 'none';
+        env.style.display = 'none';
         const card = document.getElementById('letter-card');
         card.style.display = 'block';
-        setTimeout(() => card.classList.add('show'), 30);
+        setTimeout(() => card.classList.add('show'), 20);
       }, 700);
     }
 
-    // Phương trình toán học hình trái tim
-    function getHeartCoordinates(t, scale) {
-      const x = 16 * Math.pow(Math.sin(t), 3);
-      const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-      return { x: x * scale, y: y * scale };
-    }
-
-    // Bước 2: Ẩn thiệp và bung nở trái tim chữ
-    function showHeartUniverse() {
+    function startHeartShow() {
       const card = document.getElementById('letter-card');
       card.classList.remove('show');
 
       setTimeout(() => {
         card.style.display = 'none';
-        const heartContainer = document.getElementById('heart-container');
-        heartContainer.style.display = 'flex';
-        renderHeartText();
-      }, 600);
+        const hw = document.getElementById('heart-wrapper');
+        hw.style.display = 'block';
+        setTimeout(() => hw.style.opacity = '1', 50);
+        initHeartCanvas();
+        startTextRotation();
+      }, 500);
     }
 
-    function renderHeartText() {
-      const heartContainer = document.getElementById('heart-container');
-      const centerText = document.getElementById('centerText');
-      centerText.style.left = '50%';
-      centerText.style.top = '50%';
-
-      // Căn chỉnh kích thước theo tỉ lệ màn hình
-      const isMobile = window.innerWidth < 650;
-      const baseScale = isMobile ? (window.innerWidth / 48) : 14; 
-      const totalWords = 60;
-
-      for (let i = 0; i < totalWords; i++) {
-        const span = document.createElement('span');
-        span.className = 'heart-word';
-        span.innerText = phrases[i % phrases.length];
-
-        const t = (i / totalWords) * 2 * Math.PI;
-        // Xen kẽ lớp ngoài và lớp trong
-        const layerScale = (i % 3 === 0) ? baseScale * 0.72 : baseScale;
-        const coords = getHeartCoordinates(t, layerScale);
-
-        span.style.left = `${window.innerWidth / 2 + coords.x}px`;
-        span.style.top = `${window.innerHeight / 2 + coords.y}px`;
-
-        const colors = ['#ff85a1', '#ff5c8a', '#ff99c8', '#ffffff', '#ff3366', '#fbb1bd'];
-        span.style.color = colors[i % colors.length];
-
-        heartContainer.appendChild(span);
-
-        // Hiệu ứng bay ra lần lượt
+    function startTextRotation() {
+      let idx = 0;
+      const textEl = document.getElementById('lang-text');
+      setInterval(() => {
+        textEl.style.opacity = '0';
         setTimeout(() => {
-          span.style.opacity = '1';
-          span.style.transform = 'translate(-50%, -50%) scale(1)';
-        }, i * 35);
-      }
-
-      // Nhịp đập sau khi xếp chữ xong
-      setTimeout(() => {
-        heartContainer.style.animation = 'beat 1.5s infinite ease-in-out';
-      }, totalWords * 35 + 400);
+          idx = (idx + 1) % phrases.length;
+          textEl.innerText = phrases[idx];
+          textEl.style.opacity = '1';
+        }, 400);
+      }, 2400);
     }
 
-    // Tự động vẽ lại chuẩn tỷ lệ khi đổi kích thước hoặc xoay màn hình điện thoại
-    window.addEventListener('resize', () => {
-      const heartContainer = document.getElementById('heart-container');
-      if (heartContainer.style.display === 'flex') {
-        const words = document.querySelectorAll('.heart-word');
-        words.forEach(w => w.remove());
-        renderHeartText();
+    /* Hiệu ứng Trái tim Canvas đập nhịp */
+    function initHeartCanvas() {
+      const canvas = document.getElementById('heartCanvas');
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      });
+
+      // Công thức tạo hình trái tim chuẩn xác
+      function heartPosition(t) {
+        return {
+          x: 16 * Math.pow(Math.sin(t), 3),
+          y: -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))
+        };
       }
-    });
+
+      const points = [];
+      const totalPoints = 380;
+      for (let i = 0; i < totalPoints; i++) {
+        const t = (Math.PI * 2 * i) / totalPoints;
+        const pos = heartPosition(t);
+        points.push({
+          x: pos.x,
+          y: pos.y,
+          r: Math.random() * 2 + 1,
+          alpha: Math.random() * 0.7 + 0.3
+        });
+      }
+
+      let beatProgress = 0;
+
+      function render() {
+        ctx.fillStyle = 'rgba(5, 2, 8, 0.25)';
+        ctx.fillRect(0, 0, width, height);
+
+        beatProgress += 0.04;
+        // Nhịp đập tim
+        const beatScale = 1 + 0.15 * Math.pow(Math.sin(beatProgress), 6);
+        const scale = Math.min(width, height) / 38 * beatScale;
+
+        const centerX = width / 2;
+        const centerY = height / 2 - 40; // Nâng nhẹ lên trên nhường chỗ cho dòng chữ
+
+        // Vẽ từng điểm hạt phát sáng
+        for (let i = 0; i < points.length; i++) {
+          const p = points[i];
+          const px = centerX + p.x * scale + (Math.random() - 0.5) * 4;
+          const py = centerY + p.y * scale + (Math.random() - 0.5) * 4;
+
+          ctx.beginPath();
+          ctx.arc(px, py, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 77, 109, ${p.alpha})`;
+          ctx.shadowBlur = 12;
+          ctx.shadowColor = '#ff2a55';
+          ctx.fill();
+        }
+
+        requestAnimationFrame(render);
+      }
+
+      render();
+    }
   </script>
 </body>
 </html>
