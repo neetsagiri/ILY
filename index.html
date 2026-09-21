@@ -24,7 +24,7 @@
       position: relative;
     }
 
-    /* Đốm sáng đom đóm nền */
+    /* Đốm sáng đom đóm nền cho giai đoạn 1 */
     .bg-firefly {
       position: absolute;
       background: #ff758c;
@@ -132,7 +132,7 @@
       user-select: none;
     }
 
-    /* Tờ thư từ từ trồi lên */
+    /* Tờ thư */
     #paper-letter {
       position: absolute;
       top: 10px;
@@ -355,6 +355,9 @@
       envWrapper.style.opacity = '0';
       envWrapper.style.transform = 'scale(0.7)';
 
+      // Ẩn đàn đom đóm giai đoạn 1 khi vào giai đoạn 2
+      fireflyContainer.style.display = 'none';
+
       setTimeout(() => {
         envWrapper.style.display = 'none';
         const hw = document.getElementById('heart-wrapper');
@@ -364,19 +367,50 @@
       }, 850);
     }
 
-    /* Thuật toán dựng hình trái tim chuẩn xác theo từng lớp biên dạng */
     function initCrispHeart() {
       const canvas = document.getElementById('heartCanvas');
       const ctx = canvas.getContext('2d');
       let width = canvas.width = window.innerWidth;
       let height = canvas.height = window.innerHeight;
 
+      // 1. Sao nền lấp lánh (160 ngôi sao)
+      const stars = [];
+      const starCount = 160;
+      for (let i = 0; i < starCount; i++) {
+        stars.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          size: Math.random() * 1.5 + 0.5,
+          twinkleSpeed: 0.02 + Math.random() * 0.04,
+          phase: Math.random() * Math.PI * 2,
+          color: Math.random() > 0.4 ? '#ffffff' : '#ffd1dc'
+        });
+      }
+
+      // 2. Bụi tiên bay lơ lửng từ dưới lên (70 hạt)
+      const stardust = [];
+      const stardustCount = 70;
+      for (let i = 0; i < stardustCount; i++) {
+        stardust.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: -(Math.random() * 0.5 + 0.25),
+          size: Math.random() * 2 + 1,
+          alpha: Math.random() * 0.5 + 0.2,
+          pulse: Math.random() * Math.PI * 2
+        });
+      }
+
       window.addEventListener('resize', () => {
         width = canvas.width = window.innerWidth;
         height = canvas.height = window.innerHeight;
+        for (let s of stars) {
+          s.x = Math.random() * width;
+          s.y = Math.random() * height;
+        }
       });
 
-      // Phương trình toán học trái tim chuẩn
       function heartCurve(t) {
         return {
           x: 16 * Math.pow(Math.sin(t), 3),
@@ -385,8 +419,6 @@
       }
 
       const heartParticles = [];
-
-      // Dựng 14 lớp đường biên từ ngoài vào trong, co về đúng tâm đối xứng (-2.5) để không mất hõm chữ V
       const layers = [1.0, 0.94, 0.88, 0.82, 0.76, 0.70, 0.64, 0.58, 0.52, 0.45, 0.38, 0.30, 0.22, 0.12];
       const centerYOffset = -2.5;
 
@@ -418,7 +450,6 @@
         }
       });
 
-      // Đĩa hạt xoay chân đế
       const ringParticles = [];
       const ringCount = 200;
       for (let i = 0; i < ringCount; i++) {
@@ -446,21 +477,80 @@
         const ringRadiusX = Math.min(width * 0.42, 175);
         const ringRadiusY = ringRadiusX * 0.34;
 
+        // ================= KHÔNG GIAN NỀN CHI TIẾT (BACKGROUND LAYER) =================
+        // A. Tinh vân mờ (Nebula glow)
+        const nebula = ctx.createRadialGradient(centerX, centerY, 30, centerX, centerY, Math.max(width, height) * 0.6);
+        nebula.addColorStop(0, 'rgba(105, 12, 49, 0.28)');
+        nebula.addColorStop(0.5, 'rgba(40, 5, 25, 0.16)');
+        nebula.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = nebula;
+        ctx.fillRect(0, 0, width, height);
+
+        // B. Chùm tia sáng xoay nhẹ phía sau trái tim
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(time * 0.06);
+        const rayCount = 12;
+        for (let r = 0; r < rayCount; r++) {
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          const startAngle = (r * Math.PI * 2) / rayCount;
+          const endAngle = startAngle + (Math.PI / rayCount) * 0.45;
+          ctx.arc(0, 0, Math.max(width, height) * 0.7, startAngle, endAngle);
+          ctx.closePath();
+          ctx.fillStyle = 'rgba(255, 77, 109, 0.025)';
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // C. Bầu trời sao lấp lánh
+        for (let i = 0; i < stars.length; i++) {
+          const s = stars[i];
+          const twinkle = (Math.sin(time * 35 * s.twinkleSpeed + s.phase) + 1) / 2;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.size * (0.8 + 0.4 * twinkle), 0, Math.PI * 2);
+          ctx.fillStyle = s.color;
+          ctx.globalAlpha = 0.2 + 0.7 * twinkle;
+          ctx.fill();
+        }
+
+        // D. Bụi tiên bay bồng bềnh
+        for (let i = 0; i < stardust.length; i++) {
+          const dust = stardust[i];
+          dust.x += dust.vx;
+          dust.y += dust.vy;
+          dust.pulse += 0.03;
+
+          if (dust.y < -10) { dust.y = height + 10; dust.x = Math.random() * width; }
+          if (dust.x < -10) dust.x = width + 10;
+          if (dust.x > width + 10) dust.x = -10;
+
+          const dAlpha = (Math.sin(dust.pulse) + 1) / 2 * dust.alpha;
+          ctx.beginPath();
+          ctx.arc(dust.x, dust.y, dust.size, 0, Math.PI * 2);
+          ctx.fillStyle = '#ff85a1';
+          ctx.shadowBlur = 6;
+          ctx.shadowColor = '#ff2a6d';
+          ctx.globalAlpha = dAlpha;
+          ctx.fill();
+        }
+
+        // ================= ĐỐI TƯỢNG CHÍNH (HEART & TEXT) =================
         // Nhịp tim đập
         const beat = 1 + 0.08 * Math.pow(Math.sin(time * 1.2), 8) + 0.02 * Math.sin(time * 2.4);
         const scale = (Math.min(width, height) / 38) * beat;
 
-        // Hào quang
+        // Quầng sáng hào quang quanh tim
         const grad = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, 150 * beat);
-        grad.addColorStop(0, 'rgba(255, 42, 109, 0.35)');
-        grad.addColorStop(0.5, 'rgba(255, 77, 109, 0.1)');
+        grad.addColorStop(0, 'rgba(255, 42, 109, 0.4)');
+        grad.addColorStop(0.5, 'rgba(255, 77, 109, 0.12)');
         grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = grad;
         ctx.beginPath();
         ctx.arc(centerX, centerY, 160 * beat, 0, Math.PI * 2);
         ctx.fill();
 
-        // 1. Vẽ các hạt tim chuẩn xác
+        // 1. Vẽ các hạt tim
         for (let i = 0; i < heartParticles.length; i++) {
           const p = heartParticles[i];
 
