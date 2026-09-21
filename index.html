@@ -10,8 +10,6 @@
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
-      user-select: none;
-      -webkit-user-select: none;
     }
 
     body {
@@ -26,14 +24,14 @@
       position: relative;
     }
 
-    /* Đốm sáng đom đóm & sao bay ngập tràn nền */
+    /* Đốm sáng đom đóm nền */
     .bg-firefly {
       position: absolute;
       background: #ff758c;
       border-radius: 50%;
       pointer-events: none;
       opacity: 0.4;
-      animation: floatFirefly 5s infinite ease-in-out;
+      animation: floatFirefly 6s infinite ease-in-out;
       z-index: 1;
     }
 
@@ -42,25 +40,26 @@
       50% { transform: translateY(-25px) scale(1.4); opacity: 0.75; }
     }
 
-    /* Bì thư 3D (Giữ nguyên gốc để mở nhạy 100%) */
+    /* Khung Phong bì */
     #envelope-wrapper {
+      position: relative;
       text-align: center;
       cursor: pointer;
       z-index: 50;
-      transition: opacity 0.8s ease, transform 0.8s ease;
-      animation: floatEnvelope 3s ease-in-out infinite;
+      transition: opacity 1.2s ease, transform 1.2s ease;
+      animation: floatEnvelope 3.5s ease-in-out infinite;
     }
 
     @keyframes floatEnvelope {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-8px); }
     }
 
     .envelope {
       position: relative;
-      width: 250px;
-      height: 165px;
-      background: #b01037;
+      width: 260px;
+      height: 170px;
+      background: #9b0e31;
       border-radius: 0 0 16px 16px;
       box-shadow: 0 20px 45px rgba(255, 42, 109, 0.45), 0 0 35px rgba(255, 117, 140, 0.25);
       margin: 0 auto;
@@ -72,13 +71,13 @@
       left: 0;
       width: 0;
       height: 0;
-      border-left: 125px solid transparent;
-      border-right: 125px solid transparent;
-      border-top: 100px solid #d62246;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.35));
+      border-left: 130px solid transparent;
+      border-right: 130px solid transparent;
+      border-top: 105px solid #cb1a40;
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4));
       transform-origin: top;
-      transition: transform 0.4s ease;
-      z-index: 3;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 5;
     }
 
     .envelope-pocket {
@@ -87,38 +86,40 @@
       left: 0;
       width: 0;
       height: 0;
-      border-left: 125px solid #c1123a;
-      border-right: 125px solid #c1123a;
-      border-bottom: 95px solid #e01e4a;
+      border-left: 130px solid #b31439;
+      border-right: 130px solid #b31439;
+      border-bottom: 98px solid #d91c47;
       border-radius: 0 0 16px 16px;
-      z-index: 2;
+      z-index: 4;
     }
 
     .heart-seal {
       position: absolute;
-      top: 75px;
+      top: 80px;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 50px;
-      height: 50px;
-      background: radial-gradient(circle, #ffccd5 0%, #ff4d6d 70%, #a0082a 100%);
+      width: 48px;
+      height: 48px;
+      background: radial-gradient(circle, #ffccd5 0%, #ff4d6d 70%, #900523 100%);
       border-radius: 50%;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4), inset 0 2px 3px rgba(255,255,255,0.6);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 2px 3px rgba(255,255,255,0.7);
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 26px;
-      z-index: 4;
-      animation: pulse 1.4s infinite;
+      font-size: 24px;
+      z-index: 6;
+      animation: pulse 1.6s infinite;
+      transition: opacity 0.5s ease;
     }
 
     .hint-text {
       margin-top: 26px;
       color: #ffccd5;
-      font-size: 1.15rem;
+      font-size: 1.12rem;
       font-weight: 600;
       letter-spacing: 0.5px;
       text-shadow: 0 0 12px rgba(255, 77, 109, 0.8);
+      user-select: none;
     }
 
     .tap-hint {
@@ -128,59 +129,87 @@
       color: #ff85a1;
       opacity: 0.85;
       letter-spacing: 1px;
+      user-select: none;
     }
 
-    /* Thiệp */
-    #letter-card {
+    /* Tờ thư từ từ trồi lên */
+    #paper-letter {
       position: absolute;
-      width: 86%;
-      max-width: 380px;
-      background: rgba(255, 255, 255, 0.96);
-      border-radius: 20px;
-      padding: 28px 24px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 77, 109, 0.35);
-      text-align: center;
-      z-index: 60;
-      display: none;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%) scale(0.85);
+      width: 230px;
+      height: 145px;
+      background: #fffdf7;
+      background-image: repeating-linear-gradient(#fffdf7, #fffdf7 26px, #f1e4d8 27px);
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      padding: 16px 14px;
+      z-index: 3;
       opacity: 0;
-      transform: translateY(20px) scale(0.9);
-      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 1.2s cubic-bezier(0.2, 0.8, 0.25, 1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid #ebd9c8;
     }
 
-    #letter-card.show {
-      display: block;
+    #paper-letter.opened {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 88%;
+      max-width: 360px;
+      height: auto;
+      min-height: 250px;
+      padding: 26px 22px;
+      border-radius: 18px;
+      z-index: 100;
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: translate(-50%, -50%) scale(1);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(255, 77, 109, 0.4);
+      background: #fffdf7;
+      background-image: repeating-linear-gradient(#fffdf7, #fffdf7 27px, #faeade 28px);
     }
 
-    .letter-title {
-      font-size: 1.25rem;
+    .paper-header {
+      font-size: 1.22rem;
       color: #c9184a;
       font-weight: 700;
-      margin-bottom: 12px;
+      text-align: center;
+      margin-bottom: 14px;
     }
 
-    .letter-content {
-      color: #333;
-      font-size: 1.05rem;
-      line-height: 1.6;
-      margin-bottom: 22px;
+    .paper-body {
+      color: #3b2826;
+      font-size: 1.02rem;
+      line-height: 1.68;
       font-weight: 500;
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .paper-stamp {
+      font-size: 28px;
+      text-align: center;
+      margin-bottom: 8px;
     }
 
     .surprise-btn {
       background: linear-gradient(135deg, #ff4d6d, #c9184a);
       color: #fff;
       border: none;
-      padding: 12px 28px;
-      border-radius: 30px;
-      font-size: 1rem;
+      padding: 11px 26px;
+      border-radius: 25px;
+      font-size: 0.95rem;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 6px 18px rgba(201, 24, 74, 0.45);
+      box-shadow: 0 5px 15px rgba(201, 24, 74, 0.45);
+      align-self: center;
     }
 
-    /* Khung Canvas Trái Tim 3D */
+    /* Khung Canvas */
     #heart-wrapper {
       position: fixed;
       top: 0;
@@ -189,7 +218,7 @@
       height: 100vh;
       display: none;
       opacity: 0;
-      transition: opacity 1.2s ease;
+      transition: opacity 1.4s ease;
       z-index: 10;
     }
 
@@ -218,27 +247,29 @@
   <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
   <div id="fireflies"></div>
 
-  <!-- Bước 1: Phong bì nguyên bản (Mở thư siêu nhạy) -->
+  <!-- Bước 1: Phong bì và Lá thư -->
   <div id="envelope-wrapper" onclick="openEnvelope()">
     <div class="envelope">
       <div class="envelope-flap" id="envFlap"></div>
+      
+      <div id="paper-letter">
+        <div class="paper-stamp">💌</div>
+        <div class="paper-header">Gửi Bảo Bei của bé 💕</div>
+        <div class="paper-body">
+          Bé iuu Bảo Bei Nhất 💕, Bảo Bei bấm ở dưới bấm ở dưới...
+        </div>
+        <button class="surprise-btn" onclick="startHeartShow(event)">Xem điều bất ngờ 💖</button>
+      </div>
+
       <div class="envelope-pocket"></div>
-      <div class="heart-seal">❤️</div>
+      <div class="heart-seal" id="heartSeal">❤️</div>
     </div>
-    <div class="hint-text">Gửi Bảo Bei, tình cảm của bé 💕</div>
-    <span class="tap-hint">(Chạm vào phong thư để mở ✨)</span>
+    
+    <div class="hint-text" id="hintTitle">Gửi Bảo Bei, tình cảm của bé 💕</div>
+    <span class="tap-hint" id="hintSub">(Chạm vào phong thư để mở ✨)</span>
   </div>
 
-  <!-- Bước 2: Thiệp nguyên bản -->
-  <div id="letter-card">
-    <div class="letter-title">Gửi Bảo Bei của bé 💕</div>
-    <div class="letter-content">
-      Bé iuu Bảo Bei Nhất 💕, Bảo Bei bấm ở dưới bấm ở dưới...
-    </div>
-    <button class="surprise-btn" onclick="startHeartShow()">Xem điều bất ngờ 💖</button>
-  </div>
-
-  <!-- Bước 3: Khối Trái tim 3D & Đĩa chữ xoay vũ trụ -->
+  <!-- Bước 2: Canvas Trái tim 3D -->
   <div id="heart-wrapper">
     <canvas id="heartCanvas"></canvas>
   </div>
@@ -264,7 +295,7 @@
       fly.style.height = size + 'px';
       fly.style.left = Math.random() * 100 + 'vw';
       fly.style.top = Math.random() * 100 + 'vh';
-      fly.style.animationDelay = Math.random() * 5 + 's';
+      fly.style.animationDelay = Math.random() * 6 + 's';
       fireflyContainer.appendChild(fly);
     }
 
@@ -286,51 +317,54 @@
       }
     });
 
-    // Mở phong bì an toàn
+    let isOpened = false;
+
     function openEnvelope() {
+      if (isOpened) return;
+      isOpened = true;
+
       const music = document.getElementById('bg-music');
-      if (music) {
-        music.play().catch(() => {});
-      }
+      music.play().catch(() => {});
 
-      const flap = document.getElementById('envFlap');
-      if (flap) flap.style.transform = 'rotateX(180deg)';
+      document.getElementById('heartSeal').style.opacity = '0';
+      document.getElementById('envFlap').style.transform = 'rotateX(180deg)';
+      document.getElementById('hintTitle').style.opacity = '0';
+      document.getElementById('hintSub').style.opacity = '0';
 
-      setTimeout(() => {
-        const env = document.getElementById('envelope-wrapper');
-        if (env) {
-          env.style.opacity = '0';
-          env.style.transform = 'scale(0.7)';
-        }
-
-        setTimeout(() => {
-          if (env) env.style.display = 'none';
-          const card = document.getElementById('letter-card');
-          if (card) {
-            card.style.display = 'block';
-            setTimeout(() => card.classList.add('show'), 20);
-          }
-        }, 600);
-      }, 350);
-    }
-
-    // Chuyển sang Trái tim 3D
-    function startHeartShow() {
-      const card = document.getElementById('letter-card');
-      if (card) card.classList.remove('show');
+      const letter = document.getElementById('paper-letter');
 
       setTimeout(() => {
-        if (card) card.style.display = 'none';
-        const hw = document.getElementById('heart-wrapper');
-        if (hw) {
-          hw.style.display = 'block';
-          setTimeout(() => hw.style.opacity = '1', 50);
-        }
-        init3DVolumetricHeart();
+        letter.style.opacity = '1';
+        letter.style.transform = 'translateX(-50%) translateY(-65px) scale(0.9)';
       }, 500);
+
+      setTimeout(() => {
+        letter.classList.add('opened');
+      }, 1100);
     }
 
-    /* ================= THUẬT TOÁN TRÁI TIM KHỐI 3D + ĐĨA CHỮ XOAY ================= */
+    function startHeartShow(e) {
+      e.stopPropagation();
+
+      const letter = document.getElementById('paper-letter');
+      const envWrapper = document.getElementById('envelope-wrapper');
+
+      letter.style.transition = 'all 0.9s ease';
+      letter.style.opacity = '0';
+      letter.style.transform = 'translate(-50%, -50%) scale(0.7)';
+      envWrapper.style.opacity = '0';
+      envWrapper.style.transform = 'scale(0.7)';
+
+      setTimeout(() => {
+        envWrapper.style.display = 'none';
+        const hw = document.getElementById('heart-wrapper');
+        hw.style.display = 'block';
+        setTimeout(() => hw.style.opacity = '1', 50);
+        init3DVolumetricHeart();
+      }, 850);
+    }
+
+    /* Thuật toán tạo khối quả cầu Trái tim 3D (3D Volumetric Heart) */
     function init3DVolumetricHeart() {
       const canvas = document.getElementById('heartCanvas');
       const ctx = canvas.getContext('2d');
@@ -342,7 +376,6 @@
         height = canvas.height = window.innerHeight;
       });
 
-      // Tọa độ toán học trái tim chuẩn
       function heartCurve(t) {
         return {
           x: 16 * Math.pow(Math.sin(t), 3),
@@ -353,11 +386,12 @@
       const heartParticles = [];
       const centerYOffset = -2.5;
 
-      // 14 lớp đường bao thu hẹp về tâm để giữ form chuẩn ❤ đồng thời tạo độ phồng 3D trên trục Z
+      // 18 lớp lát cắt hình khối tạo độ phồng 3D căng tròn
       const layers = [1.0, 0.96, 0.92, 0.86, 0.80, 0.74, 0.68, 0.62, 0.55, 0.48, 0.40, 0.32, 0.24, 0.15];
 
       layers.forEach((layerScale) => {
-        const count = Math.floor(95 * Math.pow(layerScale, 0.65));
+        const count = Math.floor(95 * Math.pow(layerScale, 0.6));
+        // Tính bán kính độ phồng trục Z (lồi ra trước và lùi về sau)
         const maxZ = Math.sqrt(Math.max(0, 1 - layerScale * layerScale)) * 9.5;
 
         for (let i = 0; i < count; i++) {
@@ -367,7 +401,7 @@
           const finalX = base.x * layerScale;
           const finalY = (base.y - centerYOffset) * layerScale + centerYOffset;
 
-          // Phân bố mặt trước (Z > 0) và mặt sau (Z < 0) tạo khối phồng bóng tim 3D
+          // Tạo hai mặt: mặt trước (Z > 0) lồi căng, mặt sau (Z < 0)
           const zSign = (i % 2 === 0) ? 1 : -1;
           const finalZ = zSign * maxZ * (0.8 + Math.random() * 0.4);
 
@@ -389,7 +423,7 @@
         }
       });
 
-      // Đĩa hạt xoay quanh chân đế
+      // Đĩa hạt xoay chân đế
       const ringParticles = [];
       const ringCount = 220;
       for (let i = 0; i < ringCount; i++) {
@@ -417,18 +451,18 @@
         const ringRadiusX = Math.min(width * 0.42, 175);
         const ringRadiusY = ringRadiusX * 0.34;
 
-        // Nhịp tim phập phồng
+        // Nhịp tim đập kép
         const beat = 1 + 0.08 * Math.pow(Math.sin(time * 1.2), 8) + 0.02 * Math.sin(time * 2.4);
         const scale = (Math.min(width, height) / 38) * beat;
 
-        // Góc nghiêng 3D Perspective (chúc nhẹ xuống và lắc nhẹ qua lại)
-        const tiltX = 0.22;
-        const rotY = Math.sin(time * 0.7) * 0.28;
+        // Góc xoay 3D nhẹ (nghiêng trục X nhìn từ trên xuống và lắc trục Y)
+        const tiltX = 0.22; // Độ nghiêng chúc xuống để nhìn rõ độ sâu 3D
+        const rotY = Math.sin(time * 0.7) * 0.28; // Xoay đảo qua lại trục Y
 
         const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
         const cosX = Math.cos(tiltX), sinX = Math.sin(tiltX);
 
-        // Vầng hào quang phát quang ấm áp
+        // Hào quang ấm áp
         const grad = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, 150 * beat);
         grad.addColorStop(0, 'rgba(255, 42, 109, 0.4)');
         grad.addColorStop(0.5, 'rgba(255, 77, 109, 0.12)');
@@ -438,7 +472,7 @@
         ctx.arc(centerX, centerY, 160 * beat, 0, Math.PI * 2);
         ctx.fill();
 
-        // 1. VẼ HẠT TRÁI TIM 3D ĐA CHIỀU
+        // 1. TÍNH TOÁN VÀ VẼ HẠT TIM THEO PHỐI CẢNH KHÔNG GIAN 3D
         const sortedParticles = [];
 
         for (let i = 0; i < heartParticles.length; i++) {
@@ -457,7 +491,7 @@
           const y2 = p.origY * cosX - z1 * sinX;
           const z2 = p.origY * sinX + z1 * cosX;
 
-          // Phối cảnh Perspective
+          // Phối cảnh Perspective 3D
           const fov = 42;
           const pScale = fov / (fov + z2);
 
@@ -479,17 +513,18 @@
           });
         }
 
-        // Sắp xếp Z-depth (vẽ hạt ở sau trước, hạt ở gần vẽ sau)
+        // Sắp xếp Z-depth: Hạt ở sau vẽ trước, hạt ở gần vẽ sau
         sortedParticles.sort((a, b) => a.z - b.z);
 
         for (let i = 0; i < sortedParticles.length; i++) {
           const sp = sortedParticles[i];
-          const depthRatio = (sp.z + 12) / 24;
+          // Độ sáng theo chiều sâu: hạt ở trước sáng hồng neon rực rỡ, hạt ở sau tối mờ
+          const depthRatio = (sp.z + 12) / 24; 
           const clampedDepth = Math.max(0.1, Math.min(1, depthRatio));
 
           ctx.beginPath();
           ctx.arc(sp.drawX, sp.drawY, sp.baseSize * sp.pScale * (0.5 + 0.5 * sp.ease), 0, Math.PI * 2);
-
+          
           if (clampedDepth > 0.65) {
             ctx.fillStyle = '#ff3366';
             ctx.shadowBlur = 6;
@@ -504,7 +539,7 @@
           ctx.fill();
         }
 
-        // 2. VẼ ĐĨA HẠT CHÂN ĐẾ
+        // 2. VẼ ĐĨA HẠT QUỸ ĐẠO CHÂN ĐẾ
         for (let i = 0; i < ringParticles.length; i++) {
           const rp = ringParticles[i];
           rp.theta += rp.speed;
@@ -522,7 +557,7 @@
           ctx.fill();
         }
 
-        // 3. VẼ ĐĨA CÁC CÂU CHỮ XOAY TRÒN 3D
+        // 3. VẼ ĐĨA CHỮ 3D XOAY TRÒN
         const textCount = ringTexts.length;
         const sortedTexts = [];
 
