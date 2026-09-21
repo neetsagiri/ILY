@@ -15,7 +15,7 @@
     body {
       width: 100vw;
       height: 100vh;
-      background: radial-gradient(circle at 50% 45%, #220318 0%, #05010a 100%);
+      background: radial-gradient(circle at 50% 40%, #200416 0%, #040107 100%);
       overflow: hidden;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
       display: flex;
@@ -24,13 +24,13 @@
       position: relative;
     }
 
-    /* Đốm sáng đom đóm & sao bay ngập tràn nền */
+    /* Đốm sáng đom đóm nền mở đầu */
     .bg-firefly {
       position: absolute;
       background: #ff758c;
       border-radius: 50%;
       pointer-events: none;
-      opacity: 0.5;
+      opacity: 0.4;
       animation: floatFirefly 5s infinite ease-in-out;
       z-index: 1;
     }
@@ -178,7 +178,7 @@
       box-shadow: 0 6px 18px rgba(201, 24, 74, 0.45);
     }
 
-    /* Khung Trái Tim & Nền trong suốt */
+    /* Khung Canvas Trái Tim 3D Vũ Trụ */
     #heart-wrapper {
       position: fixed;
       top: 0;
@@ -187,44 +187,14 @@
       height: 100vh;
       display: none;
       opacity: 0;
-      transition: opacity 0.8s ease;
+      transition: opacity 1s ease;
       z-index: 10;
-      pointer-events: none;
     }
 
     canvas {
       width: 100%;
       height: 100%;
       display: block;
-    }
-
-    /* Chữ chạy phía dưới - Đèn Neon sắc nét */
-    .caption-container {
-      position: absolute;
-      bottom: 10%;
-      width: 100%;
-      text-align: center;
-      pointer-events: none;
-      z-index: 20;
-    }
-
-    #lang-text {
-      font-size: 1.45rem;
-      font-weight: 700;
-      color: #ffffff;
-      text-shadow: 0 0 12px #ff4d6d, 0 0 25px #ff0055, 0 0 35px #ff2a6d;
-      letter-spacing: 0.8px;
-      transition: opacity 0.4s ease, transform 0.4s ease;
-      transform: scale(1);
-    }
-
-    #sub-text {
-      margin-top: 8px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #ffccd5;
-      text-shadow: 0 0 8px rgba(255, 77, 109, 0.8);
-      letter-spacing: 1px;
     }
 
     .touch-heart {
@@ -244,11 +214,9 @@
 <body>
 
   <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
-  
-  <!-- Hạt đom đóm nền luôn hiển thị xuyên suốt -->
   <div id="fireflies"></div>
 
-  <!-- Bước 1: Phong bì -->
+  <!-- Bước 1: Bì thư -->
   <div id="envelope-wrapper" onclick="openEnvelope()">
     <div class="envelope">
       <div class="envelope-flap" id="envFlap"></div>
@@ -268,18 +236,14 @@
     <button class="surprise-btn" onclick="startHeartShow()">Xem điều bất ngờ 💖</button>
   </div>
 
-  <!-- Bước 3: Trái tim đa tầng & hạt bay từ từ -->
+  <!-- Bước 3: Trái tim hạt 3D và đĩa quỹ đạo chữ xoay tròn -->
   <div id="heart-wrapper">
     <canvas id="heartCanvas"></canvas>
-
-    <div class="caption-container">
-      <div id="lang-text">Anh yêu Bảo Bei 💕</div>
-      <div id="sub-text">Forever with Bảo Bei ✨</div>
-    </div>
   </div>
 
   <script>
-    const phrases = [
+    // Danh sách câu chữ xoay trên đĩa thiên hà
+    const ringTexts = [
       "Anh yêu Bảo Bei 💕",
       "I Love You, Bảo Bei ✨",
       "我爱你, Bảo Bei 💕",
@@ -287,16 +251,11 @@
       "愛してる, Bảo Bei 💕",
       "Je t'aime, Bảo Bei ✨",
       "Te amo, Bảo Bei 💕",
-      "Ich liebe dich, Bảo Bei ✨",
-      "Ti amo, Bảo Bei 💕",
-      "Я люблю тебя, Bảo Bei ✨",
-      "ฉันรักเธอ, Bảo Bei 💕",
       "Bé iuu Bảo Bei Nhất 💕"
     ];
 
-    // Tạo 45 hạt đom đóm nền bay lơ lửng khắp màn hình
     const fireflyContainer = document.getElementById('fireflies');
-    for (let i = 0; i < 45; i++) {
+    for (let i = 0; i < 40; i++) {
       const fly = document.createElement('div');
       fly.className = 'bg-firefly';
       const size = Math.random() * 4 + 2;
@@ -312,13 +271,13 @@
       if (Math.random() < 0.25) {
         const heart = document.createElement('div');
         heart.className = 'touch-heart';
-        heart.innerText = Math.random() > 0.5 ? '💗' : '💕';
+        heart.innerText = Math.random() > 0.5 ? '💗' : '✨';
         heart.style.left = e.clientX + 'px';
         heart.style.top = e.clientY + 'px';
         document.body.appendChild(heart);
 
         setTimeout(() => {
-          heart.style.transform = `translate(${(Math.random() - 0.5) * 50}px, -40px) scale(0.3)`;
+          heart.style.transform = `translate(${(Math.random() - 0.5) * 40}px, -40px) scale(0.3)`;
           heart.style.opacity = '0';
         }, 20);
 
@@ -356,28 +315,12 @@
         const hw = document.getElementById('heart-wrapper');
         hw.style.display = 'block';
         setTimeout(() => hw.style.opacity = '1', 50);
-        initSlowGracefulHeart();
-        startTextRotation();
+        initVolumetric3DHeart();
       }, 500);
     }
 
-    function startTextRotation() {
-      let idx = 0;
-      const textEl = document.getElementById('lang-text');
-      setInterval(() => {
-        textEl.style.opacity = '0';
-        textEl.style.transform = 'scale(0.85)';
-        setTimeout(() => {
-          idx = (idx + 1) % phrases.length;
-          textEl.innerText = phrases[idx];
-          textEl.style.opacity = '1';
-          textEl.style.transform = 'scale(1)';
-        }, 350);
-      }, 2600);
-    }
-
-    /* Thuật toán Trái tim hình thành từ từ & Giữ nguyên vẹn nền lung linh */
-    function initSlowGracefulHeart() {
+    /* Thuật toán Trái tim 3D Hạt Lượng Tử + Đĩa Chữ Xoay Quanh Chân Đế */
+    function initVolumetric3DHeart() {
       const canvas = document.getElementById('heartCanvas');
       const ctx = canvas.getContext('2d');
       let width = canvas.width = window.innerWidth;
@@ -387,23 +330,6 @@
         width = canvas.width = window.innerWidth;
         height = canvas.height = window.innerHeight;
       });
-
-      // Tạo trước ảnh sprite nhẹ không lag
-      function createHeartSprite(emoji) {
-        const sCanvas = document.createElement('canvas');
-        sCanvas.width = 44;
-        sCanvas.height = 44;
-        const sCtx = sCanvas.getContext('2d');
-        sCtx.font = '24px -apple-system, sans-serif';
-        sCtx.textAlign = 'center';
-        sCtx.textBaseline = 'middle';
-        sCtx.shadowBlur = 10;
-        sCtx.shadowColor = '#ff2a6d';
-        sCtx.fillText(emoji, 22, 22);
-        return sCanvas;
-      }
-
-      const sprites = [createHeartSprite('💗'), createHeartSprite('❤️'), createHeartSprite('💕')];
 
       function heartCurve(t) {
         return {
@@ -419,106 +345,191 @@
         return (a * a * a - nx * nx * ny * ny * ny) <= 0;
       }
 
-      const particles = [];
+      // 1. TẠO KHỐI HẠT TIM 3D (Hơn 1100 hạt phát quang)
+      const heartParticles = [];
+      const totalHeartParticles = 1100;
+      let count = 0;
 
-      // 1. Viền ngoài trái tim (110 hạt)
-      const borderCount = 110;
-      for (let i = 0; i < borderCount; i++) {
-        const t = (Math.PI * 2 * i) / borderCount;
-        const pos = heartCurve(t);
-        const angle = Math.random() * Math.PI * 2;
-        const dist = Math.max(width, height) * (0.6 + Math.random() * 0.45);
-
-        particles.push({
-          targetRelX: pos.x,
-          targetRelY: pos.y,
-          currX: width / 2 + Math.cos(angle) * dist,
-          currY: height / 2 + Math.sin(angle) * dist,
-          sprite: sprites[i % sprites.length],
-          scaleMod: Math.random() * 0.2 + 0.9,
-          progress: 0,
-          // Tốc độ chậm rãi & thời gian trễ kéo dài giúp hình thành từ từ
-          speed: 0.005 + Math.random() * 0.005,
-          delay: Math.random() * 90,
-          phase: Math.random() * Math.PI * 2
-        });
-      }
-
-      // 2. Ruột trong trái tim (150 hạt)
-      const insideCount = 150;
-      let added = 0;
-      while (added < insideCount) {
-        const rx = (Math.random() * 2 - 1) * 15.2;
-        const ry = Math.random() * 27 - 15.5;
+      while (count < totalHeartParticles) {
+        const rx = (Math.random() * 2 - 1) * 15.6;
+        const ry = Math.random() * 28 - 16;
         if (isInsideHeart(rx, ry)) {
+          // Trục Z cho hiệu ứng 3D khối tròn
+          const rz = (Math.random() * 2 - 1) * 7.5;
           const angle = Math.random() * Math.PI * 2;
-          const dist = Math.max(width, height) * (0.6 + Math.random() * 0.45);
+          const dist = Math.max(width, height) * (0.6 + Math.random() * 0.5);
 
-          particles.push({
-            targetRelX: rx,
-            targetRelY: ry,
+          heartParticles.push({
+            origX: rx,
+            origY: ry,
+            origZ: rz,
             currX: width / 2 + Math.cos(angle) * dist,
             currY: height / 2 + Math.sin(angle) * dist,
-            sprite: sprites[added % sprites.length],
-            scaleMod: Math.random() * 0.25 + 0.75,
+            size: Math.random() * 2.2 + 0.8,
+            color: Math.random() > 0.4 ? '#ff2a6d' : (Math.random() > 0.5 ? '#ff5c8a' : '#ffa8be'),
+            alpha: Math.random() * 0.7 + 0.3,
             progress: 0,
-            speed: 0.004 + Math.random() * 0.005,
-            delay: Math.random() * 110,
+            speed: 0.007 + Math.random() * 0.006,
+            delay: Math.random() * 70,
             phase: Math.random() * Math.PI * 2
           });
-          added++;
+          count++;
         }
+      }
+
+      // 2. TẠO CÁC HẠT ĐĨA THIÊN HÀ XOAY DƯỚI ĐÁY
+      const ringParticles = [];
+      const ringCount = 220;
+      for (let i = 0; i < ringCount; i++) {
+        const theta = Math.random() * Math.PI * 2;
+        const radius = Math.random() * 110 + 60;
+        ringParticles.push({
+          theta: theta,
+          radius: radius,
+          speed: 0.012 + Math.random() * 0.008,
+          size: Math.random() * 1.8 + 0.6,
+          alpha: Math.random() * 0.6 + 0.3
+        });
       }
 
       let time = 0;
       let frame = 0;
 
       function render() {
-        // Xóa trong suốt mỗi khung hình để lộ nền đom đóm & tinh vân
         ctx.clearRect(0, 0, width, height);
 
-        time += 0.045;
+        time += 0.04;
         frame++;
 
-        const beat = 1 + 0.08 * Math.pow(Math.sin(time), 8) + 0.03 * Math.sin(time * 2);
-        const scale = (Math.min(width, height) / 38) * beat;
+        // Tâm trái tim hơi lệch lên phía trên
         const centerX = width / 2;
-        const centerY = height / 2 - 45;
+        const centerY = height * 0.38;
+        
+        // Tâm đĩa chữ xoay ở chân đế bên dưới
+        const ringCenterY = height * 0.75;
+        const ringRadiusX = Math.min(width * 0.42, 175);
+        const ringRadiusY = ringRadiusX * 0.35; // Độ nghiêng 3D tạo thành hình elip nằm
 
-        // Vẽ vầng sáng hào quang mềm mại ở giữa tâm
-        const gradient = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, 170 * beat);
-        gradient.addColorStop(0, 'rgba(255, 42, 109, 0.35)');
-        gradient.addColorStop(0.6, 'rgba(255, 77, 109, 0.12)');
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-        ctx.fillStyle = gradient;
+        // Nhịp đập tim
+        const beat = 1 + 0.09 * Math.pow(Math.sin(time * 1.1), 8);
+        const scale = (Math.min(width, height) / 38) * beat;
+
+        // Vầng sáng phát quang trung tâm
+        const grad = ctx.createRadialGradient(centerX, centerY, 5, centerX, centerY, 160 * beat);
+        grad.addColorStop(0, 'rgba(255, 42, 109, 0.4)');
+        grad.addColorStop(0.6, 'rgba(255, 77, 109, 0.1)');
+        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+        ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(centerX, centerY, 180 * beat, 0, Math.PI * 2);
+        ctx.arc(centerX, centerY, 170 * beat, 0, Math.PI * 2);
         ctx.fill();
 
-        for (let i = 0; i < particles.length; i++) {
-          const p = particles[i];
+        // --- VẼ CÁC HẠT TIM 3D BAY TỤ TỪ TỪ ---
+        for (let i = 0; i < heartParticles.length; i++) {
+          const p = heartParticles[i];
 
           if (frame > p.delay && p.progress < 1) {
             p.progress += p.speed;
             if (p.progress > 1) p.progress = 1;
           }
 
-          const floatOffset = (p.progress >= 1) ? Math.sin(time * 2 + p.phase) * 1.5 : 0;
-          const targetX = centerX + p.targetRelX * scale + floatOffset;
-          const targetY = centerY + p.targetRelY * scale + floatOffset;
+          // Xoay góc 3D nhẹ xung quanh trục Y
+          const rotAngle = Math.sin(time * 0.6) * 0.15;
+          const cosRot = Math.cos(rotAngle);
+          const sinRot = Math.sin(rotAngle);
 
-          // Hiệu ứng lướt mượt mà chậm rãi Cubic-Bezier
+          const rotX = p.origX * cosRot + p.origZ * sinRot;
+          const rotZ = -p.origX * sinRot + p.origZ * cosRot;
+
+          // Phối cảnh Perspective 3D
+          const fov = 35;
+          const pScale = fov / (fov + rotZ);
+
+          const floatOffset = (p.progress >= 1) ? Math.sin(time * 2 + p.phase) * 1.5 : 0;
+          const targetX = centerX + rotX * scale * pScale + floatOffset;
+          const targetY = centerY + p.origY * scale * pScale + floatOffset;
+
           const ease = 1 - Math.pow(1 - p.progress, 3);
           const drawX = p.currX + (targetX - p.currX) * ease;
           const drawY = p.currY + (targetY - p.currY) * ease;
 
-          const size = 32 * p.scaleMod * (0.4 + 0.6 * ease);
+          ctx.beginPath();
+          ctx.arc(drawX, drawY, p.size * pScale * (0.4 + 0.6 * ease), 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = '#ff2a6d';
+          ctx.globalAlpha = p.alpha * ease;
+          ctx.fill();
+        }
 
-          ctx.globalAlpha = Math.min(1, ease + 0.1);
-          ctx.drawImage(p.sprite, drawX - size / 2, drawY - size / 2, size, size);
+        // --- VẼ ĐĨA HẠT QUỸ ĐẠO DƯỚI ĐÁY ---
+        for (let i = 0; i < ringParticles.length; i++) {
+          const rp = ringParticles[i];
+          rp.theta += rp.speed;
+
+          const rx = centerX + Math.cos(rp.theta) * (rp.radius * (ringRadiusX / 140));
+          const ry = ringCenterY + Math.sin(rp.theta) * (rp.radius * (ringRadiusY / 140));
+
+          // Chiều sâu trục Z: phía trước sáng hơn phía sau
+          const zDepth = (Math.sin(rp.theta) + 1) / 2;
+
+          ctx.beginPath();
+          ctx.arc(rx, ry, rp.size * (0.6 + 0.5 * zDepth), 0, Math.PI * 2);
+          ctx.fillStyle = '#ff758c';
+          ctx.shadowBlur = 6;
+          ctx.shadowColor = '#ff2a6d';
+          ctx.globalAlpha = rp.alpha * (0.3 + 0.7 * zDepth);
+          ctx.fill();
+        }
+
+        // --- VẼ CÁC DÒNG CHỮ XOAY TRÒN 3D QUANH ĐĨA ---
+        const textCount = ringTexts.length;
+        // Thu thập và sắp xếp các từ theo trục Z để chữ ở xa vẽ trước, chữ ở gần đè lên trước
+        const sortedTexts = [];
+
+        for (let i = 0; i < textCount; i++) {
+          const angle = time * 0.45 + (i * 2 * Math.PI) / textCount;
+          const sinA = Math.sin(angle);
+          const cosA = Math.cos(angle);
+
+          const tx = centerX + cosA * ringRadiusX;
+          const ty = ringCenterY + sinA * ringRadiusY;
+
+          // zIndex: -1 (xa nhất ở phía sau) -> +1 (gần nhất ở phía trước)
+          const zDepth = (sinA + 1) / 2; 
+
+          sortedTexts.push({
+            text: ringTexts[i],
+            x: tx,
+            y: ty,
+            z: zDepth,
+            depthRatio: zDepth
+          });
+        }
+
+        // Sắp xếp theo chiều sâu
+        sortedTexts.sort((a, b) => a.z - b.z);
+
+        // Vẽ từng dòng chữ có chiều sâu 3D
+        for (let i = 0; i < sortedTexts.length; i++) {
+          const item = sortedTexts[i];
+          const fontSize = 11 + item.depthRatio * 6.5; // Gần: 17.5px, Xa: 11px
+
+          ctx.font = `bold ${fontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          // Chữ phía trước sáng rực, chữ phía sau mờ nhẹ
+          ctx.globalAlpha = 0.35 + 0.65 * item.depthRatio;
+          ctx.fillStyle = item.depthRatio > 0.65 ? '#ffffff' : '#ffccd5';
+          ctx.shadowBlur = item.depthRatio > 0.65 ? 14 : 6;
+          ctx.shadowColor = '#ff2a6d';
+
+          ctx.fillText(item.text, item.x, item.y);
         }
 
         ctx.globalAlpha = 1;
+        ctx.shadowBlur = 0;
         requestAnimationFrame(render);
       }
 
