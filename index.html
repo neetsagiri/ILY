@@ -26,7 +26,7 @@
       position: relative;
     }
 
-    /* Đốm sáng đom đóm & sao bay ngập tràn nền */
+    /* Đốm sáng đom đóm nền */
     .bg-firefly {
       position: absolute;
       background: #ff758c;
@@ -42,18 +42,31 @@
       50% { transform: translateY(-25px) scale(1.4); opacity: 0.75; }
     }
 
-    /* Bì thư 3D ban đầu */
+    /* Khung Phong bì */
     #envelope-wrapper {
+      position: relative;
       text-align: center;
-      cursor: pointer;
       z-index: 50;
       transition: opacity 0.8s ease, transform 0.8s ease;
       animation: floatEnvelope 3s ease-in-out infinite;
+      cursor: pointer;
     }
 
     @keyframes floatEnvelope {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
+    }
+
+    /* VÙNG CHẠM TÀNG HÌNH ĐẢM BẢO BẤM LÀ ĂN NGAY */
+    .hit-area {
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      right: -20px;
+      bottom: -20px;
+      z-index: 99;
+      background: transparent;
+      cursor: pointer;
     }
 
     .envelope {
@@ -64,6 +77,7 @@
       border-radius: 0 0 16px 16px;
       box-shadow: 0 20px 45px rgba(255, 42, 109, 0.45), 0 0 35px rgba(255, 117, 140, 0.25);
       margin: 0 auto;
+      pointer-events: none; /* Tránh cản trở vùng chạm */
     }
 
     .envelope-flap {
@@ -119,6 +133,7 @@
       font-weight: 600;
       letter-spacing: 0.5px;
       text-shadow: 0 0 12px rgba(255, 77, 109, 0.8);
+      pointer-events: none;
     }
 
     .tap-hint {
@@ -128,6 +143,7 @@
       color: #ff85a1;
       opacity: 0.85;
       letter-spacing: 1px;
+      pointer-events: none;
     }
 
     /* Thiệp tâm tình */
@@ -199,14 +215,6 @@
       display: block;
     }
 
-    .touch-heart {
-      position: fixed;
-      pointer-events: none;
-      font-size: 18px;
-      z-index: 999;
-      transition: transform 0.7s ease-out, opacity 0.7s ease-out;
-    }
-
     @keyframes pulse {
       0%, 100% { transform: translate(-50%, -50%) scale(1); }
       50% { transform: translate(-50%, -50%) scale(1.12); }
@@ -218,8 +226,9 @@
   <audio id="bg-music" src="audio.mp3" preload="auto" loop></audio>
   <div id="fireflies"></div>
 
-  <!-- Bước 1: Phong bì nguyên bản mở siêu nhạy -->
-  <div id="envelope-wrapper" onclick="openEnvelope()">
+  <!-- Bước 1: Phong bì (Có vùng Hit-Area độc lập) -->
+  <div id="envelope-wrapper">
+    <div class="hit-area" id="envelopeHitArea"></div>
     <div class="envelope">
       <div class="envelope-flap" id="envFlap"></div>
       <div class="envelope-pocket"></div>
@@ -229,16 +238,16 @@
     <span class="tap-hint">(Chạm vào phong thư để mở ✨)</span>
   </div>
 
-  <!-- Bước 2: Thiệp xuất hiện nguyên bản -->
+  <!-- Bước 2: Thiệp xuất hiện -->
   <div id="letter-card">
     <div class="letter-title">Gửi Bảo Bei của bé 💕</div>
     <div class="letter-content">
       Bé iuu Bảo Bei Nhất 💕, Bảo Bei bấm ở dưới bấm ở dưới...
     </div>
-    <button class="surprise-btn" onclick="startHeartShow()">Xem điều bất ngờ 💖</button>
+    <button class="surprise-btn" id="surpriseBtn">Xem điều bất ngờ 💖</button>
   </div>
 
-  <!-- Bước 3: Canvas Trái tim 3D + Đĩa chữ xoay giữ nguyên -->
+  <!-- Bước 3: Canvas Trái tim 3D + Đĩa chữ xoay -->
   <div id="heart-wrapper">
     <canvas id="heartCanvas"></canvas>
   </div>
@@ -255,6 +264,7 @@
       "Bé iuu Bảo Bei Nhất 💕"
     ];
 
+    // Tạo đốm sáng nền
     const fireflyContainer = document.getElementById('fireflies');
     for (let i = 0; i < 40; i++) {
       const fly = document.createElement('div');
@@ -268,31 +278,25 @@
       fireflyContainer.appendChild(fly);
     }
 
-    window.addEventListener('pointermove', (e) => {
-      if (Math.random() < 0.25) {
-        const heart = document.createElement('div');
-        heart.className = 'touch-heart';
-        heart.innerText = Math.random() > 0.5 ? '💗' : '✨';
-        heart.style.left = e.clientX + 'px';
-        heart.style.top = e.clientY + 'px';
-        document.body.appendChild(heart);
+    let isOpened = false;
 
-        setTimeout(() => {
-          heart.style.transform = `translate(${(Math.random() - 0.5) * 40}px, -40px) scale(0.3)`;
-          heart.style.opacity = '0';
-        }, 20);
+    // XỬ LÝ MỞ THƯ
+    function triggerOpenEnvelope() {
+      if (isOpened) return;
+      isOpened = true;
 
-        setTimeout(() => heart.remove(), 700);
-      }
-    });
+      // Xử lý phát nhạc không bao giờ làm nghẽn code
+      try {
+        const music = document.getElementById('bg-music');
+        if (music) {
+          const playPromise = music.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(() => {});
+          }
+        }
+      } catch (e) {}
 
-    // Mở phong bì và mở thiệp an toàn
-    function openEnvelope() {
-      const music = document.getElementById('bg-music');
-      if (music) {
-        music.play().catch(() => {});
-      }
-
+      // Lật nắp phong bì
       const flap = document.getElementById('envFlap');
       if (flap) flap.style.transform = 'rotateX(180deg)';
 
@@ -308,14 +312,24 @@
           const card = document.getElementById('letter-card');
           if (card) {
             card.style.display = 'block';
-            setTimeout(() => card.classList.add('show'), 20);
+            setTimeout(() => card.classList.add('show'), 30);
           }
         }, 600);
       }, 350);
     }
 
-    // Chuyển từ thiệp sang Trái tim 3D
-    function startHeartShow() {
+    // Đăng ký sự kiện mở thư trên vùng hit-area
+    const hitArea = document.getElementById('envelopeHitArea');
+    hitArea.addEventListener('click', triggerOpenEnvelope);
+    hitArea.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      triggerOpenEnvelope();
+    });
+
+    // XỬ LÝ BẤM XEM BẤT NGỜ
+    const surpriseBtn = document.getElementById('surpriseBtn');
+    function triggerStartShow(e) {
+      if (e) e.stopPropagation();
       const card = document.getElementById('letter-card');
       if (card) card.classList.remove('show');
 
@@ -329,6 +343,11 @@
         init3DVolumetricHeart();
       }, 500);
     }
+    surpriseBtn.addEventListener('click', triggerStartShow);
+    surpriseBtn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      triggerStartShow(e);
+    });
 
     /* Thuật toán tạo khối quả cầu Trái tim 3D (3D Volumetric Heart) */
     function init3DVolumetricHeart() {
